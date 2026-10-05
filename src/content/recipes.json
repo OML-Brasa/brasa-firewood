@@ -1,0 +1,70 @@
+{
+  "heroTitle": "Wood-Fired Recipes",
+  "heroSubtitle": "Discover the flavors only a Brasa oven can create.",
+  "searchPlaceholder": "Search recipes...",
+  "categories": ["All", "Pizza", "Pork", "Chicken", "Dessert", "Steak", "Sausage"],
+  "recipes": [
+    {
+      "title": "Neapolitan Margherita",
+      "category": "Pizza",
+      "prepTime": "20 mins",
+      "cookTime": "90 secs",
+      "ovenTemp": "900°F / 482°C",
+      "difficulty": "Medium",
+      "ingredients": ["250g '00' flour", "165ml water", "5g sea salt", "2g fresh yeast", "San Marzano tomatoes, crushed", "Fresh mozzarella (fior di latte)", "Fresh basil", "Extra-virgin olive oil"],
+      "directions": "Mix flour, water, salt, and yeast into a smooth dough and let it rise 8–12 hours. Shape a ball into a thin disc by hand, top with crushed San Marzano, torn mozzarella, and a drizzle of oil. Slide onto the 900°F floor and bake about 90 seconds, turning once, until the cornicione is puffed and leopard-spotted. Finish with fresh basil."
+    },
+    {
+      "title": "Tomahawk Ribeye al Fuego",
+      "category": "Steak",
+      "prepTime": "15 mins",
+      "cookTime": "12 mins",
+      "ovenTemp": "700°F / 371°C",
+      "difficulty": "Hard",
+      "ingredients": ["1 tomahawk ribeye (2–2.5 lbs)", "Coarse sea salt", "Cracked black pepper", "Rosemary sprigs", "Garlic cloves", "Butter"],
+      "directions": "Salt the ribeye generously and bring to room temperature. Sear directly over live flame near the oven mouth to build a crust on both sides, then move deeper into the 700°F chamber to roast to your target internal temperature. Baste with butter, garlic, and rosemary in the final minutes. Rest 10 minutes before slicing against the grain."
+    },
+    {
+      "title": "Herb-Roasted Spatchcock Chicken",
+      "category": "Chicken",
+      "prepTime": "25 mins",
+      "cookTime": "45 mins",
+      "ovenTemp": "450°F / 232°C",
+      "difficulty": "Easy",
+      "ingredients": ["1 whole chicken (3.5–4 lbs), spatchcocked", "Olive oil", "Lemon", "Garlic", "Thyme and rosemary", "Sea salt and pepper"],
+      "directions": "Flatten the chicken by removing the backbone and pressing the breast. Rub with oil, garlic, herbs, salt, and pepper. Roast skin-side up in a 450°F oven until the skin is crisp and the thickest part reaches 165°F, about 40–45 minutes. Rest, then carve and finish with a squeeze of lemon."
+    },
+    {
+      "title": "Slow-Smoked Pulled Pork",
+      "category": "Pork",
+      "prepTime": "30 mins",
+      "cookTime": "8 hours",
+      "ovenTemp": "225°F / 107°C",
+      "difficulty": "Hard",
+      "ingredients": ["1 pork shoulder (6–8 lbs)", "Yellow mustard", "Brown sugar", "Paprika", "Garlic and onion powder", "Salt and pepper", "Wood chunks for smoke"],
+      "directions": "Coat the shoulder in mustard and a brown-sugar spice rub. Hold the oven low, around 225°F, with a small smoldering fire for smoke. Cook low and slow until the meat pulls apart easily and reaches about 203°F internal, roughly 8 hours. Rest, then shred and toss with the rendered juices."
+    },
+    {
+      "title": "Italian Sausage & Peppers",
+      "category": "Sausage",
+      "prepTime": "15 mins",
+      "cookTime": "20 mins",
+      "ovenTemp": "500°F / 260°C",
+      "difficulty": "Easy",
+      "ingredients": ["6 Italian sausages", "3 bell peppers, sliced", "2 onions, sliced", "Garlic", "Olive oil", "Oregano", "Salt and pepper"],
+      "directions": "Toss peppers, onions, and garlic with oil, oregano, salt, and pepper in a cast-iron pan. Roast in the 500°F oven, stirring once, until charred and soft. Add the sausages and cook until browned and cooked through, about 20 minutes total. Serve hot with crusty bread."
+    },
+    {
+      "title": "Wood-Fired Apple Crostata",
+      "category": "Dessert",
+      "prepTime": "20 mins",
+      "cookTime": "25 mins",
+      "ovenTemp": "400°F / 204°C",
+      "difficulty": "Medium",
+      "ingredients": ["1 sheet all-butter pastry", "4 apples, thinly sliced", "Brown sugar", "Cinnamon", "Lemon juice", "1 egg (for wash)", "Turbinado sugar"],
+      "directions": "Toss apples with brown sugar, cinnamon, and lemon. Pile in the center of the pastry and fold the edges up over the filling. Brush with egg wash and sprinkle with turbinado. Bake in a 400°F oven until the crust is golden and the apples are tender, about 25 minutes. Cool slightly before slicing."
+    }
+  ],
+  "submitTitle": "Submit Your Recipe",
+  "submitSubtitle": "Share your wood-fired culinary creations with the Brasa community."
+}

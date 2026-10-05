@@ -1,0 +1,22 @@
+{
+  "heroTitle": "Let's talk performance.",
+  "heroSubtitle": "Whether you're choosing your first Brasa, specifying the outdoor kitchen of your life, or exploring a partnership, we're glad to help you get it right. Tell us what you have in mind and we'll be in touch.",
+  "formTitle": "Send Us a Message",
+  "subjects": ["General Inquiry", "Product Question", "Custom Build", "Order Support", "Partnership", "Other"],
+  "detailsTitle": "Contact Details",
+  "detailsIntro": "Have questions about our outdoor wood-fired ovens or need assistance? Reach out to our dedicated support team directly.",
+  "email": "support@brasaoutdoor.com",
+  "phone": "+1 (800) 555-0199",
+  "businessHours": "Monday – Friday: 9:00 AM – 6:00 PM EST\nSaturday: 10:00 AM – 2:00 PM EST\nSunday: Closed",
+  "consultationTitle": "Request a Personal Consultation",
+  "consultationBody": "Prefer to talk it through? Reach us directly and we'll help you match the instrument to the way you cook.",
+  "faqTitle": "Common Questions",
+  "faqIntro": "Find quick answers to typical queries regarding customized delivery, contractor services, warranty coverage, and care.",
+  "faqs": [
+    { "question": "How long does custom delivery take?", "answer": "Standard freight typically arrives in 2–3 weeks; custom-built ovens add 1–2 weeks of build time. We'll confirm a window when you order." },
+    { "question": "Do I need a professional contractor for installation?", "answer": "No. Ovens arrive assembled and only need a level base. White-glove delivery and placement is available if you'd like it done for you." },
+    { "question": "What kind of warranty is included with my Brasa oven?", "answer": "Every Brasa carries a 2-year premium warranty on the refractory chamber against defects in materials and workmanship." },
+    { "question": "Can I request a completely custom-built brick oven?", "answer": "Yes — reach out with your vision and our specialists will design a one-off build around your space and cooking style." },
+    { "question": "What is your return policy for refractory clay ovens?", "answer": "Unused ovens in original condition can be returned within the return window. Custom configurations may be non-returnable; we'll walk you through the details." }
+  ]
+}
