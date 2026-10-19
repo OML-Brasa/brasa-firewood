@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { CompareTable } from "@/components/CompareTable";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
@@ -184,7 +185,10 @@ export default async function Home() {
       {/* HERO */}
       <section className="relative h-[520px] w-full overflow-hidden bg-charcoal-800 md:h-[760px]">
         <img src={c.hero.image} alt="Brasa oven and live-fire cooking" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-black/5 to-transparent" />
+        {/* Darker scrim on mobile (where the headline is large and sits over the
+            busy background); lighter, left-weighted gradient on desktop. */}
+        <div className="absolute inset-0 bg-black/45 md:hidden" />
+        <div className="absolute inset-0 hidden bg-gradient-to-r from-black/35 via-black/5 to-transparent md:block" />
         <div className={`${wrap} relative flex h-full items-center`}>
           <h1 className="max-w-[640px] font-heading text-[40px] font-extrabold leading-[1.05] tracking-[-0.02em] text-sand md:text-[64px]">
             {c.hero.title[0]}
@@ -330,28 +334,7 @@ export default async function Home() {
             <p className="max-w-2xl text-[18px] leading-[1.4] text-charcoal-500">{c.comparison.subtitle}</p>
           </div>
 
-          <div className="mt-12 overflow-x-auto rounded border border-charcoal-500">
-            <table className="w-full min-w-[760px] border-collapse text-left">
-              <thead>
-                <tr className="bg-copper-500 text-sand">
-                  <th className="px-4 py-4 text-[15px] font-bold uppercase tracking-[0.04em]">Features</th>
-                  {c.comparison.models.map((m) => (
-                    <th key={m} className="px-4 py-4 text-[15px] font-bold uppercase tracking-[0.04em]">{m}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {c.comparison.rows.map((r, i) => (
-                  <tr key={r.feature} className={`border-t border-charcoal-100 ${i % 2 ? "bg-[#f8fafc]" : "bg-background"}`}>
-                    <td className="px-4 py-4 text-[15px] text-charcoal-500">{r.feature}</td>
-                    {r.values.map((v, j) => (
-                      <td key={j} className="px-4 py-4 text-[15px] text-charcoal-500">{v}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <CompareTable models={c.comparison.models} rows={c.comparison.rows} />
 
           {/* We Ship To */}
           <div className="mt-20">

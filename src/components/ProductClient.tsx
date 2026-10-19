@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
+import { CompareTable, type CompareData } from "@/components/CompareTable";
 import { addToCart, money, priceToNumber } from "@/lib/cart";
 import type { Accessory } from "@/lib/checkoutDefaults";
 import { useRecentlyViewed } from "@/lib/recentlyViewed";
@@ -41,8 +42,6 @@ export type ProductData = {
   specs: { label: string; value: string }[];
   faqs: { question: string; answer: string }[];
 };
-
-type CompareData = { models: string[]; rows: { feature: string; values: string[] }[] };
 
 const wrap = "mx-auto w-full max-w-[1440px] px-6 md:px-20";
 const label = "font-sans text-[15px] font-bold uppercase leading-none tracking-[0.5px] text-charcoal-800";
@@ -75,7 +74,7 @@ function Pill({
   return (
     <button
       onClick={onClick}
-      className={`rounded-[4px] px-4 py-3 text-[14px] font-semibold leading-[1.5] tracking-[0.28px] text-charcoal-800 transition-colors ${
+      className={`flex items-center justify-center rounded-[4px] px-4 py-3 text-center text-[14px] font-semibold leading-[1.5] tracking-[0.28px] text-charcoal-800 transition-colors ${
         active ? "border-2 border-charcoal-300 bg-[#f8fafc]" : "border border-charcoal-300 bg-white hover:bg-[#f8fafc]"
       } ${className}`}
     >
@@ -205,9 +204,9 @@ export function ProductClient({
               {/* Size */}
               <div className="flex flex-col gap-2">
                 <span className={label}>Oven Size</span>
-                <div className="flex max-w-[520px] flex-wrap gap-2">
+                <div className="grid max-w-[520px] grid-cols-2 gap-2 sm:grid-cols-3">
                   {product.sizes.map((s, i) => (
-                    <Pill key={s.model} active={i === size} onClick={() => setSize(i)} className="flex flex-col items-center !py-[10px] text-[15px] font-normal tracking-[0.3px]">
+                    <Pill key={s.model} active={i === size} onClick={() => setSize(i)} className="!flex-col !py-[10px] text-[15px] font-normal leading-[1.3] tracking-[0.3px]">
                       <span>{s.model}</span>
                       <span>{s.dims}</span>
                     </Pill>
@@ -282,9 +281,9 @@ export function ProductClient({
                   <Heart size={20} />
                 </button>
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <a href="#" className="flex items-center gap-1.5 text-[13px] font-bold capitalize leading-[1.5] tracking-[0.26px] text-charcoal-800 transition-colors hover:text-copper-600">
-                  Request a Custom Quote <ExternalLink size={14} />
+                  Request a Custom Quote <ExternalLink size={14} className="shrink-0" />
                 </a>
                 <span className="text-[13px] leading-[1.2] tracking-[0.26px] text-charcoal-800/60">Free shipping · Delivery 4–6 weeks</span>
               </div>
@@ -424,28 +423,7 @@ export function ProductClient({
             <h2 className={sectionTitle}>Compare Our Ovens</h2>
             <p className="max-w-2xl text-[16px] leading-[1.4] text-charcoal-500">Side-by-side specifications for all assembled oven lines.</p>
           </div>
-          <div className="mt-10 overflow-x-auto rounded border border-charcoal-500">
-            <table className="w-full min-w-[760px] border-collapse text-left">
-              <thead>
-                <tr className="bg-copper-500 text-sand">
-                  <th className="px-4 py-4 text-[15px] font-bold uppercase tracking-[0.04em]">Features</th>
-                  {compare.models.map((m) => (
-                    <th key={m} className="px-4 py-4 text-[15px] font-bold uppercase tracking-[0.04em]">{m}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {compare.rows.map((r, i) => (
-                  <tr key={r.feature} className={`border-t border-charcoal-100 ${i % 2 ? "bg-[#f8fafc]" : "bg-background"}`}>
-                    <td className="px-4 py-4 text-[15px] text-charcoal-500">{r.feature}</td>
-                    {r.values.map((v, j) => (
-                      <td key={j} className="px-4 py-4 text-[15px] text-charcoal-500">{v}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <CompareTable models={compare.models} rows={compare.rows} />
         </div>
       </section>
 
