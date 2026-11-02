@@ -1,9 +1,85 @@
-import type { ProductData } from "@/components/ProductClient";
+/** Real in-stock catalog, cross-checked against the OML-01 check list
+ *  (data lives in src/content/catalog.json, shared with the seed script).
+ *
+ *  Each oven line has variants — a real unit per size/finish, with its own
+ *  price and photo. Prices are the FULL regular prices; discounts are applied
+ *  at checkout via promo codes (BRASA10 / BRASA15). Used as the code fallback
+ *  when a Sanity `product` document is missing. */
+import catalog from "@/content/catalog.json";
 
-/** Code defaults for the four ovens — used when a Sanity `product` document is
- *  missing, and as the source the seed script writes into Sanity. */
+export type Variant = {
+  size: string;
+  finish: string;
+  price: number;
+  stock: number;
+  base: string;
+  description: string;
+  image: string | null;
+  /** Ordered gallery (primary first). Falls back to [image] when no gallery set. */
+  gallery: string[];
+};
 
-export const sharedFeatures: ProductData["features"] = [
+export type Oven = {
+  type: "oven";
+  slug: string;
+  name: string;
+  tagline: string;
+  style: string;
+  doors: number;
+  shortDescription: string;
+  variants: Variant[];
+};
+
+export type AccessoryProduct = {
+  type: "accessory";
+  slug: string;
+  name: string;
+  price: number;
+  stock: number;
+  shortDescription: string;
+  description: string;
+  image: string | null;
+};
+
+/** Per stakeholder: every displayed price is rounded UP to the next ten
+ *  ("a la próxima decena") — e.g. 5036.11 → 5040, 110.46 → 120. Applied at
+ *  every boundary prices enter the app (code catalog + Sanity) so nothing slips
+ *  through unrounded, even values edited later in Studio. */
+export const roundUpToTen = (n: number) => Math.ceil(n / 10) * 10;
+
+const stockImg = (photo: string | null) => (photo ? `/images/stock/${photo}.jpg` : null);
+
+type RawVariant = Omit<Variant, "image" | "gallery"> & { photo: string | null; gallery?: string[] };
+type RawOven = Omit<Oven, "type" | "variants"> & { variants: RawVariant[] };
+type RawAccessory = Omit<AccessoryProduct, "type" | "image"> & { photo: string | null };
+
+export const ovens: Oven[] = (catalog.ovens as RawOven[]).map((o) => ({
+  type: "oven",
+  slug: o.slug,
+  name: o.name,
+  tagline: o.tagline,
+  style: o.style,
+  doors: o.doors,
+  shortDescription: o.shortDescription,
+  variants: o.variants.map(({ photo, gallery, ...v }) => ({
+    ...v,
+    price: roundUpToTen(v.price),
+    image: stockImg(photo),
+    gallery: (gallery ?? (photo ? [photo] : [])).map((p) => `/images/stock/${p}.jpg`),
+  })),
+}));
+
+export const accessories: AccessoryProduct[] = (catalog.accessories as RawAccessory[]).map(({ photo, ...a }) => ({
+  type: "accessory",
+  ...a,
+  price: roundUpToTen(a.price),
+  image: stockImg(photo),
+}));
+
+export const getOven = (slug: string) => ovens.find((o) => o.slug === slug);
+
+// Shared brand content used across every oven's detail page.
+export const sharedFeatures = [
   { title: "Refractory-Clay Core", copy: "Proven for hundreds of years for heat retention and even radiant performance." },
   { title: "Heat Retention", copy: "Reaches searing temperatures fast, then holds them for hours." },
   { title: "Precise, Repeatable Results", copy: "The control a disciplined cook expects, every session." },
@@ -12,167 +88,13 @@ export const sharedFeatures: ProductData["features"] = [
   { title: "Built to Last", copy: "Built and proven to perform for generations." },
 ];
 
-export const sharedSpecs: ProductData["specs"] = [
-  { label: "Cooking Surface", value: '36" diameter / 1,018 sq. in.' },
-  { label: "Overall Dimensions", value: '48"W x 52"D x 68"H (including stand)' },
-  { label: "Weight", value: "1,250 lbs (Oven dome only: 850 lbs)" },
-  { label: "Max Temperature", value: "1000°F (538°C)" },
-  { label: "Heat-up Time", value: "45 minutes to 900°F" },
-  { label: "Construction Material", value: "Authentic refractory clay double-baked chamber" },
-  { label: "Insulation", value: '3" high-density ceramic fiber blanket' },
-  { label: "Installation Type", value: "Specialized positioning / Integrated Base" },
-];
-
-export const sharedFaqs: ProductData["faqs"] = [
+export const sharedFaqs = [
   { question: "How long does it take to heat up?", answer: "About 45 minutes to reach 900°F from a cold start with seasoned hardwood — then it holds heat for hours on a single fire." },
   { question: "Can it stay outdoors during winter?", answer: "Yes. Brasa ovens are built for year-round outdoor use; we recommend a fitted cover and keeping the chamber dry between fires." },
   { question: "What wood is recommended?", answer: "Seasoned hardwoods such as oak, maple, or fruitwoods. Avoid softwoods, treated lumber, or anything green or damp." },
-  { question: "Does it require professional installation?", answer: "The oven arrives assembled; most customers need only a level base. White-glove delivery and placement is available at checkout." },
-  { question: "What's included with every oven?", answer: "A cast iron door with glass, an oven thermometer, a chimney cap, and flue dampers are included as standard." },
-  { question: "How much does it weigh?", answer: "Roughly 1,250 lbs installed on its base; the refractory dome alone is about 850 lbs." },
-  { question: "What warranty do you offer?", answer: "Every Brasa is backed by a multi-year warranty on the refractory chamber against defects in materials and workmanship." },
+  { question: "Does it require professional installation?", answer: "The oven arrives on its base ready to use; it only needs a level spot. Delivery and placement are quoted separately." },
+  { question: "What's included?", answer: "Every oven ships with its base, premium insulation, an upper glass door, and a thermometer (Ardente ovens include two cast-iron doors and two thermometers)." },
+  { question: "How is shipping handled?", answer: "Freight on these ovens is heavy and varies by location, so we quote it per order. Add what you want to your cart and request a shipping quote — we'll follow up with the total." },
+  { question: "Do you offer discounts?", answer: "We're running an introductory promotion — enter your discount code at checkout to apply it before requesting your quote." },
   { question: "Where do you ship?", answer: "We ship across the mainland U.S., Puerto Rico, and the Dominican Republic. Contact us for freight timelines to your zone." },
 ];
-
-export const compareData = {
-  models: ["Dolce", "Ravvivata", "Ardente", "Grigia"],
-  rows: [
-    { feature: "Model Sizes", values: ["75–120", "75–120", "90–120", "75–120"] },
-    { feature: "Exterior Size", values: ["100×100 – 150×150 cm", "100×100 – 150×150 cm", "120×120 – 150×150 cm", "100×100 – 150×150 cm"] },
-    { feature: "Concrete Base", values: ["6–32 blocks", "6–32 blocks", "10–36 blocks", "6–32 blocks"] },
-    { feature: "Insulation", values: ["Premium", "Premium", "Premium", "Premium"] },
-    { feature: "Finish Options", values: ["Smooth, Brick, Stone, Wood, Marble, Premium", "Smooth, Brick, Stone, Wood, Marble, Premium", "Traditional, Classic, Mixed, Brick, Stone, Wood", "Traditional, Classic, Brick & Stone"] },
-    { feature: "Burner Type", values: ["—", "—", "—", "Round or Square"] },
-  ],
-};
-
-const insulationStd = ["Yes (Multi-layer)", "No"];
-const basesStd = ["Concrete Base", "Metal Base", "No Base"];
-
-export const productDefaults: ProductData[] = [
-  {
-    slug: "dolce",
-    name: "Dolce",
-    tagline: "Traditional Oven",
-    price: "From $2,450",
-    priceSymbol: "$$$",
-    shortDescription: "Precise, the all-time traditional oven. Built for control at an intimate scale.",
-    gallery: ["/images/shop-dolce.png"],
-    sizes: [
-      { model: "model 75", dims: "(100x100 cm)" },
-      { model: "model 80", dims: "(110x110 cm)" },
-      { model: "model 85", dims: "(110x110 cm)" },
-      { model: "model 90", dims: "(120x120 cm)" },
-      { model: "model 95", dims: "(120x120 cm)" },
-      { model: "model 100", dims: "(130x130 cm)" },
-      { model: "model 110", dims: "(130x130 cm)" },
-    ],
-    insulation: insulationStd,
-    domeColors: [
-      { name: "Classic Single Coat Mortar", color: "#DED7D4" },
-      { name: "Black Marble Tile", color: "#1C1C1C" },
-      { name: "Black Brick", color: "#595959" },
-    ],
-    archFinishes: ["Red Brick", "Faux Wood", "Black Brick/Black Border", "White Brick", "Black Brick/White Border", "Black Brick/Chocolate Border"],
-    bases: basesStd,
-    financeNote: "As low as $102/mo with 24-month financing.",
-    features: sharedFeatures,
-    specs: sharedSpecs,
-    faqs: sharedFaqs,
-  },
-  {
-    slug: "ravvivata",
-    name: "Ravvivata",
-    tagline: "Traditional Oven",
-    price: "From $5,850",
-    priceSymbol: "$$$",
-    shortDescription: "Responsive and versatile — full control and exceptional heat retention for the cook who wants it all.",
-    gallery: ["/images/shop-ravvivata.png"],
-    sizes: [
-      { model: "model 75", dims: "(100x100 cm)" },
-      { model: "model 80", dims: "(110x110 cm)" },
-      { model: "model 85", dims: "(110x110 cm)" },
-      { model: "model 90", dims: "(120x120 cm)" },
-      { model: "model 95", dims: "(120x120 cm)" },
-      { model: "model 100", dims: "(130x130 cm)" },
-      { model: "model 110", dims: "(130x130 cm)" },
-    ],
-    insulation: insulationStd,
-    domeColors: [
-      { name: "Classic Single Coat Mortar", color: "#DED7D4" },
-      { name: "Black Marble Tile", color: "#1C1C1C" },
-      { name: "Black Brick", color: "#595959" },
-    ],
-    archFinishes: ["Red Brick", "Faux Wood", "Black Brick/Black Border", "White Brick", "Black Brick/White Border", "Black Brick/Chocolate Border"],
-    bases: basesStd,
-    financeNote: "As low as $244/mo with 24-month financing.",
-    features: sharedFeatures,
-    specs: sharedSpecs,
-    faqs: sharedFaqs,
-  },
-  {
-    slug: "ardente",
-    name: "Ardente",
-    tagline: "Traditional Oven",
-    price: "From $3,100",
-    priceSymbol: "$$$",
-    shortDescription: "Built for high performance. For those who push the fire hardest by maximizing space, versatility, and heat distribution.",
-    gallery: ["/images/shop-ardente.png"],
-    sizes: [
-      { model: "model 90", dims: "(120x120 cm)" },
-      { model: "model 95", dims: "(120x120 cm)" },
-      { model: "model 100", dims: "(130x130 cm)" },
-      { model: "model 110", dims: "(140x140 cm)" },
-      { model: "model 120", dims: "(150x150 cm)" },
-    ],
-    insulation: [],
-    domeColors: [
-      { name: "Classic Single Coat Mortar", color: "#DED7D4" },
-      { name: "Kaolin Brick", color: "#C6875A" },
-      { name: "Black Brick", color: "#4A4A4A" },
-      { name: "Natural Stone", color: "#C9BFA5" },
-      { name: "Red Brick", color: "#B45B3E" },
-      { name: "Terracotta Brick", color: "#C46A3F" },
-      { name: "White Single Coat Mortar", color: "#EDEAE3" },
-    ],
-    archFinishes: ["Black Brick", "Terracotta Brick", "Faux Wood", "Faux Stone", "Red Brick"],
-    bases: basesStd,
-    financeNote: "As low as $129/mo with 24-month financing.",
-    features: sharedFeatures,
-    specs: sharedSpecs,
-    faqs: sharedFaqs,
-  },
-  {
-    slug: "griggia",
-    name: "Griggia",
-    tagline: "Traditional Oven",
-    price: "From $1,950",
-    priceSymbol: "$$$",
-    shortDescription: "Double the experience of your cook — the connoisseur's instrument.",
-    gallery: ["/images/shop-griggia.png"],
-    sizes: [
-      { model: "model 75", dims: "(100x100 cm)" },
-      { model: "model 80", dims: "(110x110 cm)" },
-      { model: "model 85", dims: "(120x110 cm)" },
-      { model: "model 90", dims: "(120x110 cm)" },
-      { model: "model 95", dims: "(130x130 cm)" },
-      { model: "model 100", dims: "(130x130 cm)" },
-      { model: "model 110", dims: "(150x150 cm)" },
-      { model: "model 120", dims: "(150x150 cm)" },
-    ],
-    insulation: insulationStd,
-    domeColors: [
-      { name: "Classic Single Coat Mortar", color: "#DED7D4" },
-      { name: "Natural Stone", color: "#C9BFA5" },
-      { name: "Red Brick", color: "#B45B3E" },
-    ],
-    archFinishes: ["Red Brick"],
-    bases: basesStd,
-    financeNote: "As low as $81/mo with 24-month financing.",
-    features: sharedFeatures,
-    specs: sharedSpecs,
-    faqs: sharedFaqs,
-  },
-];
-
-export const getProductDefault = (slug: string) => productDefaults.find((p) => p.slug === slug);

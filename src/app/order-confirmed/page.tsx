@@ -13,7 +13,7 @@ export default async function OrderConfirmedPage() {
     <div className="flex flex-col bg-background">
       <Navbar />
       <CheckoutStepper step={3} />
-      <OrderConfirmedClient whatsNext={s.whatsNext} shippingMethods={s.shippingMethods} supportPhone={s.supportPhone} supportEmail={s.supportEmail} />
+      <OrderConfirmedClient whatsNext={s.whatsNext} supportPhone={s.supportPhone} supportEmail={s.supportEmail} />
       <Newsletter />
       <Footer />
     </div>

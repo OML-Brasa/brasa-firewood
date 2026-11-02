@@ -9,7 +9,7 @@ const columns = [
       { label: "Dolce", href: "/shop/dolce" },
       { label: "Ravvivata", href: "/shop/ravvivata" },
       { label: "Ardente", href: "/shop/ardente" },
-      { label: "Griggia", href: "/shop/griggia" },
+      { label: "Acerba", href: "/shop/acerba" },
     ],
   },
   {

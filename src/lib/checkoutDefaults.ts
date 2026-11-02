@@ -23,15 +23,15 @@ export const checkoutDefaults: CheckoutSettings = {
     { name: "White Glove Delivery & Setup", description: "Scheduled delivery, unboxing, assembly, and precise stand installation by outdoor oven specialists.", price: 349 },
   ],
   trustBadges: [
-    { title: "100% Secure Checkout", description: "Encrypted transaction processing." },
+    { title: "No Online Payment", description: "We quote freight first — you only pay once you approve." },
     { title: "2-Year Premium Warranty", description: "Comprehensive Brasa coverage." },
-    { title: "Free Design Consultation", description: "Speak with our outdoor oven experts." },
+    { title: "Free Design Consultation", description: "Speak with our wood-fired oven experts." },
   ],
   whatsNext: [
-    { title: "Confirmation Email", description: "A receipt and detailed order confirmation has been dispatched to your inbox." },
-    { title: "Order Processing", description: "Our refractory specialists are preparing your Brasa oven for safe freight transport (1–2 business days)." },
-    { title: "Shipping Notification", description: "You will receive an email containing a dedicated freight tracking number once your oven leaves our facility." },
-    { title: "Delivery & Wood-Fired Feast!", description: "The carrier will call to schedule a convenient curbside delivery window. Fire up and enjoy!" },
+    { title: "Request Received", description: "We've logged your request and the ovens and accessories you're interested in." },
+    { title: "Freight Quote", description: "Our team calculates shipping to your area and emails you a quote — these ovens are heavy, so freight is priced per location." },
+    { title: "Confirm & Pay", description: "Once you approve the quote, we arrange payment and schedule dispatch of your oven." },
+    { title: "Delivery & Wood-Fired Feast!", description: "Your oven ships by freight to your location. Fire it up and enjoy!" },
   ],
   accessories: [
     { name: "Cast Iron Door", description: "With heat-rated glass", price: 180, image: null },

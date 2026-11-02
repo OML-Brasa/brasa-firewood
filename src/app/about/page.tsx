@@ -65,7 +65,7 @@ const steps = [
 
 const values = [
   { Icon: Blocks, title: "Hand-Built in Europe", copy: "Finished to a standard of modern sophistication." },
-  { Icon: LibraryBig, title: "Four Collections", copy: "Dolce, Ravvivata, Ardente, and Griggia, across a range of sizes and finishes." },
+  { Icon: LibraryBig, title: "Four Collections", copy: "Dolce, Ravvivata, Ardente, and Acerba, across a range of sizes and finishes." },
   { Icon: CircleDashedCheck, title: "Built to Last", copy: "Built and proven to perform for generations." },
   { Icon: BookmarkCheck, title: "Held to a Standard", copy: "Measured, finished, and inspected before every Brasa leaves the workshop." },
 ];

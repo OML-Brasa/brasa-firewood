@@ -1,0 +1,70 @@
+{
+  "ovens": [
+    {
+      "slug": "dolce",
+      "name": "Dolce",
+      "tagline": "Superior Wood-Fired Oven",
+      "style": "Superior",
+      "doors": 1,
+      "shortDescription": "Our classic single-chamber oven — glass door, premium insulation, in several sizes and finishes.",
+      "variants": [
+        { "size": "80 cm", "finish": "Red Brick", "price": 4423.9, "stock": 1, "base": "Metal Base", "photo": "dolce-80-red-brick", "description": "80 cm Superior Oven, red brick exterior finish, upper glass door, premium insulation with thermometer, and red brick entryway. Includes metal base." },
+        { "size": "80 cm", "finish": "Black Brick / White Joint", "price": 4690.08, "stock": 1, "base": "Metal Base", "photo": "dolce-80-black-brick", "description": "80 cm Superior Oven, black brick finish with white joint, upper glass door, and premium insulation with thermometer. Includes metal base." },
+        { "size": "90 cm", "finish": "Iberian Stone", "price": 4370.66, "stock": 1, "base": "Metal Base", "photo": "dolce-90-iberian-stone", "gallery": ["dolce-90-iberian-stone", "dolce-90-iberian-stone-2", "dolce-90-iberian-stone-3", "dolce-90-iberian-stone-4"], "description": "90 cm Oven, premium insulation, Iberian stone finish, upper glass door and thermometer. Includes metal base." },
+        { "size": "90 cm", "finish": "Wood", "price": 5089.34, "stock": 1, "base": "Metal Base", "photo": "dolce-90-wood", "description": "90 cm Oven, premium insulation with wood-look finish and entryway, upper glass door and thermometer. Includes metal base." },
+        { "size": "95 cm", "finish": "Marble", "price": 4849.78, "stock": 1, "base": "Metal Base", "photo": "dolce-95-marble", "description": "95 cm Oven, premium insulation, marble finish, upper glass door and thermometer. Includes metal base." },
+        { "size": "95 cm", "finish": "Imitation Stone", "price": 5169.2, "stock": 1, "base": "Metal Base", "photo": "dolce-95-imitation-stone", "description": "95 cm Superior Oven, imitation stone finish with single-coat mortar, upper glass door, premium insulation with thermometer. Includes metal base." },
+        { "size": "110 cm", "finish": "Marble", "price": 6193.99, "stock": 1, "base": "Metal Base", "photo": "dolce-110-marble", "description": "110 cm Oven, premium insulation, marble finish, upper glass door and thermometer. Includes metal base." }
+      ]
+    },
+    {
+      "slug": "ravvivata",
+      "name": "Ravvivata",
+      "tagline": "Supreme Wood-Fired Oven",
+      "style": "Supreme",
+      "doors": 1,
+      "shortDescription": "The Supreme line — single-coat mortar finish with a cast-iron glass door and premium insulation.",
+      "variants": [
+        { "size": "90 cm", "finish": "Terracota Brick", "price": 5036.11, "stock": 1, "base": "Metal Base", "photo": "ravvivata-90-terracota", "gallery": ["ravvivata-90-terracota", "ravvivata-90-2", "ravvivata-90-3", "ravvivata-90-4"], "description": "90 cm Supreme Oven, traditional single-coat mortar finish, Terracota brick opening, upper glass door, and premium insulation with thermometer. Includes metal base." },
+        { "size": "90 cm", "finish": "Terra Brick", "price": 5036.11, "stock": 2, "base": "Metal Base", "photo": "ravvivata-90-terra", "gallery": ["ravvivata-90-terra", "ravvivata-90-2", "ravvivata-90-3", "ravvivata-90-4"], "description": "90 cm Supreme Oven, single-coat mortar finish, Terra brick entryway, and upper cast iron door with glass. Includes metal base." }
+      ]
+    },
+    {
+      "slug": "ardente",
+      "name": "Ardente",
+      "tagline": "Enclosing Wood-Fired Oven",
+      "style": "Enclosing / Indirect",
+      "doors": 2,
+      "shortDescription": "Our flagship enclosing/indirect oven — round firebox, two cast-iron glass doors, dual thermometers, premium insulation.",
+      "variants": [
+        { "size": "90 cm", "finish": "Exterior Red Brick", "price": 7743.15, "stock": 1, "base": "Metal Base", "photo": "ardente-90", "description": "90 cm Enclosing/Indirect Oven, round firebox/burner, 2 upper cast iron doors with glass, and exterior brick finish. 2 thermometers and premium insulation. Includes metal base." },
+        { "size": "95 cm", "finish": "Marble & Black Brick", "price": 7692.58, "stock": 1, "base": "Concrete Base", "photo": "ardente-95", "gallery": ["ardente-95", "ardente-95-2", "ardente-95-3", "ardente-95-4"], "description": "95 cm Enclosing/Indirect Oven (Model 2), round firebox/burner, 2 upper cast iron doors with glass, black brick entryway with gray joint, and authentic marble finish. 2 thermometers and premium insulation. Includes concrete base." },
+        { "size": "100 cm", "finish": "White Mortar & Premium Black Brick", "price": 8807.87, "stock": 1, "base": "Concrete Base", "photo": "ardente-100", "description": "100 cm Enclosing/Indirect Oven, round firebox/burner, 2 upper cast iron doors with glass, black Premium imitation brick entryway, and white single-coat mortar finish. 2 thermometers and premium insulation. Includes concrete base." }
+      ]
+    },
+    {
+      "slug": "acerba",
+      "name": "Acerba",
+      "tagline": "Complete Oven Lot",
+      "style": "Complete Lot",
+      "doors": 1,
+      "shortDescription": "A ready-to-fire package — oven, door, spatula kit, and thermometer — in four sizes at one great price.",
+      "variants": [
+        { "size": "85 cm", "finish": "Standard", "price": 1512.56, "stock": 1, "base": "", "photo": "acerba-85-90", "description": "85 cm oven lot — includes the oven, door, spatula kit, and thermometer. A complete, ready-to-fire package." },
+        { "size": "90 cm", "finish": "Standard", "price": 1512.56, "stock": 1, "base": "", "photo": "acerba-85-90", "description": "90 cm oven lot — includes the oven, door, spatula kit, and thermometer. A complete, ready-to-fire package." },
+        { "size": "95 cm", "finish": "Standard", "price": 1512.56, "stock": 1, "base": "", "photo": "acerba-95-100", "description": "95 cm oven lot — includes the oven, door, spatula kit, and thermometer. A complete, ready-to-fire package." },
+        { "size": "100 cm", "finish": "Standard", "price": 1512.56, "stock": 1, "base": "", "photo": "acerba-95-100", "description": "100 cm oven lot — includes the oven, door, spatula kit, and thermometer. A complete, ready-to-fire package." }
+      ]
+    }
+  ],
+  "accessories": [
+    { "slug": "exhaust-tube", "name": "Exhaust Tube", "price": 110.46, "stock": 18, "photo": "acc-pipe", "shortDescription": "1 m exhaust tube, Ø150 mm.", "description": "1-meter stainless exhaust tube, Ø150 mm. Connects your oven's flue to the hood and elbow sections." },
+    { "slug": "exhaust-hood", "name": "Exhaust Hood", "price": 133.09, "stock": 18, "photo": "acc-hood", "shortDescription": "Exhaust hood, Ø150 mm.", "description": "Exhaust hood, Ø150 mm. Caps the flue and shields it from weather and sparks." },
+    { "slug": "exhaust-elbow", "name": "Exhaust 45° Elbow", "price": 71.87, "stock": 8, "photo": null, "shortDescription": "45° exhaust elbow, Ø150 mm.", "description": "45° exhaust elbow, Ø150 mm, for routing the flue around overhangs." },
+    { "slug": "spatula-set", "name": "Spatula Set", "price": 119.78, "stock": 10, "photo": "acc-spatula", "shortDescription": "Pizza and bread spatula set.", "description": "Long-handled spatula set for launching, turning, and pulling pizza and bread." },
+    { "slug": "grill-racks", "name": "Dual-Height Grill Racks", "price": 133.09, "stock": 10, "photo": "acc-rack", "shortDescription": "Dual-height grill racks.", "description": "Dual-height grill racks for searing and roasting at two levels inside the chamber." },
+    { "slug": "door-with-glass", "name": "Cast Iron Door (with Glass)", "price": 319.41, "stock": 2, "photo": null, "shortDescription": "Cast iron oven door with glass.", "description": "Cast iron oven door with heat-rated glass — lets you watch the fire while holding heat." },
+    { "slug": "door-no-glass", "name": "Cast Iron Door (no Glass)", "price": 266.18, "stock": 2, "photo": null, "shortDescription": "Cast iron oven door without glass.", "description": "Solid cast iron oven door without glass for maximum heat retention." },
+    { "slug": "exhaust-shot", "name": "Exhaust Shot", "price": 159.71, "stock": 4, "photo": null, "shortDescription": "Exhaust shot with blown regulator.", "description": "Exhaust shot with blown regulator to fine-tune draft and airflow." }
+  ]
+}

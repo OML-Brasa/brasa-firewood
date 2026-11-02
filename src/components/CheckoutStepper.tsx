@@ -15,8 +15,8 @@ export function CheckoutStepper({ step }: { step: 1 | 2 | 3 }) {
   const crumbs = steps.slice(0, step);
   return (
     <div className="border-b border-[#e7e2d7] bg-sand">
-      <div className={`${wrap} flex flex-wrap items-center justify-between gap-3 py-4`}>
-        <nav className="flex items-center gap-2 text-[13px] text-charcoal-500">
+      <div className={`${wrap} flex flex-wrap items-center justify-center gap-3 py-4 sm:justify-between`}>
+        <nav className="hidden items-center gap-2 text-[13px] text-charcoal-500 sm:flex">
           <Link href="/" className="transition-colors hover:text-copper-600">Home</Link>
           {crumbs.map((c, i) => (
             <span key={c.label} className="flex items-center gap-2">
@@ -45,7 +45,7 @@ export function CheckoutStepper({ step }: { step: 1 | 2 | 3 }) {
                   {done ? <Check size={13} strokeWidth={3} /> : n}
                 </span>
                 <span className={`text-[13px] ${current ? "font-bold text-charcoal-800" : "text-charcoal-500"}`}>{s.label}</span>
-                {n < steps.length && <span className="mx-1 h-px w-8 bg-charcoal-100" aria-hidden />}
+                {n < steps.length && <span className="mx-1 hidden h-px w-6 bg-charcoal-100 sm:block sm:w-8" aria-hidden />}
               </li>
             );
           })}

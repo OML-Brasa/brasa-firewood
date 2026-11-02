@@ -19,6 +19,7 @@ import { createClient } from "next-sanity";
 import faqContent from "../src/content/faq.json" with { type: "json" };
 import contactContent from "../src/content/contact.json" with { type: "json" };
 import recipesContent from "../src/content/recipes.json" with { type: "json" };
+import catalog from "../src/content/catalog.json" with { type: "json" };
 
 // Minimal .env.local loader (no extra dependency needed).
 function loadEnv() {
@@ -83,10 +84,10 @@ async function build() {
     aboutImage: await image("about.png"),
     featuredImage: await image("featured-oven.png"),
     products: [
-      { _key: "p1", name: "Dolce", price: "$$", image: await image("model-dolce.png") },
-      { _key: "p2", name: "Ravvivata", price: "$$", image: await image("model-ravvivata.png") },
-      { _key: "p3", name: "Ardente", price: "$$", image: await image("model-ardente.png") },
-      { _key: "p4", name: "Griggia", price: "$$", image: await image("model-griggia.png") },
+      { _key: "p1", name: "Dolce", price: "From $4,380", image: await image("model-dolce.png") },
+      { _key: "p2", name: "Ravvivata", price: "From $5,040", image: await image("model-ravvivata.png") },
+      { _key: "p3", name: "Ardente", price: "From $7,700", image: await image("model-ardente.png") },
+      { _key: "p4", name: "Acerba", price: "From $1,520", image: await image("model-griggia.png") },
     ],
     materialImage: await image("material.png"),
     editorialRecipesImage: await image("editorial-recipes.png"),
@@ -127,7 +128,7 @@ async function build() {
     ],
     values: [
       { _key: "v1", title: "Hand-Built in Europe", copy: "Finished to a standard of modern sophistication." },
-      { _key: "v2", title: "Four Collections", copy: "Dolce, Ravvivata, Ardente, and Griggia, across a range of sizes and finishes." },
+      { _key: "v2", title: "Four Collections", copy: "Dolce, Ravvivata, Ardente, and Acerba, across a range of sizes and finishes." },
       { _key: "v3", title: "Built to Last", copy: "Built and proven to perform for generations." },
       { _key: "v4", title: "Held to a Standard", copy: "Measured, finished, and inspected before every Brasa leaves the workshop." },
     ],
@@ -138,18 +139,7 @@ async function build() {
     _type: "shopPage",
     pageTitle: "The Models",
     pageIntro:
-      "Explore our handcrafted European wood-fired ovens. Each model is built with premium refractory materials and available in multiple sizes, dome finishes, and base configurations to suit your outdoor kitchen.",
-    products: [
-      { _key: "sp1", name: "Dolce", price: "From $2,450", image: await image("shop-dolce.png"), desc: "Precise, the all-time traditional oven. Built for control at an intimate scale. Available in 80–110cm. Includes cast iron door with glass, thermometer, chimney cap, and flue dampers." },
-      { _key: "sp2", name: "Ravvivata", price: "From $5,850", image: await image("shop-ravvivata.png"), desc: "Responsive and versatile — full control and exceptional heat retention for the cook who wants it all. Available in 80–110cm. Includes cast iron door with glass, thermometer, chimney cap, and flue dampers." },
-      { _key: "sp3", name: "Ardente", price: "From $3,100", image: await image("shop-ardente.png"), desc: "Built for high performance. For those who push the fire hardest by maximizing space, versatility, and heat distribution. Available in 80–110cm. Includes cast iron door with glass, thermometer, chimney cap, and flue dampers." },
-      { _key: "sp4", name: "Griggia", price: "From $1,950", image: await image("shop-griggia.png"), desc: "Double the experience of your cook — the connoisseur's instrument. Available in 80–110cm. Includes cast iron door with glass, thermometer, chimney cap, and flue dampers." },
-    ],
-    bundleTitle: "The Essentials Package",
-    bundleDescription:
-      "Our best-selling traditional oven bundled with a concrete base and premium insulation. Everything you need to start cooking wood-fired meals at home.",
-    bundlePrice: "$199",
-    bundleImage: await image("featured-oven.png"),
+      "Our handcrafted European wood-fired ovens — each a one-of-a-kind, in-stock build. Pick a size and finish, add it to your cart, and request a shipping quote.",
   };
 
   const keyed = (arr, p) => arr.map((x, i) => ({ _key: `${p}${i}`, ...x }));
@@ -168,9 +158,9 @@ async function build() {
     ),
     trustBadges: keyed(
       [
-        { title: "100% Secure Checkout", description: "Encrypted transaction processing." },
+        { title: "No Online Payment", description: "We quote freight first — you only pay once you approve." },
         { title: "2-Year Premium Warranty", description: "Comprehensive Brasa coverage." },
-        { title: "Free Design Consultation", description: "Speak with our outdoor oven experts." },
+        { title: "Free Design Consultation", description: "Speak with our wood-fired oven experts." },
       ],
       "tb"
     ),
@@ -243,175 +233,56 @@ async function build() {
     submitSubtitle: recipesContent.submitSubtitle,
   };
 
-  // ---- Product documents (power /shop/[slug] detail pages) ----
-  const insulationStd = ["Yes (Multi-layer)", "No"];
-  const basesStd = ["Concrete Base", "Metal Base", "No Base"];
-  const sharedFeatures = keyed(
-    [
-      { title: "Refractory-Clay Core", copy: "Proven for hundreds of years for heat retention and even radiant performance." },
-      { title: "Heat Retention", copy: "Reaches searing temperatures fast, then holds them for hours." },
-      { title: "Precise, Repeatable Results", copy: "The control a disciplined cook expects, every session." },
-      { title: "Live-Wood Flavor", copy: "Never coal, gas, or electricity." },
-      { title: "Hand-Built in Europe", copy: "Finished to a standard of modern sophistication." },
-      { title: "Built to Last", copy: "Built and proven to perform for generations." },
-    ],
-    "f"
-  );
-  const sharedSpecs = keyed(
-    [
-      { label: "Cooking Surface", value: '36" diameter / 1,018 sq. in.' },
-      { label: "Overall Dimensions", value: '48"W x 52"D x 68"H (including stand)' },
-      { label: "Weight", value: "1,250 lbs (Oven dome only: 850 lbs)" },
-      { label: "Max Temperature", value: "1000°F (538°C)" },
-      { label: "Heat-up Time", value: "45 minutes to 900°F" },
-      { label: "Construction Material", value: "Authentic refractory clay double-baked chamber" },
-      { label: "Insulation", value: '3" high-density ceramic fiber blanket' },
-      { label: "Installation Type", value: "Specialized positioning / Integrated Base" },
-    ],
-    "sp"
-  );
-  const sharedFaqs = keyed(
-    [
-      { question: "How long does it take to heat up?", answer: "About 45 minutes to reach 900°F from a cold start with seasoned hardwood — then it holds heat for hours on a single fire." },
-      { question: "Can it stay outdoors during winter?", answer: "Yes. Brasa ovens are built for year-round outdoor use; we recommend a fitted cover and keeping the chamber dry between fires." },
-      { question: "What wood is recommended?", answer: "Seasoned hardwoods such as oak, maple, or fruitwoods. Avoid softwoods, treated lumber, or anything green or damp." },
-      { question: "Does it require professional installation?", answer: "The oven arrives assembled; most customers need only a level base. White-glove delivery and placement is available at checkout." },
-      { question: "What's included with every oven?", answer: "A cast iron door with glass, an oven thermometer, a chimney cap, and flue dampers are included as standard." },
-      { question: "How much does it weigh?", answer: "Roughly 1,250 lbs installed on its base; the refractory dome alone is about 850 lbs." },
-      { question: "What warranty do you offer?", answer: "Every Brasa is backed by a multi-year warranty on the refractory chamber against defects in materials and workmanship." },
-      { question: "Where do you ship?", answer: "We ship across the mainland U.S., Puerto Rico, and the Dominican Republic. Contact us for freight timelines to your zone." },
-    ],
-    "q"
-  );
-
-  const productSpecs = {
-    dolce: {
-      order: 0,
-      tagline: "Traditional Oven",
-      price: "From $2,450",
-      priceSymbol: "$$$",
-      shortDescription: "Precise, the all-time traditional oven. Built for control at an intimate scale.",
-      img: "shop-dolce.png",
-      financeNote: "As low as $102/mo with 24-month financing.",
-      sizes: [
-        { model: "model 75", dims: "(100x100 cm)" },
-        { model: "model 80", dims: "(110x110 cm)" },
-        { model: "model 85", dims: "(110x110 cm)" },
-        { model: "model 90", dims: "(120x120 cm)" },
-        { model: "model 95", dims: "(120x120 cm)" },
-        { model: "model 100", dims: "(130x130 cm)" },
-        { model: "model 110", dims: "(130x130 cm)" },
-      ],
-      insulation: insulationStd,
-      domeColors: [
-        { name: "Classic Single Coat Mortar", color: "#DED7D4" },
-        { name: "Black Marble Tile", color: "#1C1C1C" },
-        { name: "Black Brick", color: "#595959" },
-      ],
-      archFinishes: ["Red Brick", "Faux Wood", "Black Brick/Black Border", "White Brick", "Black Brick/White Border", "Black Brick/Chocolate Border"],
-    },
-    ravvivata: {
-      order: 1,
-      tagline: "Traditional Oven",
-      price: "From $5,850",
-      priceSymbol: "$$$",
-      shortDescription: "Responsive and versatile — full control and exceptional heat retention for the cook who wants it all.",
-      img: "shop-ravvivata.png",
-      financeNote: "As low as $244/mo with 24-month financing.",
-      sizes: [
-        { model: "model 75", dims: "(100x100 cm)" },
-        { model: "model 80", dims: "(110x110 cm)" },
-        { model: "model 85", dims: "(110x110 cm)" },
-        { model: "model 90", dims: "(120x120 cm)" },
-        { model: "model 95", dims: "(120x120 cm)" },
-        { model: "model 100", dims: "(130x130 cm)" },
-        { model: "model 110", dims: "(130x130 cm)" },
-      ],
-      insulation: insulationStd,
-      domeColors: [
-        { name: "Classic Single Coat Mortar", color: "#DED7D4" },
-        { name: "Black Marble Tile", color: "#1C1C1C" },
-        { name: "Black Brick", color: "#595959" },
-      ],
-      archFinishes: ["Red Brick", "Faux Wood", "Black Brick/Black Border", "White Brick", "Black Brick/White Border", "Black Brick/Chocolate Border"],
-    },
-    ardente: {
-      order: 2,
-      tagline: "Traditional Oven",
-      price: "From $3,100",
-      priceSymbol: "$$$",
-      shortDescription: "Built for high performance. For those who push the fire hardest by maximizing space, versatility, and heat distribution.",
-      img: "shop-ardente.png",
-      financeNote: "As low as $129/mo with 24-month financing.",
-      sizes: [
-        { model: "model 90", dims: "(120x120 cm)" },
-        { model: "model 95", dims: "(120x120 cm)" },
-        { model: "model 100", dims: "(130x130 cm)" },
-        { model: "model 110", dims: "(140x140 cm)" },
-        { model: "model 120", dims: "(150x150 cm)" },
-      ],
-      insulation: [],
-      domeColors: [
-        { name: "Classic Single Coat Mortar", color: "#DED7D4" },
-        { name: "Kaolin Brick", color: "#C6875A" },
-        { name: "Black Brick", color: "#4A4A4A" },
-        { name: "Natural Stone", color: "#C9BFA5" },
-        { name: "Red Brick", color: "#B45B3E" },
-        { name: "Terracotta Brick", color: "#C46A3F" },
-        { name: "White Single Coat Mortar", color: "#EDEAE3" },
-      ],
-      archFinishes: ["Black Brick", "Terracotta Brick", "Faux Wood", "Faux Stone", "Red Brick"],
-    },
-    griggia: {
-      order: 3,
-      tagline: "Traditional Oven",
-      price: "From $1,950",
-      priceSymbol: "$$$",
-      shortDescription: "Double the experience of your cook — the connoisseur's instrument.",
-      img: "shop-griggia.png",
-      financeNote: "As low as $81/mo with 24-month financing.",
-      sizes: [
-        { model: "model 75", dims: "(100x100 cm)" },
-        { model: "model 80", dims: "(110x110 cm)" },
-        { model: "model 85", dims: "(120x110 cm)" },
-        { model: "model 90", dims: "(120x110 cm)" },
-        { model: "model 95", dims: "(130x130 cm)" },
-        { model: "model 100", dims: "(130x130 cm)" },
-        { model: "model 110", dims: "(150x150 cm)" },
-        { model: "model 120", dims: "(150x150 cm)" },
-      ],
-      insulation: insulationStd,
-      domeColors: [
-        { name: "Classic Single Coat Mortar", color: "#DED7D4" },
-        { name: "Natural Stone", color: "#C9BFA5" },
-        { name: "Red Brick", color: "#B45B3E" },
-      ],
-      archFinishes: ["Red Brick"],
-    },
-  };
-
+  // ---- Product documents: ovens (with in-stock variants) + accessories ----
+  const vKey = (o, v) => `${o.slug}-${v.size}-${v.finish}`.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
   const products = [];
-  for (const [slug, s] of Object.entries(productSpecs)) {
+
+  for (const [i, o] of catalog.ovens.entries()) {
+    const variants = [];
+    for (const v of o.variants) {
+      const gallery = [];
+      for (const [gi, g] of (v.gallery ?? []).entries()) {
+        gallery.push({ _key: `${vKey(o, v)}-g${gi}`, ...(await image(`stock/${g}.jpg`)) });
+      }
+      variants.push({
+        _key: vKey(o, v),
+        size: v.size,
+        finish: v.finish,
+        price: v.price,
+        stock: v.stock,
+        base: v.base,
+        description: v.description,
+        ...(v.photo ? { image: await image(`stock/${v.photo}.jpg`) } : {}),
+        ...(gallery.length ? { gallery } : {}),
+      });
+    }
     products.push({
-      _id: `product.${slug}`,
+      _id: `product.${o.slug}`,
       _type: "product",
-      name: slug.charAt(0).toUpperCase() + slug.slice(1),
-      slug: { _type: "slug", current: slug },
-      order: s.order,
-      tagline: s.tagline,
-      price: s.price,
-      priceSymbol: s.priceSymbol,
-      shortDescription: s.shortDescription,
-      gallery: [{ _key: "g0", ...(await image(s.img)) }],
-      sizes: keyed(s.sizes, "sz"),
-      insulation: s.insulation,
-      domeColors: keyed(s.domeColors, "dc"),
-      archFinishes: s.archFinishes,
-      bases: basesStd,
-      financeNote: s.financeNote,
-      features: sharedFeatures,
-      specs: sharedSpecs,
-      faqs: sharedFaqs,
+      type: "oven",
+      name: o.name,
+      slug: { _type: "slug", current: o.slug },
+      order: i,
+      tagline: o.tagline,
+      style: o.style,
+      doors: o.doors,
+      shortDescription: o.shortDescription,
+      variants,
+    });
+  }
+
+  for (const [i, a] of catalog.accessories.entries()) {
+    products.push({
+      _id: `product.acc-${a.slug}`,
+      _type: "product",
+      type: "accessory",
+      name: a.name,
+      slug: { _type: "slug", current: a.slug },
+      order: 100 + i,
+      shortDescription: a.shortDescription,
+      description: a.description,
+      price: a.price,
+      ...(a.photo ? { image: await image(`stock/${a.photo}.jpg`) } : {}),
     });
   }
 
@@ -423,7 +294,20 @@ const run = async () => {
   const docs = await build();
   const tx = docs.reduce((t, doc) => t.createOrReplace(doc), client.transaction());
   await tx.commit();
-  console.log(`✓ Seeded ${docs.length} documents with images: ${docs.map((d) => d._id).join(", ")}`);
+  console.log(`✓ Seeded ${docs.length} documents.`);
+
+  // Remove any stale product docs that aren't in the current catalog (e.g. old
+  // demo ovens). Deleting by explicit _id (never a parameterised query, which
+  // can silently match everything if params don't bind) so we only ever remove
+  // products we did NOT just write.
+  const keepIds = new Set(docs.filter((d) => d._type === "product").map((d) => d._id));
+  const existingIds = await client.fetch(`*[_type == "product"]._id`);
+  const staleIds = existingIds.filter((id) => !keepIds.has(id));
+  if (staleIds.length) {
+    const delTx = staleIds.reduce((t, id) => t.delete(id), client.transaction());
+    await delTx.commit();
+    console.log(`✓ Removed ${staleIds.length} stale product(s): ${staleIds.join(", ")}`);
+  }
 };
 
 run().catch((err) => {

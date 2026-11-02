@@ -13,7 +13,7 @@ export default async function CheckoutPage() {
     <div className="flex flex-col bg-background">
       <Navbar />
       <CheckoutStepper step={2} />
-      <CheckoutClient shippingMethods={s.shippingMethods} trustBadges={s.trustBadges} financeText={s.financeText} taxRate={s.taxRate} />
+      <CheckoutClient trustBadges={s.trustBadges} />
       <Newsletter />
       <Footer />
     </div>

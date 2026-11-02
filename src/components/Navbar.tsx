@@ -39,17 +39,6 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-5">
-          <div className="hidden items-center gap-1.5 rounded-full border border-white/25 px-3 py-1.5 text-white/85 md:flex">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <circle cx="12" cy="12" r="9" />
-              <path d="M3 12h18" />
-              <path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z" />
-            </svg>
-            <span className="text-[13px] font-medium uppercase tracking-wide">EN</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <path d="M6 9l6 6 6-6" />
-            </svg>
-          </div>
           <Link
             href="/cart"
             aria-label="Cart"

@@ -16,8 +16,8 @@ const CART_KEY = "brasa:cart";
 const ORDER_KEY = "brasa:lastOrder";
 const PROMO_KEY = "brasa:promo";
 
-/** Demo promo codes → fractional discount off the subtotal. */
-export const PROMO_CODES: Record<string, number> = { BRASA10: 0.1, FIRE15: 0.15 };
+/** Intro promo codes → fractional discount off the subtotal. */
+export const PROMO_CODES: Record<string, number> = { BRASA10: 0.1, BRASA15: 0.15 };
 
 export function getPromo(): { code: string; rate: number } | null {
   try {
@@ -127,20 +127,18 @@ export function useCart() {
   return { items, subtotal, count };
 }
 
-// ---- order (for the confirmation page) ----
+// ---- quote request (for the confirmation page) ----
 export type PlacedOrder = {
   orderNo: string;
   date: string;
   email: string;
   name: string;
   address: { line1: string; line2?: string; city: string; state: string; zip: string; country: string; phone?: string };
-  shippingMethod: { name: string; price: number };
+  promoCode?: string;
   items: CartItem[];
   subtotal: number;
   discount: number;
-  shippingCost: number;
-  tax: number;
-  total: number;
+  total: number; // estimated subtotal after discount; shipping quoted separately
 };
 
 export function generateOrderNo() {

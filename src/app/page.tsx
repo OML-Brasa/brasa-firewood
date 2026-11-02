@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from "next/link";
+
 import { CompareTable } from "@/components/CompareTable";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
@@ -39,10 +41,10 @@ const content = {
     meta: "4 Models Available",
     featured: "/images/featured-oven.png",
     products: [
-      { name: "Dolce", price: "$$", image: "/images/model-dolce.png" },
-      { name: "Ravvivata", price: "$$", image: "/images/model-ravvivata.png" },
-      { name: "Ardente", price: "$$", image: "/images/model-ardente.png" },
-      { name: "Griggia", price: "$$", image: "/images/model-griggia.png" },
+      { name: "Dolce", slug: "dolce", price: "From $4,380", image: "/images/model-dolce.png" },
+      { name: "Ravvivata", slug: "ravvivata", price: "From $5,040", image: "/images/model-ravvivata.png" },
+      { name: "Ardente", slug: "ardente", price: "From $7,700", image: "/images/model-ardente.png" },
+      { name: "Acerba", slug: "acerba", price: "From $1,520", image: "/images/model-griggia.png" },
     ],
   },
   material: {
@@ -63,7 +65,7 @@ const content = {
   experience: {
     title: "The Ownership Experience",
     steps: [
-      { n: "01", title: "Select Your Oven", copy: "Choose from four collections — Dolce, Ravvivata, Ardente, or Griggia — each engineered to the same standard, sized and finished for the way you cook and the space you have." },
+      { n: "01", title: "Select Your Oven", copy: "Choose from four collections — Dolce, Ravvivata, Ardente, or Acerba — each engineered to the same standard, sized and finished for the way you cook and the space you have." },
       { n: "02", title: "Configure to Your Taste", copy: "Dial in your base, insulation, and finish. Every Brasa is built to order, so the instrument you receive is the one you specified." },
       { n: "03", title: "White-Glove Delivery", copy: "From curbside freight to full white-glove installation, we deliver and place your oven so it's ready to season and fire on day one." },
     ],
@@ -75,7 +77,7 @@ const content = {
   comparison: {
     title: "Compare Our Ovens",
     subtitle: "Side-by-side specifications for all assembled oven lines.",
-    models: ["Dolce", "Ravvivata", "Ardente", "Grigia"],
+    models: ["Dolce", "Ravvivata", "Ardente", "Acerba"],
     rows: [
       { feature: "Model Sizes", values: ["75–120", "75–120", "90–120", "75–120"] },
       { feature: "Exterior Size", values: ["100×100 – 150×150 cm", "100×100 – 150×150 cm", "120×120 – 150×150 cm", "100×100 – 150×150 cm"] },
@@ -95,7 +97,7 @@ const content = {
   footer: {
     tagline: "Hand-built, refractory-clay ovens engineered for the way serious cooks actually cook.",
     columns: [
-      { h: "Collection", items: ["Dolce", "Ravvivata", "Ardente", "Griggia"] },
+      { h: "Collection", items: ["Dolce", "Ravvivata", "Ardente", "Acerba"] },
       { h: "Company", items: ["Our Story", "Shop", "Contact"] },
       { h: "Learn", items: ["Refractory Science", "Recipes", "FAQ"] },
     ],
@@ -250,13 +252,13 @@ export default async function Home() {
           {/* Cards — each export is the bordered card; name + price sit below */}
           <div className="mt-12 grid grid-cols-2 gap-6 lg:grid-cols-4">
             {c.collection.products.map((p) => (
-              <article key={p.name} className="flex flex-col gap-4">
-                <img src={p.image} alt={`Brasa ${p.name} oven`} className="w-full" />
+              <Link key={p.name} href={`/shop/${p.slug}`} className="group flex flex-col gap-4">
+                <img src={p.image} alt={`Brasa ${p.name} oven`} className="w-full transition-transform group-hover:scale-[1.02]" />
                 <div className="flex items-center justify-between">
-                  <h3 className="text-[20px] font-extrabold text-charcoal-800">{p.name}</h3>
+                  <h3 className="text-[20px] font-extrabold text-charcoal-800 transition-colors group-hover:text-copper-600">{p.name}</h3>
                   <span className="text-[18px] font-bold tracking-[0.02em] text-charcoal-800">{p.price}</span>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </div>

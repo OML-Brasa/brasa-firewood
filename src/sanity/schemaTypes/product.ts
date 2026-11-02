@@ -1,118 +1,70 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 
-/** A single oven model — powers both the shop grid card and its /shop/[slug]
- *  detail page. Everything here is editable; the page falls back to code
- *  defaults only when a document is missing entirely. */
+const isAccessory = ({ parent }: { parent?: { type?: string } }) => parent?.type === "accessory";
+const isOven = ({ parent }: { parent?: { type?: string } }) => parent?.type !== "oven";
+
+/** An oven line (Dolce / Ravvivata / Ardente / Acerba) with in-stock variants,
+ *  or an accessory. Each oven variant is a real unit with its own size, finish,
+ *  price and photo — selecting size + finish on the product page picks one. */
 export const product = defineType({
   name: "product",
   title: "Product",
   type: "document",
   fields: [
-    defineField({ name: "name", title: "Name", type: "string", validation: (r) => r.required() }),
     defineField({
-      name: "slug",
-      title: "Slug",
-      type: "slug",
-      options: { source: "name", maxLength: 96 },
+      name: "type",
+      title: "Type",
+      type: "string",
+      options: { list: [{ title: "Oven", value: "oven" }, { title: "Accessory", value: "accessory" }], layout: "radio" },
+      initialValue: "oven",
       validation: (r) => r.required(),
     }),
+    defineField({ name: "name", title: "Name", type: "string", description: 'Oven line (e.g. "Dolce") or accessory name', validation: (r) => r.required() }),
+    defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "name", maxLength: 96 }, validation: (r) => r.required() }),
     defineField({ name: "order", title: "Sort order", type: "number", initialValue: 0 }),
+    defineField({ name: "shortDescription", title: "Short description", type: "string", description: "One line, shown on the shop card." }),
 
-    defineField({ name: "tagline", title: "Tagline", type: "string", description: 'e.g. "Traditional Oven"' }),
-    defineField({ name: "price", title: "Price (shop card)", type: "string", description: 'e.g. "From $2,450"' }),
-    defineField({ name: "priceSymbol", title: "Price symbol (detail hero)", type: "string", description: 'e.g. "$$$"' }),
-    defineField({ name: "shortDescription", title: "Short description", type: "text", rows: 3 }),
+    // ---- Oven ----
+    defineField({ name: "tagline", title: "Tagline", type: "string", description: 'e.g. "Superior Wood-Fired Oven"', hidden: isOven }),
+    defineField({ name: "style", title: "Style", type: "string", description: 'e.g. "Superior", "Supreme", "Enclosing / Indirect", "Complete Lot"', hidden: isOven }),
+    defineField({ name: "doors", title: "Upper doors", type: "number", description: "1 or 2 (drives the spec sheet).", initialValue: 1, hidden: isOven }),
+    defineField({
+      name: "variants",
+      title: "Variants (in-stock units)",
+      type: "array",
+      hidden: isOven,
+      of: [
+        defineArrayMember({
+          type: "object",
+          fields: [
+            defineField({ name: "size", title: "Size", type: "string", description: 'e.g. "80 cm"' }),
+            defineField({ name: "finish", title: "Finish / color", type: "string", description: 'e.g. "Red Brick"' }),
+            defineField({ name: "price", title: "Price (USD)", type: "number" }),
+            defineField({ name: "stock", title: "Units in stock", type: "number", initialValue: 1 }),
+            defineField({ name: "base", title: "Base", type: "string", description: 'e.g. "Metal Base"' }),
+            defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+            defineField({ name: "image", title: "Primary photo", type: "image", options: { hotspot: true }, description: "Shown on shop cards, cart, and as the first gallery image." }),
+            defineField({
+              name: "gallery",
+              title: "Gallery (extra angles)",
+              type: "array",
+              description: "Additional photos shown as thumbnails on the product page. The primary photo leads automatically.",
+              of: [defineArrayMember({ type: "image", options: { hotspot: true } })],
+            }),
+          ],
+          preview: { select: { title: "finish", subtitle: "size", media: "image" }, prepare: ({ title, subtitle, media }) => ({ title: `${subtitle ?? ""} · ${title ?? ""}`, media }) },
+        }),
+      ],
+    }),
 
-    defineField({
-      name: "gallery",
-      title: "Gallery images",
-      type: "array",
-      of: [defineArrayMember({ type: "image", options: { hotspot: true } })],
-    }),
-
-    // ---- Configurator options ----
-    defineField({
-      name: "sizes",
-      title: "Oven sizes",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "object",
-          fields: [
-            defineField({ name: "model", title: "Model", type: "string", description: 'e.g. "model 90"' }),
-            defineField({ name: "dims", title: "Dimensions", type: "string", description: 'e.g. "(120x120 cm)"' }),
-          ],
-          preview: { select: { title: "model", subtitle: "dims" } },
-        }),
-      ],
-    }),
-    defineField({ name: "insulation", title: "Insulation options", type: "array", of: [defineArrayMember({ type: "string" })] }),
-    defineField({
-      name: "domeColors",
-      title: "Dome colors",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "object",
-          fields: [
-            defineField({ name: "name", title: "Name", type: "string" }),
-            defineField({ name: "color", title: "Swatch color (hex)", type: "string", description: 'e.g. "#DED7D4"' }),
-          ],
-          preview: { select: { title: "name", subtitle: "color" } },
-        }),
-      ],
-    }),
-    defineField({ name: "archFinishes", title: "Arch finishes", type: "array", of: [defineArrayMember({ type: "string" })] }),
-    defineField({ name: "bases", title: "Base options", type: "array", of: [defineArrayMember({ type: "string" })] }),
-    defineField({ name: "financeNote", title: "Financing note", type: "string", description: 'e.g. "As low as $242/mo with 24-month financing."' }),
-
-    // ---- Content sections ----
-    defineField({
-      name: "features",
-      title: "Features & Benefits (6)",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "object",
-          fields: [
-            defineField({ name: "title", title: "Title", type: "string" }),
-            defineField({ name: "copy", title: "Copy", type: "text", rows: 2 }),
-          ],
-          preview: { select: { title: "title", subtitle: "copy" } },
-        }),
-      ],
-    }),
-    defineField({
-      name: "specs",
-      title: "Technical specifications",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "object",
-          fields: [
-            defineField({ name: "label", title: "Label", type: "string" }),
-            defineField({ name: "value", title: "Value", type: "string" }),
-          ],
-          preview: { select: { title: "label", subtitle: "value" } },
-        }),
-      ],
-    }),
-    defineField({
-      name: "faqs",
-      title: "Frequently asked questions",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "object",
-          fields: [
-            defineField({ name: "question", title: "Question", type: "string" }),
-            defineField({ name: "answer", title: "Answer", type: "text", rows: 3 }),
-          ],
-          preview: { select: { title: "question", subtitle: "answer" } },
-        }),
-      ],
-    }),
+    // ---- Accessory ----
+    defineField({ name: "price", title: "Price (USD)", type: "number", hidden: ({ parent }) => !isAccessory({ parent }) }),
+    defineField({ name: "description", title: "Description", type: "text", rows: 3, hidden: ({ parent }) => !isAccessory({ parent }) }),
+    defineField({ name: "image", title: "Photo", type: "image", options: { hotspot: true }, hidden: ({ parent }) => !isAccessory({ parent }) }),
   ],
   orderings: [{ title: "Sort order", name: "orderAsc", by: [{ field: "order", direction: "asc" }] }],
-  preview: { select: { title: "name", subtitle: "price", media: "gallery.0" } },
+  preview: {
+    select: { title: "name", type: "type", media: "variants.0.image", accMedia: "image" },
+    prepare: ({ title, type, media, accMedia }) => ({ title, subtitle: type === "accessory" ? "Accessory" : "Oven", media: media ?? accMedia }),
+  },
 });
