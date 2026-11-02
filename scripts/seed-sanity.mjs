@@ -257,7 +257,9 @@ async function build() {
       });
     }
     products.push({
-      _id: `product.${o.slug}`,
+      // NOTE: no dot in the _id — Sanity treats dotted IDs (like `drafts.`) as
+      // private, so `product.foo` would be invisible to anonymous/public reads.
+      _id: `product-${o.slug}`,
       _type: "product",
       type: "oven",
       name: o.name,
@@ -273,7 +275,7 @@ async function build() {
 
   for (const [i, a] of catalog.accessories.entries()) {
     products.push({
-      _id: `product.acc-${a.slug}`,
+      _id: `product-acc-${a.slug}`,
       _type: "product",
       type: "accessory",
       name: a.name,
