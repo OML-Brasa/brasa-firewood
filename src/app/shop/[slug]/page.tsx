@@ -45,11 +45,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           doc.variants?.length
             ? doc.variants.map((v: { size: string; finish: string; price: number; stock: number; base: string; description: string; image?: VariantImg; gallery?: VariantImg[] }) => {
                 const image = v.image ? urlFor(v.image).width(1000).auto("format").url() : null;
-                const gallery = v.gallery?.length
-                  ? v.gallery.map((g) => urlFor(g).width(1000).auto("format").url())
-                  : image
-                    ? [image]
-                    : [];
+                // Primary photo always leads the gallery; extra angles follow (deduped).
+                const gallery = [
+                  ...new Set([image, ...(v.gallery ?? []).map((g) => urlFor(g).width(1000).auto("format").url())]),
+                ].filter((u): u is string => !!u);
                 return {
                   size: v.size,
                   finish: v.finish,
