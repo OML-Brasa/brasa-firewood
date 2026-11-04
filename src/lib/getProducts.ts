@@ -30,11 +30,10 @@ export async function getOvens(): Promise<Oven[]> {
     shortDescription: d.shortDescription ?? "",
     variants: (d.variants ?? []).map((v) => {
       const image = url(v.image, 800);
-      const gallery = v.gallery?.length
-        ? v.gallery.map((g) => url(g, 1000)).filter((u): u is string => !!u)
-        : image
-          ? [image]
-          : [];
+      // Primary photo always leads the gallery; extra angles follow (deduped).
+      const gallery = [...new Set([url(v.image, 1000), ...(v.gallery ?? []).map((g) => url(g, 1000))])].filter(
+        (u): u is string => !!u
+      );
       return {
         size: v.size,
         finish: v.finish,

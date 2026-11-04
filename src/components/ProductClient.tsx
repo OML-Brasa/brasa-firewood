@@ -4,7 +4,7 @@
 import { Blocks, Box, Flame, Image as ImageIcon, Minus, Plus, ShieldCheck, Sparkles, Thermometer, Truck } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { addToCart, money } from "@/lib/cart";
 import { ovens as collection, type AccessoryProduct, type Oven } from "@/lib/productDefaults";
@@ -97,16 +97,43 @@ export function ProductClient({
   const finishVariants = oven.variants.filter((v) => v.size === size);
   const showFinishes = finishVariants.length > 1;
 
-  // Per-variant image gallery (angles of the selected unit); reset to the first
-  // shot whenever the chosen size/finish changes (render-time reset pattern).
+  // Per-variant images: the primary photo is the hero by default; extra angles
+  // show as thumbnails below (primary excluded). activeImg = selected thumbnail,
+  // null = primary. Resets whenever size/finish changes (render-time reset pattern).
   const galleryImages = variant.gallery.length ? variant.gallery : variant.image ? [variant.image] : [];
-  const [activeImg, setActiveImg] = useState(0);
+  const primaryImage = galleryImages[0] ?? variant.image;
+  const thumbImages = galleryImages.slice(1);
+  const [activeImg, setActiveImg] = useState<number | null>(null);
+  const [heroFading, setHeroFading] = useState(false);
   const [imgKey, setImgKey] = useState(`${size}:${finish}`);
   if (imgKey !== `${size}:${finish}`) {
     setImgKey(`${size}:${finish}`);
-    setActiveImg(0);
+    setActiveImg(null);
+    setHeroFading(false);
   }
-  const heroImage = galleryImages[activeImg] ?? galleryImages[0] ?? variant.image;
+  const heroImage = (activeImg !== null ? thumbImages[activeImg] : null) ?? primaryImage;
+
+  // Fade out, swap the image, then fade back in once the new one has loaded.
+  const fadeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (fadeTimer.current) clearTimeout(fadeTimer.current); }, []);
+  const showImage = (next: number | null) => {
+    if (fadeTimer.current) clearTimeout(fadeTimer.current);
+    setHeroFading(true);
+    fadeTimer.current = setTimeout(() => setActiveImg(next), 200);
+  };
+  // Clicking the selected thumb again returns to the primary photo.
+  const selectThumb = (i: number) => showImage(i === activeImg ? null : i);
+
+  // Clicking anywhere outside the thumbnail row deselects it → back to the primary photo.
+  const thumbRowRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (activeImg === null) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (thumbRowRef.current && !thumbRowRef.current.contains(e.target as Node)) showImage(null);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [activeImg]);
 
   const specs: { label: string; value: string }[] = [
     { label: "Size", value: variant.size },
@@ -157,20 +184,27 @@ export function ProductClient({
         <div className={`${wrap} flex flex-wrap items-start gap-x-16 gap-y-10 pb-12 pt-16`}>
           {/* Gallery */}
           <div className="flex min-w-[320px] flex-[1_0_0] flex-col gap-4">
-            <div className="flex h-[480px] w-full items-center justify-center overflow-hidden rounded-[2px] border border-charcoal-300 bg-white">
+            <div className="flex aspect-[5/4] w-full items-center justify-center overflow-hidden rounded-[2px] border border-charcoal-300 bg-white">
               {heroImage ? (
-                <img src={heroImage} alt={`${oven.name} ${variant.size} — ${variant.finish}`} className="h-full w-full object-contain" />
+                <img
+                  src={heroImage}
+                  alt={`${oven.name} ${variant.size} — ${variant.finish}`}
+                  onLoad={() => setHeroFading(false)}
+                  onError={() => setHeroFading(false)}
+                  className={`h-full w-full object-cover transition-opacity duration-200 ease-in-out ${heroFading ? "opacity-0" : "opacity-100"}`}
+                />
               ) : (
                 <ImageIcon size={40} className="text-charcoal-300" />
               )}
             </div>
-            {galleryImages.length > 1 && (
-              <div className="flex flex-wrap gap-3">
-                {galleryImages.map((src, i) => (
+            {thumbImages.length > 0 && (
+              <div ref={thumbRowRef} className="grid grid-cols-4 gap-4">
+                {thumbImages.map((src, i) => (
                   <button
                     key={src}
-                    onClick={() => setActiveImg(i)}
-                    className={`flex h-[96px] w-[112px] items-center justify-center overflow-hidden rounded-[2px] bg-white ${i === activeImg ? "border-2 border-copper-500" : "border border-charcoal-300"}`}
+                    onClick={() => selectThumb(i)}
+                    aria-pressed={i === activeImg}
+                    className={`flex aspect-[6/5] w-full items-center justify-center overflow-hidden rounded-[2px] bg-white ${i === activeImg ? "border-2 border-copper-500" : "border border-charcoal-300"}`}
                     aria-label={`View image ${i + 1}`}
                   >
                     <img src={src} alt={`${oven.name} ${variant.size} view ${i + 1}`} className="h-full w-full object-contain" />
