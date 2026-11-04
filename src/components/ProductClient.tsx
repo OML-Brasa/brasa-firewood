@@ -159,7 +159,7 @@ export function ProductClient({
           <div className="flex min-w-[320px] flex-[1_0_0] flex-col gap-4">
             <div className="flex h-[480px] w-full items-center justify-center overflow-hidden rounded-[2px] border border-charcoal-300 bg-white">
               {heroImage ? (
-                <img src={heroImage} alt={`${oven.name} ${variant.size} — ${variant.finish}`} className="h-full w-full object-cover" />
+                <img src={heroImage} alt={`${oven.name} ${variant.size} — ${variant.finish}`} className="h-full w-full object-contain" />
               ) : (
                 <ImageIcon size={40} className="text-charcoal-300" />
               )}
@@ -173,7 +173,7 @@ export function ProductClient({
                     className={`flex h-[96px] w-[112px] items-center justify-center overflow-hidden rounded-[2px] bg-white ${i === activeImg ? "border-2 border-copper-500" : "border border-charcoal-300"}`}
                     aria-label={`View image ${i + 1}`}
                   >
-                    <img src={src} alt={`${oven.name} ${variant.size} view ${i + 1}`} className="h-full w-full object-cover" />
+                    <img src={src} alt={`${oven.name} ${variant.size} view ${i + 1}`} className="h-full w-full object-contain" />
                   </button>
                 ))}
               </div>

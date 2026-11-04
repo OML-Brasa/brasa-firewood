@@ -157,7 +157,7 @@ export function ShopClient({
                   return (
                     <article key={o.slug} className="group flex flex-col overflow-hidden rounded-lg border border-charcoal-300 bg-background transition-shadow hover:shadow-[0_8px_30px_rgba(33,31,29,0.08)]">
                       <Link href={`/shop/${o.slug}`} className="aspect-[588/360] overflow-hidden bg-white">
-                        {cover ? <img src={cover} alt={o.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" /> : <div className="flex h-full items-center justify-center"><ImageIcon size={32} className="text-charcoal-300" /></div>}
+                        {cover ? <img src={cover} alt={o.name} className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.03]" /> : <div className="flex h-full items-center justify-center"><ImageIcon size={32} className="text-charcoal-300" /></div>}
                       </Link>
                       <div className="flex flex-1 flex-col gap-2.5 p-5">
                         <div className="flex items-baseline justify-between gap-2">
