@@ -21,6 +21,13 @@ export const recipesPage = defineType({
             defineField({ name: "title", title: "Title", type: "string" }),
             defineField({ name: "category", title: "Category", type: "string" }),
             defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true } }),
+            defineField({
+              name: "pdf",
+              title: "Recipe PDF",
+              description: "Opens in a new tab when the recipe image is clicked.",
+              type: "file",
+              options: { accept: "application/pdf" },
+            }),
             defineField({ name: "prepTime", title: "Prep time", type: "string" }),
             defineField({ name: "cookTime", title: "Cook time", type: "string" }),
             defineField({ name: "ovenTemp", title: "Oven temp", type: "string" }),

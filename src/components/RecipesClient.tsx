@@ -82,9 +82,17 @@ export function RecipesClient({ content }: { content: RecipesContent }) {
                 const isOpen = open === i;
                 return (
                   <article key={r.title} className="overflow-hidden rounded-lg border border-charcoal-300 bg-background p-6">
-                    <div className="flex aspect-[580/320] items-center justify-center overflow-hidden rounded-md bg-[#dedddd]">
-                      {r.image ? <img src={r.image} alt={r.title} className="h-full w-full object-cover" /> : <ChefHat size={32} className="text-charcoal-400" />}
-                    </div>
+                    {(() => {
+                      const media = r.image ? <img src={r.image} alt={r.title} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" /> : <ChefHat size={32} className="text-charcoal-400" />;
+                      const box = "group flex aspect-[580/320] items-center justify-center overflow-hidden rounded-md bg-[#dedddd]";
+                      return r.pdf ? (
+                        <a href={r.pdf} target="_blank" rel="noopener noreferrer" aria-label={`Open ${r.title} recipe PDF`} className={`${box} cursor-pointer`}>
+                          {media}
+                        </a>
+                      ) : (
+                        <div className={box}>{media}</div>
+                      );
+                    })()}
                     <button onClick={() => setOpen(isOpen ? null : i)} className="mt-5 flex w-full items-start justify-between gap-4 text-left">
                       <div className="flex flex-col gap-1">
                         <span className="text-[12px] font-bold uppercase tracking-[0.1em] text-copper-600">{r.category}</span>
