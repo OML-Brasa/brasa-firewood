@@ -10,16 +10,16 @@ export const revalidate = 60;
 
 const query = `*[_type == "recipesPage"][0]{
   heroTitle, heroSubtitle, searchPlaceholder, categories,
-  recipes[]{ title, category, image, prepTime, cookTime, ovenTemp, difficulty, ingredients, directions },
+  recipes[]{ title, category, image, "pdf": pdf.asset->url, prepTime, cookTime, ovenTemp, difficulty, ingredients, directions },
   submitTitle, submitSubtitle
 }`;
 
-type DocRecipe = Omit<Recipe, "image"> & { image?: Parameters<typeof urlFor>[0] };
+type DocRecipe = Omit<Recipe, "image" | "pdf"> & { image?: Parameters<typeof urlFor>[0]; pdf?: string | null };
 
 export default async function RecipesPage() {
   const doc = await client.fetch(query).catch(() => null);
   const recipes: Recipe[] = doc?.recipes?.length
-    ? doc.recipes.map((r: DocRecipe) => ({ ...r, image: r.image ? urlFor(r.image).width(800).auto("format").url() : null }))
+    ? doc.recipes.map((r: DocRecipe) => ({ ...r, image: r.image ? urlFor(r.image).width(800).auto("format").url() : null, pdf: r.pdf ?? null }))
     : recipesDefaults.recipes;
   const content: RecipesContent = {
     heroTitle: doc?.heroTitle ?? recipesDefaults.heroTitle,

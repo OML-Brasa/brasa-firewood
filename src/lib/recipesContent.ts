@@ -4,6 +4,7 @@ export type Recipe = {
   title: string;
   category: string;
   image: string | null;
+  pdf: string | null;
   prepTime: string;
   cookTime: string;
   ovenTemp: string;
@@ -22,8 +23,8 @@ export type RecipesContent = {
   submitSubtitle: string;
 };
 
-// JSON has no `image` field on recipes; normalize to the Recipe shape.
+// JSON has no `image` or `pdf` field on recipes; normalize to the Recipe shape.
 export const recipesDefaults = {
   ...(data as Omit<RecipesContent, "recipes">),
-  recipes: (data as { recipes: Omit<Recipe, "image">[] }).recipes.map((r) => ({ ...r, image: null })),
+  recipes: (data as { recipes: Omit<Recipe, "image" | "pdf">[] }).recipes.map((r) => ({ ...r, image: null, pdf: null })),
 } as RecipesContent;
