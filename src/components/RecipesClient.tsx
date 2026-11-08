@@ -1,7 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-import { ChefHat, Minus, Plus, Search } from "lucide-react";
+import { ChefHat, Download, Minus, Plus, Search } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
@@ -95,14 +95,15 @@ export function RecipesClient({ content }: { content: RecipesContent }) {
                     })()}
                     <button onClick={() => setOpen(isOpen ? null : i)} className="mt-5 flex w-full items-start justify-between gap-4 text-left">
                       <div className="flex flex-col gap-1">
-                        <span className="text-[12px] font-bold uppercase tracking-[0.1em] text-copper-600">{r.category}</span>
+                        <span className="text-[12px] font-bold uppercase tracking-[0.1em] text-copper-600">{r.category}{r.region ? ` · ${r.region}` : ""}</span>
                         <h2 className="font-heading text-[20px] font-extrabold text-charcoal-800">{r.title}</h2>
                       </div>
                       {isOpen ? <Minus size={20} className="mt-1 shrink-0 text-charcoal-500" /> : <Plus size={20} className="mt-1 shrink-0 text-charcoal-500" />}
                     </button>
                     {isOpen && (
                       <div className="mt-4 flex flex-col gap-4">
-                        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                        <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
+                          {r.serves ? <Meta label="Serves" value={r.serves} /> : null}
                           <Meta label="Prep Time" value={r.prepTime} />
                           <Meta label="Cook Time" value={r.cookTime} />
                           <Meta label="Oven Temp" value={r.ovenTemp} />
@@ -120,8 +121,16 @@ export function RecipesClient({ content }: { content: RecipesContent }) {
                         <div className="h-px w-full bg-[#edf2f7]" />
                         <div className="flex flex-col gap-2">
                           <h3 className="font-heading text-[16px] font-extrabold text-charcoal-800">Directions</h3>
-                          <p className="text-[14px] leading-[1.6] text-charcoal-500">{r.directions}</p>
+                          <p className="whitespace-pre-line text-[14px] leading-[1.6] text-charcoal-500">{r.directions}</p>
                         </div>
+                        {r.pdf ? (
+                          <a
+                            href={`${r.pdf}?dl=`}
+                            className="inline-flex items-center justify-center gap-2 self-start rounded-md bg-copper-600 px-4 py-2.5 text-[14px] font-bold text-white transition-colors hover:bg-copper-700"
+                          >
+                            <Download size={16} /> Download recipe PDF
+                          </a>
+                        ) : null}
                       </div>
                     )}
                   </article>

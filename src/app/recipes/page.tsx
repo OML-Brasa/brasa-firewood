@@ -10,7 +10,7 @@ export const revalidate = 60;
 
 const query = `*[_type == "recipesPage"][0]{
   heroTitle, heroSubtitle, searchPlaceholder, categories,
-  recipes[]{ title, category, image, "pdf": pdf.asset->url, prepTime, cookTime, ovenTemp, difficulty, ingredients, directions },
+  recipes[]{ title, category, region, serves, image, "pdf": pdf.asset->url, prepTime, cookTime, ovenTemp, difficulty, ingredients, directions },
   submitTitle, submitSubtitle
 }`;
 

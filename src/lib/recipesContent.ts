@@ -3,6 +3,8 @@ import data from "@/content/recipes.json";
 export type Recipe = {
   title: string;
   category: string;
+  region: string | null;
+  serves: string | null;
   image: string | null;
   pdf: string | null;
   prepTime: string;
@@ -23,8 +25,14 @@ export type RecipesContent = {
   submitSubtitle: string;
 };
 
-// JSON has no `image` or `pdf` field on recipes; normalize to the Recipe shape.
+// JSON recipes have no `image`, `pdf`, `region` or `serves`; normalize to the Recipe shape.
 export const recipesDefaults = {
   ...(data as Omit<RecipesContent, "recipes">),
-  recipes: (data as { recipes: Omit<Recipe, "image" | "pdf">[] }).recipes.map((r) => ({ ...r, image: null, pdf: null })),
+  recipes: (data as { recipes: Omit<Recipe, "image" | "pdf" | "region" | "serves">[] }).recipes.map((r) => ({
+    ...r,
+    image: null,
+    pdf: null,
+    region: null,
+    serves: null,
+  })),
 } as RecipesContent;

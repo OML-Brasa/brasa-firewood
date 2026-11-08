@@ -20,6 +20,8 @@ export const recipesPage = defineType({
           fields: [
             defineField({ name: "title", title: "Title", type: "string" }),
             defineField({ name: "category", title: "Category", type: "string" }),
+            defineField({ name: "region", title: "Region", type: "string" }),
+            defineField({ name: "serves", title: "Serves", type: "string" }),
             defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true } }),
             defineField({
               name: "pdf",
