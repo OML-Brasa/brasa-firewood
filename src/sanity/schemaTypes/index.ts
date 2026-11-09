@@ -5,10 +5,11 @@ import { checkoutSettings } from "./checkoutSettings";
 import { contactPage } from "./contactPage";
 import { faqPage } from "./faqPage";
 import { homePage } from "./homePage";
+import { legalPage } from "./legalPage";
 import { product } from "./product";
 import { recipesPage } from "./recipesPage";
 import { shopPage } from "./shopPage";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [homePage, aboutPage, shopPage, faqPage, contactPage, recipesPage, product, checkoutSettings],
+  types: [homePage, aboutPage, shopPage, faqPage, contactPage, recipesPage, legalPage, product, checkoutSettings],
 };
