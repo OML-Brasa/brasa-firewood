@@ -94,12 +94,12 @@ export default async function AboutPage() {
               {doc?.heroSubtitle ??
                 "Every Brasa is hand-formed by European artisans, then held to a standard closer to an instrument than an appliance. Each is measured, finished, and inspected before it leaves."}
             </p>
-            <a
-              href="#"
-              className="mt-2 rounded bg-copper-500 px-7 py-3.5 text-[14px] font-bold uppercase tracking-[0.03em] text-sand transition-colors hover:bg-copper-600"
+            <Link
+              href="/shop"
+              className="mt-2 w-fit rounded bg-copper-500 px-7 py-3.5 text-[14px] font-bold uppercase tracking-[0.03em] text-sand transition-colors hover:bg-copper-600"
             >
               Explore Our Ovens
-            </a>
+            </Link>
           </div>
         </div>
       </section>

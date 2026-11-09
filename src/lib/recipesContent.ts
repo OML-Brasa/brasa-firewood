@@ -23,6 +23,7 @@ export type RecipesContent = {
   recipes: Recipe[];
   submitTitle: string;
   submitSubtitle: string;
+  submitEmail: string;
 };
 
 // JSON recipes have no `image`, `pdf`, `region` or `serves`; normalize to the Recipe shape.

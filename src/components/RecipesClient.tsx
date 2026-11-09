@@ -148,7 +148,16 @@ export function RecipesClient({ content }: { content: RecipesContent }) {
             <h2 className={sectionTitle}>{content.submitTitle}</h2>
             <p className="max-w-2xl text-[16px] text-charcoal-500">{content.submitSubtitle}</p>
           </div>
-          <a href="#" className="rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600">Submit Recipe</a>
+          <a
+            href={`mailto:${content.submitEmail}?subject=${encodeURIComponent(
+              "Recipe Submission"
+            )}&body=${encodeURIComponent(
+              "Recipe name:\n\nServes:\n\nOven temperature:\n\nIngredients:\n- \n- \n\nMethod:\n1. \n2. \n\nYour name:\n\nAttach a photo of the finished dish if you have one — thank you!"
+            )}`}
+            className="rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600"
+          >
+            Submit Recipe
+          </a>
         </div>
       </section>
     </>

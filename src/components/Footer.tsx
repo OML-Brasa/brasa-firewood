@@ -9,7 +9,6 @@ const columns = [
       { label: "Dolce", href: "/shop/dolce" },
       { label: "Ravvivata", href: "/shop/ravvivata" },
       { label: "Ardente", href: "/shop/ardente" },
-      { label: "Acerba", href: "/shop/acerba" },
     ],
   },
   {
@@ -36,7 +35,11 @@ const social = [
   { label: "YouTube", href: "#", Icon: FaYoutube },
 ];
 
-const legal = ["Privacy Policy", "Terms of Use", "Refractory Care"];
+const legal = [
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms of Use", href: "/terms" },
+  { label: "Refractory Care", href: "/care" },
+];
 
 export function Footer() {
   return (
@@ -85,9 +88,9 @@ export function Footer() {
             <span>© {new Date().getFullYear()} Brasa. All rights reserved.</span>
             <div className="flex gap-6">
               {legal.map((l) => (
-                <a key={l} href="#" className="transition-colors hover:text-copper-300">
-                  {l}
-                </a>
+                <Link key={l.label} href={l.href} className="transition-colors hover:text-copper-300">
+                  {l.label}
+                </Link>
               ))}
             </div>
           </div>

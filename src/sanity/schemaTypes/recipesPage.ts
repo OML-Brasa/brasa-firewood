@@ -43,6 +43,7 @@ export const recipesPage = defineType({
     }),
     defineField({ name: "submitTitle", title: "Submit CTA · title", type: "string" }),
     defineField({ name: "submitSubtitle", title: "Submit CTA · subtitle", type: "string" }),
+    defineField({ name: "submitEmail", title: "Submit CTA · email recipient", description: "Where the “Submit Recipe” button sends submissions.", type: "string" }),
   ],
   preview: { prepare: () => ({ title: "Recipes Page" }) },
 });

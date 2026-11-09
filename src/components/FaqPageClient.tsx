@@ -77,7 +77,11 @@ export function FaqPageClient({ content }: { content: FaqContent }) {
                             <span className="text-[15px] text-charcoal-700">{item.question}</span>
                             {isOpen ? <Minus size={16} className="shrink-0 text-charcoal-500" /> : <Plus size={16} className="shrink-0 text-charcoal-500" />}
                           </button>
-                          {isOpen && <p className="px-6 pb-4 text-[14px] leading-[1.6] text-charcoal-500">{item.answer}</p>}
+                          <div className={`grid transition-all duration-300 ease-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
+                            <div className="overflow-hidden">
+                              <p className="px-6 pb-4 text-[14px] leading-[1.6] text-charcoal-500">{item.answer}</p>
+                            </div>
+                          </div>
                         </div>
                       );
                     })}

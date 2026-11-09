@@ -25,8 +25,26 @@ export function ContactClient({ content, heroImage }: { content: ContactContent;
       return;
     }
     setError("");
+    const body = [
+      `Name: ${form.first} ${form.last}`,
+      `Email: ${form.email}`,
+      form.phone ? `Phone: ${form.phone}` : "",
+      "",
+      form.message,
+    ]
+      .filter((l) => l !== "")
+      .join("\n");
+    window.location.href = `mailto:${content.email}?subject=${encodeURIComponent(
+      form.subject
+    )}&body=${encodeURIComponent(body)}`;
     setSent(true);
   };
+
+  const scheduleHref = `mailto:${content.email}?subject=${encodeURIComponent(
+    "Schedule a Call"
+  )}&body=${encodeURIComponent(
+    "Hi Brasa team,\n\nI'd like to schedule a call to discuss my oven. Here are a few times that work for me:\n\n- \n- \n\nThanks!"
+  )}`;
 
   return (
     <>
@@ -115,7 +133,7 @@ export function ContactClient({ content, heroImage }: { content: ContactContent;
               <h2 className="font-heading text-[24px] font-extrabold text-charcoal-800">{content.consultationTitle}</h2>
               <p className="text-[15px] leading-[1.5] text-charcoal-600">{content.consultationBody}</p>
             </div>
-            <a href="#" className="w-fit rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600">Schedule a Call</a>
+            <a href={scheduleHref} className="w-fit rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600">Schedule a Call</a>
           </div>
         </div>
       </section>
@@ -136,7 +154,11 @@ export function ContactClient({ content, heroImage }: { content: ContactContent;
                     <span className="text-[16px] font-semibold text-charcoal-800">{f.question}</span>
                     {isOpen ? <Minus size={18} className="shrink-0 text-charcoal-500" /> : <Plus size={18} className="shrink-0 text-charcoal-500" />}
                   </button>
-                  {isOpen && <p className="pb-5 text-[15px] leading-[1.6] text-charcoal-500">{f.answer}</p>}
+                  <div className={`grid transition-all duration-300 ease-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
+                    <div className="overflow-hidden">
+                      <p className="pb-5 text-[15px] leading-[1.6] text-charcoal-500">{f.answer}</p>
+                    </div>
+                  </div>
                 </div>
               );
             })}

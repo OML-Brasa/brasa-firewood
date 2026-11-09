@@ -11,7 +11,7 @@ export const revalidate = 60;
 const query = `*[_type == "recipesPage"][0]{
   heroTitle, heroSubtitle, searchPlaceholder, categories,
   recipes[]{ title, category, region, serves, image, "pdf": pdf.asset->url, prepTime, cookTime, ovenTemp, difficulty, ingredients, directions },
-  submitTitle, submitSubtitle
+  submitTitle, submitSubtitle, submitEmail
 }`;
 
 type DocRecipe = Omit<Recipe, "image" | "pdf"> & { image?: Parameters<typeof urlFor>[0]; pdf?: string | null };
@@ -29,6 +29,7 @@ export default async function RecipesPage() {
     recipes,
     submitTitle: doc?.submitTitle ?? recipesDefaults.submitTitle,
     submitSubtitle: doc?.submitSubtitle ?? recipesDefaults.submitSubtitle,
+    submitEmail: doc?.submitEmail ?? recipesDefaults.submitEmail,
   };
   return (
     <div className="flex flex-col bg-background">
