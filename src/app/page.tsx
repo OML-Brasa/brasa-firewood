@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 
+import { CollectionShowcase } from "@/components/CollectionShowcase";
 import { CompareTable } from "@/components/CompareTable";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
@@ -38,13 +39,12 @@ const content = {
   },
   collection: {
     title: "The Collection",
-    meta: "4 Models Available",
+    meta: "3 Models Available",
     featured: "/images/featured-oven.png",
     products: [
       { name: "Dolce", slug: "dolce", price: "From $4,380", image: "/images/model-dolce.png" },
       { name: "Ravvivata", slug: "ravvivata", price: "From $5,040", image: "/images/model-ravvivata.png" },
       { name: "Ardente", slug: "ardente", price: "From $7,700", image: "/images/model-ardente.png" },
-      { name: "Acerba", slug: "acerba", price: "From $1,520", image: "/images/model-griggia.png" },
     ],
   },
   material: {
@@ -65,26 +65,25 @@ const content = {
   experience: {
     title: "The Ownership Experience",
     steps: [
-      { n: "01", title: "Select Your Oven", copy: "Choose from four collections — Dolce, Ravvivata, Ardente, or Acerba — each engineered to the same standard, sized and finished for the way you cook and the space you have." },
+      { n: "01", title: "Select Your Oven", copy: "Choose from three collections — Dolce, Ravvivata, or Ardente — each engineered to the same standard, sized and finished for the way you cook and the space you have." },
       { n: "02", title: "Configure to Your Taste", copy: "Dial in your base, insulation, and finish. Every Brasa is built to order, so the instrument you receive is the one you specified." },
       { n: "03", title: "White-Glove Delivery", copy: "From curbside freight to full white-glove installation, we deliver and place your oven so it's ready to season and fire on day one." },
     ],
   },
   editorial: [
-    { kicker: "Recipes", image: "/images/editorial-recipes.png", copy: "From your first seasoning fire to a full evening of searing, roasting, and baking on one bed of embers — recipes built around the way a Brasa actually cooks.", cta: "Read More" },
-    { kicker: "Memories worth Sharing", image: "/images/editorial-memories.png", copy: "A Brasa is built for the table as much as the fire — long dinners, hands-on cooking, and the kind of evening that's better with people around it.", cta: "Read More" },
+    { kicker: "Recipes", image: "/images/editorial-recipes.png", copy: "From your first seasoning fire to a full evening of searing, roasting, and baking on one bed of embers — recipes built around the way a Brasa actually cooks.", cta: "Read More", href: "/recipes" },
+    { kicker: "Memories worth Sharing", image: "/images/editorial-memories.png", copy: "A Brasa is built for the table as much as the fire — long dinners, hands-on cooking, and the kind of evening that's better with people around it.", cta: "Read More", href: "/recipes" },
   ],
   comparison: {
     title: "Compare Our Ovens",
     subtitle: "Side-by-side specifications for all assembled oven lines.",
-    models: ["Dolce", "Ravvivata", "Ardente", "Acerba"],
+    models: ["Dolce", "Ravvivata", "Ardente"],
     rows: [
-      { feature: "Model Sizes", values: ["75–120", "75–120", "90–120", "75–120"] },
-      { feature: "Exterior Size", values: ["100×100 – 150×150 cm", "100×100 – 150×150 cm", "120×120 – 150×150 cm", "100×100 – 150×150 cm"] },
-      { feature: "Concrete Base", values: ["6–32 blocks", "6–32 blocks", "10–36 blocks", "6–32 blocks"] },
-      { feature: "Insulation", values: ["Premium", "Premium", "Premium", "Premium"] },
-      { feature: "Finish Options", values: ["Smooth, Brick, Stone, Wood, Marble, Premium", "Smooth, Brick, Stone, Wood, Marble, Premium", "Traditional, Classic, Mixed, Brick, Stone, Wood", "Traditional, Classic, Brick & Stone"] },
-      { feature: "Burner Type", values: ["—", "—", "—", "Round or Square"] },
+      { feature: "Model Sizes", values: ["75–120", "75–120", "90–120"] },
+      { feature: "Exterior Size", values: ["100×100 – 150×150 cm", "100×100 – 150×150 cm", "120×120 – 150×150 cm"] },
+      { feature: "Concrete Base", values: ["6–32 blocks", "6–32 blocks", "10–36 blocks"] },
+      { feature: "Insulation", values: ["Premium", "Premium", "Premium"] },
+      { feature: "Finish Options", values: ["Smooth, Brick, Stone, Wood, Marble, Premium", "Smooth, Brick, Stone, Wood, Marble, Premium", "Traditional, Classic, Mixed, Brick, Stone, Wood"] },
     ],
     shipTitle: "We Ship To",
     regions: [
@@ -242,25 +241,8 @@ export default async function Home() {
             <span className={`${eyebrow} hidden sm:block`}>{c.collection.meta}</span>
           </div>
 
-          {/* Featured — the frame export already includes the bordered card */}
-          <img
-            src={c.collection.featured}
-            alt="Featured Brasa oven"
-            className="mt-12 w-full"
-          />
-
-          {/* Cards — each export is the bordered card; name + price sit below */}
-          <div className="mt-12 grid grid-cols-2 gap-6 lg:grid-cols-4">
-            {c.collection.products.map((p) => (
-              <Link key={p.name} href={`/shop/${p.slug}`} className="group flex flex-col gap-4">
-                <img src={p.image} alt={`Brasa ${p.name} oven`} className="w-full transition-transform group-hover:scale-[1.02]" />
-                <div className="flex items-center justify-between">
-                  <h3 className="text-[20px] font-extrabold text-charcoal-800 transition-colors group-hover:text-copper-600">{p.name}</h3>
-                  <span className="text-[18px] font-bold tracking-[0.02em] text-charcoal-800">{p.price}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {/* Click a thumbnail to swap the hero; the hero links to the product page. */}
+          <CollectionShowcase products={c.collection.products} />
         </div>
       </section>
 
@@ -317,12 +299,12 @@ export default async function Home() {
         <div className={`${wrap} grid gap-10 pb-20 md:grid-cols-2 md:pb-[120px]`}>
           {c.editorial.map((e) => (
             <article key={e.kicker} className="flex flex-col gap-5">
-              <div className="aspect-[62/38] overflow-hidden rounded-xl">
-                <img src={e.image} alt={e.kicker} className="h-full w-full object-cover" />
-              </div>
+              <Link href={e.href} className="aspect-[62/38] overflow-hidden rounded-xl">
+                <img src={e.image} alt={e.kicker} className="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.02]" />
+              </Link>
               <h3 className="font-heading text-[24px] font-extrabold tracking-[-0.01em] text-charcoal-800 md:text-[28px]">{e.kicker}</h3>
               <p className="text-[15px] leading-[1.5] text-charcoal-500">{e.copy}</p>
-              <LearnMore label={e.cta} />
+              <LearnMore label={e.cta} href={e.href} />
             </article>
           ))}
         </div>

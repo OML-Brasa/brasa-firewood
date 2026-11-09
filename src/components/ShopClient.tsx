@@ -43,19 +43,23 @@ export function ShopClient({
   const showOvens = tab === "All" || tab === "Ovens";
   const showAccessories = tab === "All" || tab === "Accessories";
 
+  // Acerba is a "Complete Oven Lot" package — shown with the accessories, not in the model collection.
+  const collectionOvens = useMemo(() => ovens.filter((o) => o.slug !== "acerba"), [ovens]);
+  const acerba = useMemo(() => ovens.find((o) => o.slug === "acerba"), [ovens]);
+
   const allSizes = useMemo(
-    () => [...new Set(ovens.flatMap((o) => o.variants.map((v) => v.size)))].sort((a, b) => parseInt(a) - parseInt(b)),
-    [ovens]
+    () => [...new Set(collectionOvens.flatMap((o) => o.variants.map((v) => v.size)))].sort((a, b) => parseInt(a) - parseInt(b)),
+    [collectionOvens]
   );
 
   const visibleOvens = useMemo(() => {
-    let list = sizeFilter ? ovens.filter((o) => o.variants.some((v) => v.size === sizeFilter)) : ovens;
+    let list = sizeFilter ? collectionOvens.filter((o) => o.variants.some((v) => v.size === sizeFilter)) : collectionOvens;
     const withMin = list.map((o) => ({ o, min: Math.min(...o.variants.map((v) => v.price)) }));
     if (sort === "price-asc") withMin.sort((a, b) => a.min - b.min);
     else if (sort === "price-desc") withMin.sort((a, b) => b.min - a.min);
     list = withMin.map((x) => x.o);
     return list;
-  }, [ovens, sizeFilter, sort]);
+  }, [collectionOvens, sizeFilter, sort]);
 
   const addAccessory = (a: AccessoryProduct) =>
     addToCart({ id: `acc:${a.slug}`, slug: a.slug, name: a.name, desc: a.shortDescription, price: a.price, image: a.image ?? "" });
@@ -157,7 +161,7 @@ export function ShopClient({
                   return (
                     <article key={o.slug} className="group flex flex-col overflow-hidden rounded-lg border border-charcoal-300 bg-background transition-shadow hover:shadow-[0_8px_30px_rgba(33,31,29,0.08)]">
                       <Link href={`/shop/${o.slug}`} className="aspect-[588/360] overflow-hidden bg-white">
-                        {cover ? <img src={cover} alt={o.name} className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.03]" /> : <div className="flex h-full items-center justify-center"><ImageIcon size={32} className="text-charcoal-300" /></div>}
+                        {cover ? <img src={cover} alt={o.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" /> : <div className="flex h-full items-center justify-center"><ImageIcon size={32} className="text-charcoal-300" /></div>}
                       </Link>
                       <div className="flex flex-1 flex-col gap-2.5 p-5">
                         <div className="flex items-baseline justify-between gap-2">
@@ -226,6 +230,33 @@ export function ShopClient({
           <div className={`${wrap} ${showOvens ? "border-t border-[#edf2f7] pt-12" : "pt-12"} pb-12`}>
             <h2 className={`${sectionTitle} mb-8`}>Accessories</h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {acerba && (
+                <Link
+                  href="/shop/acerba"
+                  className="group flex flex-col gap-3 rounded-lg border border-charcoal-300 p-4 transition-shadow hover:shadow-[0_6px_20px_rgba(33,31,29,0.06)]"
+                >
+                  <div className="flex aspect-square items-center justify-center overflow-hidden rounded-md bg-white">
+                    {(() => {
+                      const cover = (acerba.variants.find((v) => v.gallery.length > 1) ?? acerba.variants[0])?.image;
+                      return cover ? (
+                        <img src={cover} alt={acerba.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" />
+                      ) : (
+                        <ImageIcon size={28} className="text-charcoal-400" />
+                      );
+                    })()}
+                  </div>
+                  <div className="flex flex-1 flex-col">
+                    <span className="text-[15px] font-bold text-charcoal-800">{acerba.name}</span>
+                    <span className="text-[13px] text-charcoal-500">{acerba.shortDescription}</span>
+                  </div>
+                  <div className="mt-1 flex items-center justify-between">
+                    <span className="text-[15px] font-bold text-charcoal-800">From {money(Math.min(...acerba.variants.map((v) => v.price)))}</span>
+                    <span className="inline-flex items-center gap-1 rounded bg-copper-500 px-4 py-2 text-[12px] font-bold uppercase tracking-[0.02em] text-white transition-colors group-hover:bg-copper-600">
+                      View <ArrowRight size={13} />
+                    </span>
+                  </div>
+                </Link>
+              )}
               {accessories.map((a) => (
                 <div key={a.slug} className="flex flex-col gap-3 rounded-lg border border-charcoal-300 p-4 transition-shadow hover:shadow-[0_6px_20px_rgba(33,31,29,0.06)]">
                   <div className="flex aspect-square items-center justify-center overflow-hidden rounded-md bg-[#dedddd]">
