@@ -86,11 +86,11 @@ export default async function AboutPage() {
       <section className="relative flex h-[560px] w-full items-center justify-center overflow-hidden bg-charcoal-800 md:h-[640px]">
         <img src={heroImage} alt="Brasa workshop" className="absolute inset-0 h-full w-full object-cover" />
         <div className={`${wrap} relative flex justify-center`}>
-          <div className="flex w-full max-w-[800px] flex-col items-center gap-6 rounded-lg border border-[#cbd5e0] bg-white p-8 text-center md:p-10">
-            <h1 className="font-heading text-[36px] font-extrabold leading-[1.08] tracking-[-0.01em] text-charcoal-800 md:text-[56px]">
+          <div className="flex w-full max-w-[800px] flex-col items-center gap-6 rounded-lg border border-[#cbd5e0] bg-white/15 p-8 text-center md:p-10">
+            <h1 className="font-heading text-[36px] font-extrabold leading-[1.08] tracking-[-0.01em] text-sand md:text-[56px]">
               {doc?.heroTitle ?? "A discipline worth the right instrument."}
             </h1>
-            <p className="max-w-[578px] text-[18px] leading-[1.6] text-charcoal-500 md:text-[20px]">
+            <p className="max-w-[578px] text-[18px] leading-[1.6] text-sand md:text-[20px]">
               {doc?.heroSubtitle ??
                 "Every Brasa is hand-formed by European artisans, then held to a standard closer to an instrument than an appliance. Each is measured, finished, and inspected before it leaves."}
             </p>
