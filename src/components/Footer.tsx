@@ -22,7 +22,7 @@ const columns = [
   {
     h: "Learn",
     items: [
-      { label: "Refractory Science", href: "/about" },
+      { label: "Refractory Care", href: "/care" },
       { label: "Recipes", href: "/recipes" },
       { label: "FAQ", href: "/faq" },
     ],
@@ -38,7 +38,6 @@ const social = [
 const legal = [
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Use", href: "/terms" },
-  { label: "Refractory Care", href: "/care" },
 ];
 
 export function Footer() {
@@ -86,7 +85,7 @@ export function Footer() {
         <div className="mt-16 border-t border-[#cbd5e0]/30 pt-5">
           <div className="flex flex-col justify-between gap-3 text-[13px] text-sand/70 sm:flex-row">
             <span>
-              © {new Date().getFullYear()} Brasa. All rights reserved. Designed by{" "}
+              © {new Date().getFullYear()} Brasa by OML Imports. All rights reserved. Designed by{" "} 
               <a
                 href="https://www.depictbrands.com/"
                 target="_blank"

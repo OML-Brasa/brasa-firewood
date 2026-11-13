@@ -98,10 +98,10 @@ const content = {
     columns: [
       { h: "Collection", items: ["Dolce", "Ravvivata", "Ardente", "Acerba"] },
       { h: "Company", items: ["Our Story", "Shop", "Contact"] },
-      { h: "Learn", items: ["Refractory Science", "Recipes", "FAQ"] },
+      { h: "Learn", items: ["Refractory Care", "Recipes", "FAQ"] },
     ],
     social: { h: "Follow the Fire", copy: "Follow along for fire, food, and the making of every oven." },
-    legal: ["Privacy Policy", "Terms of Use", "Refractory Care"],
+    legal: ["Privacy Policy", "Terms of Use"],
   },
 };
 
