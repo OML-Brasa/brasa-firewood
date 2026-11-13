@@ -84,7 +84,18 @@ export function Footer() {
         </div>
         <div className="mt-16 border-t border-[#cbd5e0]/30 pt-5">
           <div className="flex flex-col justify-between gap-3 text-[13px] text-sand/70 sm:flex-row">
-            <span>© {new Date().getFullYear()} Brasa by OML Imports. All rights reserved.</span>
+            <span>
+              © {new Date().getFullYear()} Brasa by OML Imports. All rights reserved. Designed by{" "} 
+              <a
+                href="https://www.depictbrands.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline-offset-2 transition-colors hover:text-copper-300 hover:underline"
+              >
+                Depict Brands
+              </a>
+              .
+            </span>
             <div className="flex gap-6">
               {legal.map((l) => (
                 <Link key={l.label} href={l.href} className="transition-colors hover:text-copper-300">
