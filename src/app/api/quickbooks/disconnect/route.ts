@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { clearConnection, getStoredConnection } from "@/lib/quickbooksStore";
+
 export const runtime = "nodejs";
 
 /**
@@ -14,12 +16,12 @@ const REVOKE_URL = "https://developer.api.intuit.com/v2/oauth2/tokens/revoke";
 export async function GET() {
   const clientId = process.env.QBO_CLIENT_ID ?? "";
   const clientSecret = process.env.QBO_CLIENT_SECRET ?? "";
-  const refreshToken = process.env.QBO_REFRESH_TOKEN ?? "";
+  const conn = await getStoredConnection();
 
-  if (!clientId || !clientSecret || !refreshToken) {
+  if (!clientId || !clientSecret || !conn) {
     return NextResponse.json(
-      { ok: false, error: "Server missing QBO credentials" },
-      { status: 500 }
+      { ok: false, error: "QuickBooks is not connected" },
+      { status: 400 }
     );
   }
 
@@ -31,13 +33,13 @@ export async function GET() {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-    body: JSON.stringify({ token: refreshToken }),
+    body: JSON.stringify({ token: conn.refreshToken }),
   });
 
   if (!res.ok && res.status !== 200) {
     return NextResponse.json({ ok: false, error: await res.text() }, { status: 502 });
   }
 
-  // TODO(production): also clear the persisted refresh token from storage.
+  await clearConnection();
   return NextResponse.json({ ok: true, message: "QuickBooks disconnected." });
 }

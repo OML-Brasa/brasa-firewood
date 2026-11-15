@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { createEstimateForOrder, isQboConfigured, type QboOrder } from "@/lib/quickbooks";
+import { createEstimateForOrder, isQboReady, type QboOrder } from "@/lib/quickbooks";
 
 export const runtime = "nodejs";
 
@@ -25,8 +25,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Missing required fields" }, { status: 400 });
   }
 
-  if (!isQboConfigured()) {
-    console.log("[quote] received (QBO not configured — acknowledging only)", {
+  if (!(await isQboReady())) {
+    console.log("[quote] received (QBO not connected — acknowledging only)", {
       orderNo: order.orderNo,
       email: order.email,
       items: order.items.length,

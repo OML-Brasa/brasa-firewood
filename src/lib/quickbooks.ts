@@ -15,9 +15,12 @@
  *
  * NOTE ON REFRESH-TOKEN ROTATION: Intuit returns a new refresh token on each
  * refresh (the old one keeps working for 24h) and the token expires after ~100
- * days of inactivity. For production we must persist the latest refresh token
- * (see `persistRefreshToken` below) rather than relying only on the env var.
+ * days of inactivity. The connection (refresh token + realm id) is persisted via
+ * `quickbooksStore` (Vercel KV in production), so a rotated token is saved and
+ * the connection survives.
  */
+
+import { getStoredConnection, saveRefreshToken } from "@/lib/quickbooksStore";
 
 const TOKEN_URL = "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer";
 
@@ -44,30 +47,22 @@ export type QboOrder = {
 const env = {
   clientId: process.env.QBO_CLIENT_ID ?? "",
   clientSecret: process.env.QBO_CLIENT_SECRET ?? "",
-  refreshToken: process.env.QBO_REFRESH_TOKEN ?? "",
-  realmId: process.env.QBO_REALM_ID ?? "",
   environment: (process.env.QBO_ENVIRONMENT ?? "sandbox").toLowerCase(),
 };
 
-export const isQboConfigured = () =>
-  Boolean(env.clientId && env.clientSecret && env.refreshToken && env.realmId);
+/** True when the app has API credentials AND a stored company connection. */
+export async function isQboReady(): Promise<boolean> {
+  if (!env.clientId || !env.clientSecret) return false;
+  return (await getStoredConnection()) !== null;
+}
 
 const apiBase = () =>
   env.environment === "production"
     ? "https://quickbooks.api.intuit.com"
     : "https://sandbox-quickbooks.api.intuit.com";
 
-/**
- * Hook for persisting a rotated refresh token. For sandbox/testing this is a
- * no-op (we keep using the env var). For production, implement storage here
- * (e.g. a Sanity doc or Vercel KV) so the connection survives rotation.
- */
-async function persistRefreshToken(_newRefreshToken: string): Promise<void> {
-  // TODO(production): persist `_newRefreshToken` to durable storage.
-}
-
-/** Exchange the refresh token for a fresh access token. */
-async function getAccessToken(): Promise<string> {
+/** Exchange a refresh token for a fresh access token, persisting rotation. */
+async function getAccessToken(refreshToken: string): Promise<string> {
   const basic = Buffer.from(`${env.clientId}:${env.clientSecret}`).toString("base64");
   const res = await fetch(TOKEN_URL, {
     method: "POST",
@@ -78,15 +73,15 @@ async function getAccessToken(): Promise<string> {
     },
     body: new URLSearchParams({
       grant_type: "refresh_token",
-      refresh_token: env.refreshToken,
+      refresh_token: refreshToken,
     }),
   });
   if (!res.ok) {
     throw new Error(`QBO token refresh failed: ${res.status} ${await res.text()}`);
   }
   const json = (await res.json()) as { access_token: string; refresh_token?: string };
-  if (json.refresh_token && json.refresh_token !== env.refreshToken) {
-    await persistRefreshToken(json.refresh_token);
+  if (json.refresh_token && json.refresh_token !== refreshToken) {
+    await saveRefreshToken(json.refresh_token);
   }
   return json.access_token;
 }
@@ -94,10 +89,11 @@ async function getAccessToken(): Promise<string> {
 /** Low-level call to the QBO company endpoint. */
 async function qboFetch<T>(
   accessToken: string,
+  realmId: string,
   path: string,
   init?: RequestInit
 ): Promise<T> {
-  const url = `${apiBase()}/v3/company/${env.realmId}/${path}`;
+  const url = `${apiBase()}/v3/company/${realmId}/${path}`;
   const res = await fetch(url, {
     ...init,
     headers: {
@@ -120,10 +116,11 @@ async function qboFetch<T>(
 const q = (s: string) => s.replace(/'/g, "\\'");
 
 /** Find a customer by email, or create one. Returns the QBO Customer id. */
-async function findOrCreateCustomer(accessToken: string, order: QboOrder): Promise<string> {
+async function findOrCreateCustomer(accessToken: string, realmId: string, order: QboOrder): Promise<string> {
   const query = `select Id from Customer where PrimaryEmailAddr = '${q(order.email)}'`;
   const found = await qboFetch<{ QueryResponse?: { Customer?: { Id: string }[] } }>(
     accessToken,
+    realmId,
     `query?query=${encodeURIComponent(query)}&minorversion=73`
   );
   const existing = found.QueryResponse?.Customer?.[0]?.Id;
@@ -148,7 +145,7 @@ async function findOrCreateCustomer(accessToken: string, order: QboOrder): Promi
         }
       : {}),
   };
-  const created = await qboFetch<{ Customer: { Id: string } }>(accessToken, "customer?minorversion=73", {
+  const created = await qboFetch<{ Customer: { Id: string } }>(accessToken, realmId, "customer?minorversion=73", {
     method: "POST",
     body: JSON.stringify(body),
   });
@@ -164,9 +161,12 @@ async function findOrCreateCustomer(accessToken: string, order: QboOrder): Promi
 export async function createEstimateForOrder(
   order: QboOrder
 ): Promise<{ estimateId: string; docNumber?: string }> {
-  if (!isQboConfigured()) throw new Error("QuickBooks is not configured");
-  const accessToken = await getAccessToken();
-  const customerId = await findOrCreateCustomer(accessToken, order);
+  if (!env.clientId || !env.clientSecret) throw new Error("QuickBooks is not configured");
+  const conn = await getStoredConnection();
+  if (!conn) throw new Error("QuickBooks is not connected");
+  const accessToken = await getAccessToken(conn.refreshToken);
+  const { realmId } = conn;
+  const customerId = await findOrCreateCustomer(accessToken, realmId, order);
 
   const lines: Record<string, unknown>[] = order.items.map((it) => ({
     DetailType: "SalesItemLineDetail",
@@ -200,6 +200,7 @@ export async function createEstimateForOrder(
 
   const created = await qboFetch<{ Estimate: { Id: string; DocNumber?: string } }>(
     accessToken,
+    realmId,
     "estimate?minorversion=73",
     { method: "POST", body: JSON.stringify(body) }
   );
