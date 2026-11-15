@@ -1,4 +1,7 @@
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+
+import { QBO_STATE_COOKIE } from "../connect/route";
 
 export const runtime = "nodejs";
 
@@ -21,10 +24,18 @@ export async function GET(request: Request) {
   const code = searchParams.get("code");
   const realmId = searchParams.get("realmId");
   const error = searchParams.get("error");
+  const state = searchParams.get("state");
 
   if (error) return NextResponse.json({ ok: false, error }, { status: 400 });
   if (!code || !realmId) {
     return NextResponse.json({ ok: false, error: "Missing code or realmId" }, { status: 400 });
+  }
+
+  // CSRF protection: the returned `state` must match the cookie set in /connect.
+  const cookieStore = await cookies();
+  const expectedState = cookieStore.get(QBO_STATE_COOKIE)?.value;
+  if (!state || !expectedState || state !== expectedState) {
+    return NextResponse.json({ ok: false, error: "Invalid state (possible CSRF)" }, { status: 400 });
   }
 
   const clientId = process.env.QBO_CLIENT_ID ?? "";
@@ -60,10 +71,12 @@ export async function GET(request: Request) {
 
   // One-time display so the operator can copy them into env. Do NOT log tokens
   // in production; swap this for durable storage of the refresh token.
-  return NextResponse.json({
+  const response = NextResponse.json({
     ok: true,
     message: "Connected. Copy these into your environment, then remove this display.",
     QBO_REALM_ID: realmId,
     QBO_REFRESH_TOKEN: tokens.refresh_token,
   });
+  response.cookies.delete(QBO_STATE_COOKIE);
+  return response;
 }
