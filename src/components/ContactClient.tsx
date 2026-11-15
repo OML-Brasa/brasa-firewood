@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Mail, Minus, Phone, Plus, Clock } from "lucide-react";
+import { Check, Mail, Minus, Plus, Clock } from "lucide-react";
 import { useState } from "react";
 
 import type { ContactContent } from "@/lib/contactContent";
@@ -39,12 +39,6 @@ export function ContactClient({ content, heroImage }: { content: ContactContent;
     )}&body=${encodeURIComponent(body)}`;
     setSent(true);
   };
-
-  const scheduleHref = `mailto:${content.email}?subject=${encodeURIComponent(
-    "Schedule a Call"
-  )}&body=${encodeURIComponent(
-    "Hi Brasa team,\n\nI'd like to schedule a call to discuss my oven. Here are a few times that work for me:\n\n- \n- \n\nThanks!"
-  )}`;
 
   return (
     <>
@@ -113,27 +107,10 @@ export function ContactClient({ content, heroImage }: { content: ContactContent;
                 <div className="flex flex-col"><span className="text-[12px] font-bold uppercase tracking-[0.1em] text-charcoal-500">Email Address</span><span className="text-[15px] text-charcoal-800">{content.email}</span></div>
               </div>
               <div className="flex items-start gap-3">
-                <Phone size={18} className="mt-0.5 text-copper-600" />
-                <div className="flex flex-col"><span className="text-[12px] font-bold uppercase tracking-[0.1em] text-charcoal-500">Phone Number</span><span className="text-[15px] text-charcoal-800">{content.phone}</span></div>
-              </div>
-              <div className="flex items-start gap-3">
                 <Clock size={18} className="mt-0.5 text-copper-600" />
                 <div className="flex flex-col"><span className="text-[12px] font-bold uppercase tracking-[0.1em] text-charcoal-500">Business Hours</span><span className="whitespace-pre-line text-[15px] leading-[1.6] text-charcoal-800">{content.businessHours}</span></div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Consultation */}
-      <section className="bg-background">
-        <div className={`${wrap} pb-16`}>
-          <div className="flex flex-wrap items-center justify-between gap-6 rounded-2xl border border-[#e7e2d7] bg-sand p-8 md:p-10">
-            <div className="flex max-w-2xl flex-col gap-2">
-              <h2 className="font-heading text-[24px] font-extrabold text-charcoal-800">{content.consultationTitle}</h2>
-              <p className="text-[15px] leading-[1.5] text-charcoal-600">{content.consultationBody}</p>
-            </div>
-            <a href={scheduleHref} className="w-fit rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600">Schedule a Call</a>
           </div>
         </div>
       </section>

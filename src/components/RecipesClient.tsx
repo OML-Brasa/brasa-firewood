@@ -22,7 +22,7 @@ function Meta({ label, value }: { label: string; value: string }) {
 export function RecipesClient({ content }: { content: RecipesContent }) {
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState("All");
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] = useState<number | null>(null);
 
   const q = query.trim().toLowerCase();
   const recipes = useMemo(
