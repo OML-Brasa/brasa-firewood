@@ -108,7 +108,10 @@ async function qboFetch<T>(
     },
   });
   if (!res.ok) {
-    throw new Error(`QBO ${path} failed: ${res.status} ${await res.text()}`);
+    // Capture intuit_tid (transaction id) from the response headers — Intuit
+    // support uses it to trace a failed request.
+    const tid = res.headers.get("intuit_tid") ?? "n/a";
+    throw new Error(`QBO ${path} failed: ${res.status} (intuit_tid: ${tid}) ${await res.text()}`);
   }
   return (await res.json()) as T;
 }
