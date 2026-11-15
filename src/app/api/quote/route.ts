@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 
+import { createEstimateForOrder, isQboConfigured, type QboOrder } from "@/lib/quickbooks";
+
+export const runtime = "nodejs";
+
 /**
- * Receives a shipping-quote request from checkout.
+ * Receives a shipping-quote request from checkout and, when QuickBooks is
+ * configured, creates a Customer + Estimate in QuickBooks Online.
  *
- * TODO (Part 3): create the customer + estimate in QuickBooks Online here.
- *   - Find/create Customer (by email) via the QBO API
- *   - Create an Estimate with the cart line items, discount, and shipping note
- *   - Needs: QBO client id/secret, realm id, OAuth2 refresh token (env vars)
- *
- * For now it validates the payload and acknowledges, so the checkout flow works
- * end-to-end. The front end still shows the confirmation if this returns ok.
+ * Until QBO env vars are set (QBO_CLIENT_ID/SECRET/REFRESH_TOKEN/REALM_ID), it
+ * just validates and acknowledges so the checkout flow works end-to-end.
  */
 export async function POST(request: Request) {
   let body: unknown;
@@ -19,24 +19,29 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Invalid JSON" }, { status: 400 });
   }
 
-  const order = body as {
-    orderNo?: string;
-    email?: string;
-    name?: string;
-    items?: { name: string; qty: number; price: number }[];
-  };
+  const order = body as Partial<QboOrder>;
 
   if (!order?.email || !order?.name || !order?.items?.length) {
     return NextResponse.json({ ok: false, error: "Missing required fields" }, { status: 400 });
   }
 
-  // Placeholder: log the request. Replace with the QuickBooks estimate call.
-  console.log("[quote] request received", {
-    orderNo: order.orderNo,
-    name: order.name,
-    email: order.email,
-    items: order.items.length,
-  });
+  if (!isQboConfigured()) {
+    console.log("[quote] received (QBO not configured — acknowledging only)", {
+      orderNo: order.orderNo,
+      email: order.email,
+      items: order.items.length,
+    });
+    return NextResponse.json({ ok: true, quoteNo: order.orderNo });
+  }
 
-  return NextResponse.json({ ok: true, quoteNo: order.orderNo });
+  try {
+    const { estimateId, docNumber } = await createEstimateForOrder(order as QboOrder);
+    console.log("[quote] QBO estimate created", { orderNo: order.orderNo, estimateId, docNumber });
+    return NextResponse.json({ ok: true, quoteNo: order.orderNo, estimateId, docNumber });
+  } catch (err) {
+    // Never block checkout on a bookkeeping error — the order is still captured
+    // client-side for manual follow-up.
+    console.error("[quote] QBO estimate failed", err);
+    return NextResponse.json({ ok: true, quoteNo: order.orderNo, qboError: true });
+  }
 }
