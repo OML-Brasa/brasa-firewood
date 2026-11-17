@@ -2,10 +2,12 @@
 
 /* eslint-disable @next/next/no-img-element */
 import { Blocks, Box, Flame, Image as ImageIcon, Minus, Plus, ShieldCheck, Sparkles, Thermometer, Truck } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import { I18nLink } from "@/components/I18nLink";
+import { useLocale } from "@/components/LocaleProvider";
+import { ui } from "@/i18n/ui";
 import { addToCart, money } from "@/lib/cart";
 import { ovens as collection, type AccessoryProduct, type Oven } from "@/lib/productDefaults";
 import { useRecentlyViewed } from "@/lib/recentlyViewed";
@@ -51,6 +53,9 @@ export function ProductClient({
   faqs: Faq[];
 }) {
   const router = useRouter();
+  const locale = useLocale();
+  const tp = ui[locale].product;
+  const tc = ui[locale].common;
 
   const sizes = useMemo(() => [...new Set(oven.variants.map((v) => v.size))], [oven.variants]);
   const [size, setSize] = useState(sizes[0]);
@@ -71,20 +76,20 @@ export function ProductClient({
     () => ({
       models: collection.map((c) => c.name),
       rows: [
-        { feature: "Style", values: collection.map((c) => c.style) },
-        { feature: "Sizes", values: collection.map((c) => [...new Set(c.variants.map((v) => v.size))].join(", ")) },
-        { feature: "Upper doors", values: collection.map((c) => (c.doors === 2 ? "2 doors" : "1 door")) },
-        { feature: "Finish options", values: collection.map((c) => String([...new Set(c.variants.map((v) => v.finish))].filter((f) => f !== "Standard").length || 1)) },
-        { feature: "Starting price", values: collection.map((c) => `From ${money(Math.min(...c.variants.map((v) => v.price)))}`) },
+        { feature: tp.cmpStyle, values: collection.map((c) => c.style) },
+        { feature: tp.cmpSizes, values: collection.map((c) => [...new Set(c.variants.map((v) => v.size))].join(", ")) },
+        { feature: tp.cmpUpperDoors, values: collection.map((c) => (c.doors === 2 ? tp.doorsTwo : tp.doorOne)) },
+        { feature: tp.cmpFinishOptions, values: collection.map((c) => String([...new Set(c.variants.map((v) => v.finish))].filter((f) => f !== "Standard").length || 1)) },
+        { feature: tp.cmpStartingPrice, values: collection.map((c) => `${tc.from} ${money(Math.min(...c.variants.map((v) => v.price)))}`) },
       ],
     }),
-    []
+    [tp, tc]
   );
 
   const recent = useRecentlyViewed(
     useMemo(
-      () => ({ slug: oven.slug, name: oven.name, price: `From ${money(minPrice)}`, image: oven.variants[0]?.image ?? "" }),
-      [oven.slug, oven.name, oven.variants, minPrice]
+      () => ({ slug: oven.slug, name: oven.name, price: `${tc.from} ${money(minPrice)}`, image: oven.variants[0]?.image ?? "" }),
+      [oven.slug, oven.name, oven.variants, minPrice, tc]
     )
   );
 
@@ -136,15 +141,15 @@ export function ProductClient({
   }, [activeImg]);
 
   const specs: { label: string; value: string }[] = [
-    { label: "Size", value: variant.size },
-    { label: "Style", value: oven.style },
-    { label: "Finish", value: variant.finish },
-    ...(oven.style.includes("Enclosing") ? [{ label: "Firebox", value: "Round firebox / burner" }] : []),
-    { label: "Upper door", value: oven.doors === 2 ? "2 cast iron doors with glass" : "Glass door" },
-    { label: "Thermometer", value: oven.doors === 2 ? "2 included" : "Included" },
-    { label: "Insulation", value: "Premium" },
-    ...(variant.base ? [{ label: "Base", value: variant.base }] : []),
-    ...(oven.style === "Complete Lot" ? [{ label: "Includes", value: "Oven, door, spatula kit, thermometer" }] : []),
+    { label: tp.specSize, value: variant.size },
+    { label: tp.specStyle, value: oven.style },
+    { label: tp.specFinish, value: variant.finish },
+    ...(oven.style.includes("Enclosing") ? [{ label: tp.specFirebox, value: tp.fireboxValue }] : []),
+    { label: tp.specUpperDoor, value: oven.doors === 2 ? tp.doorsTwoValue : tp.doorOneValue },
+    { label: tp.specThermometer, value: oven.doors === 2 ? tp.thermTwoValue : tp.thermOneValue },
+    { label: tp.specInsulation, value: tp.insulationValue },
+    ...(variant.base ? [{ label: tp.specBase, value: variant.base }] : []),
+    ...(oven.style === "Complete Lot" ? [{ label: tp.specIncludes, value: tp.includesValue }] : []),
   ];
 
   const addOven = () => {
@@ -170,9 +175,9 @@ export function ProductClient({
       <div className="bg-sand">
         <div className={wrap}>
           <nav className="flex items-center gap-2 py-4 text-[13px] text-charcoal-500">
-            <Link href="/" className="transition-colors hover:text-copper-600">Home</Link>
+            <I18nLink href="/" className="transition-colors hover:text-copper-600">{tc.home}</I18nLink>
             <span>/</span>
-            <Link href="/shop" className="transition-colors hover:text-copper-600">Shop</Link>
+            <I18nLink href="/shop" className="transition-colors hover:text-copper-600">{tc.shop}</I18nLink>
             <span>/</span>
             <span className="text-charcoal-800">{oven.name}</span>
           </nav>
@@ -217,7 +222,7 @@ export function ProductClient({
           {/* Info / configurator */}
           <div className="flex min-w-[320px] flex-[1_0_0] flex-col gap-8">
             <div className="flex flex-col gap-3">
-              <span className="w-fit rounded-full bg-[#eef6f0] px-3 py-1 text-[12px] font-bold uppercase tracking-[0.08em] text-[#2f7d4f]">In stock</span>
+              <span className="w-fit rounded-full bg-[#eef6f0] px-3 py-1 text-[12px] font-bold uppercase tracking-[0.08em] text-[#2f7d4f]">{tc.inStock}</span>
               <h1 className="font-heading text-[48px] font-extrabold leading-[1.1] tracking-[-0.56px] text-charcoal-800 md:text-[56px]">{oven.name}</h1>
               <p className="text-[18px] font-bold leading-[1.55] tracking-[0.36px] text-charcoal-500">{oven.tagline}</p>
               <p className="font-heading text-[32px] font-extrabold leading-[1.15] tracking-[-0.48px] text-charcoal-800">{money(variant.price)}</p>
@@ -227,7 +232,7 @@ export function ProductClient({
               {/* Size */}
               {sizes.length > 1 && (
                 <div className="flex flex-col gap-2">
-                  <span className={label}>Oven Size</span>
+                  <span className={label}>{tp.ovenSize}</span>
                   <div className="flex flex-wrap gap-2">
                     {sizes.map((s) => (
                       <button
@@ -245,7 +250,7 @@ export function ProductClient({
               {/* Finish */}
               {showFinishes && (
                 <div className="flex flex-col gap-2">
-                  <span className={label}>Finish</span>
+                  <span className={label}>{tp.finish}</span>
                   <div className="flex flex-wrap gap-2">
                     {finishVariants.map((v) => (
                       <button
@@ -267,11 +272,11 @@ export function ProductClient({
             {/* CTA */}
             <div className="flex flex-col gap-3">
               <button onClick={addOven} className="rounded-[4px] bg-copper-500 px-6 py-4 text-[14px] font-bold uppercase tracking-[0.28px] text-white transition-colors hover:bg-copper-600">
-                Add to Cart
+                {tc.addToCart}
               </button>
               <div className="flex items-center gap-2 text-[13px] text-charcoal-500">
                 <Truck size={15} className="text-charcoal-400" />
-                Shipping is quoted per location · apply your discount code at checkout
+                {tp.shippingNote}
               </div>
             </div>
           </div>
@@ -282,7 +287,7 @@ export function ProductClient({
       <section className="bg-background">
         <div className={`${wrap} py-16`}>
           <div className="flex flex-col items-center gap-3 text-center">
-            <h2 className={sectionTitle}>Features &amp; Benefits</h2>
+            <h2 className={sectionTitle}>{tp.featuresTitle}</h2>
             <p className="max-w-2xl text-[18px] leading-[1.5] text-charcoal-500">{oven.shortDescription}</p>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
@@ -304,8 +309,8 @@ export function ProductClient({
       <section className="bg-background">
         <div className={`${wrap} pb-16`}>
           <div className="flex flex-col gap-2">
-            <h2 className={sectionTitle}>Technical Specifications</h2>
-            <p className="text-[16px] leading-[1.5] text-charcoal-500">Details for the selected configuration — {oven.name} {variant.size} · {variant.finish}.</p>
+            <h2 className={sectionTitle}>{tp.specsTitle}</h2>
+            <p className="text-[16px] leading-[1.5] text-charcoal-500">{tp.specsIntroPrefix}{oven.name} {variant.size} · {variant.finish}.</p>
           </div>
           <div className="mt-8 overflow-hidden rounded-lg border border-[#e7e2d7]">
             <table className="w-full border-collapse text-left">
@@ -327,8 +332,8 @@ export function ProductClient({
         <section className="bg-background">
           <div className={`${wrap} pb-16`}>
             <div className="flex items-center justify-between">
-              <h2 className="font-heading text-[24px] font-extrabold text-charcoal-800">Complete Your Setup</h2>
-              <Link href="/shop#accessories" className="text-[14px] text-copper-600 hover:text-copper-700">View All Accessories</Link>
+              <h2 className="font-heading text-[24px] font-extrabold text-charcoal-800">{tp.completeSetup}</h2>
+              <I18nLink href="/shop#accessories" className="text-[14px] text-copper-600 hover:text-copper-700">{tp.viewAllAccessories}</I18nLink>
             </div>
             <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {accessories.slice(0, 4).map((a) => (
@@ -342,7 +347,7 @@ export function ProductClient({
                   </div>
                   <div className="mt-1 flex items-center justify-between">
                     <span className="text-[15px] font-bold text-charcoal-800">{money(a.price)}</span>
-                    <button onClick={() => addAccessory(a)} className="rounded bg-copper-500 px-4 py-2 text-[12px] font-bold uppercase tracking-[0.02em] text-white transition-colors hover:bg-copper-600">Add</button>
+                    <button onClick={() => addAccessory(a)} className="rounded bg-copper-500 px-4 py-2 text-[12px] font-bold uppercase tracking-[0.02em] text-white transition-colors hover:bg-copper-600">{tc.add}</button>
                   </div>
                 </div>
               ))}
@@ -355,8 +360,8 @@ export function ProductClient({
       <section className="bg-background">
         <div className={`${wrap} pb-16`}>
           <div className="flex flex-col items-center gap-3 text-center">
-            <h2 className={sectionTitle}>Frequently Asked Questions</h2>
-            <p className="text-[16px] text-charcoal-500">Everything you need to know about owning and operating a Brasa oven.</p>
+            <h2 className={sectionTitle}>{tp.faqTitle}</h2>
+            <p className="text-[16px] text-charcoal-500">{tp.faqIntro}</p>
           </div>
           <div className="mx-auto mt-8 max-w-[1000px]">
             {faqs.map((f, i) => {
@@ -379,8 +384,8 @@ export function ProductClient({
       <section className="bg-background">
         <div className={`${wrap} pb-16`}>
           <div className="flex flex-col gap-2">
-            <h2 className={sectionTitle}>Compare the Collection</h2>
-            <p className="text-[16px] text-charcoal-500">How {oven.name} stacks up against the rest of the range.</p>
+            <h2 className={sectionTitle}>{tp.compareTitle}</h2>
+            <p className="text-[16px] text-charcoal-500">{tp.compareIntroPrefix}{oven.name}{tp.compareIntroSuffix}</p>
           </div>
           <CompareTable models={compare.models} rows={compare.rows} />
         </div>
@@ -389,17 +394,17 @@ export function ProductClient({
       {/* Recently Viewed */}
       <section className="bg-background">
         <div className={`${wrap} py-12`}>
-          <h2 className="font-heading text-[24px] font-extrabold text-charcoal-800">Recently Viewed</h2>
+          <h2 className="font-heading text-[24px] font-extrabold text-charcoal-800">{tp.recentlyViewed}</h2>
           {recent.length === 0 ? (
             <div className="mt-6 flex flex-col items-center gap-2 rounded-lg border border-dashed border-charcoal-300 py-12 text-center">
               <ImageIcon size={28} className="text-charcoal-400" />
-              <span className="text-[15px] font-semibold text-charcoal-700">You haven&rsquo;t viewed any ovens yet</span>
-              <span className="text-[13px] text-charcoal-500">Models you look at will show up here.</span>
+              <span className="text-[15px] font-semibold text-charcoal-700">{tp.recentEmptyTitle}</span>
+              <span className="text-[13px] text-charcoal-500">{tp.recentEmptyCopy}</span>
             </div>
           ) : (
             <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {recent.map((r) => (
-                <Link key={r.slug} href={`/shop/${r.slug}`} className="flex items-center gap-4 rounded-lg border border-charcoal-300 p-3 transition-colors hover:border-copper-500">
+                <I18nLink key={r.slug} href={`/shop/${r.slug}`} className="flex items-center gap-4 rounded-lg border border-charcoal-300 p-3 transition-colors hover:border-copper-500">
                   <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-md bg-sand">
                     {r.image ? <img src={r.image} alt={r.name} className="h-full w-full object-cover" /> : <ImageIcon size={20} className="text-charcoal-400" />}
                   </div>
@@ -407,7 +412,7 @@ export function ProductClient({
                     <span className="text-[15px] font-semibold text-charcoal-800">{r.name}</span>
                     <span className="text-[14px] text-charcoal-500">{r.price}</span>
                   </div>
-                </Link>
+                </I18nLink>
               ))}
             </div>
           )}
