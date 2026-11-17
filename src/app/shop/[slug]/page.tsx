@@ -15,7 +15,7 @@ export function generateStaticParams() {
   return ovens.map((o) => ({ slug: o.slug }));
 }
 
-const ovenQuery = `*[_type == "product" && type == "oven" && slug.current == $slug][0]{
+const ovenQuery = `*[_type == "product" && type == "oven" && slug.current == $slug && (language == "en" || !defined(language))][0]{
   name, "slug": slug.current, tagline, style, doors, shortDescription,
   variants[]{ size, finish, price, stock, base, description, image, gallery }
 }`;
