@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { LegalArticle } from "@/components/LegalArticle";
 import { getLocale } from "@/lib/getLocale";
-import { privacyPlaceholder } from "@/lib/legalContent";
+import { getPrivacyPlaceholder } from "@/lib/legalContent";
 import { client } from "@/sanity/lib/client";
 import { localeDoc } from "@/sanity/lib/locale";
 
@@ -18,12 +18,13 @@ const query = `${localeDoc("legalPage")}{ privacyTitle, privacyUpdated, privacyB
 export default async function PrivacyPage() {
   const locale = await getLocale();
   const doc = await client.fetch(query, { lang: locale }).catch(() => null);
+  const placeholder = getPrivacyPlaceholder(locale);
   return (
     <LegalArticle
-      title={doc?.privacyTitle ?? privacyPlaceholder.title}
-      updated={doc?.privacyUpdated ?? privacyPlaceholder.updated}
-      intro={privacyPlaceholder.intro}
-      sections={privacyPlaceholder.sections}
+      title={doc?.privacyTitle ?? placeholder.title}
+      updated={doc?.privacyUpdated ?? placeholder.updated}
+      intro={placeholder.intro}
+      sections={placeholder.sections}
       body={doc?.privacyBody ?? null}
     />
   );

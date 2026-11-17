@@ -75,6 +75,28 @@ const values = [
 export default async function AboutPage() {
   const locale = await getLocale();
   const doc = await client.fetch(aboutQuery, { lang: locale }).catch(() => null);
+  const L =
+    locale === "es"
+      ? {
+          exploreOvens: "Explora Nuestros Hornos",
+          exploreCollection: "Explora la Colección",
+          materialEyebrow: "El Material",
+          materialTitle: "La Diferencia de la Arcilla",
+          processEyebrow: "El Proceso",
+          processTitle: "Diseñado primero.",
+          makesEyebrow: "Lo que Hace a un Brasa",
+          makesTitle: "Hecho a Mano. Comprobado con Pruebas.",
+        }
+      : {
+          exploreOvens: "Explore Our Ovens",
+          exploreCollection: "Explore the Collection",
+          materialEyebrow: "The Material",
+          materialTitle: "The Clay Difference",
+          processEyebrow: "The Process",
+          processTitle: "Engineered first.",
+          makesEyebrow: "What Makes a Brasa",
+          makesTitle: "Built by Hand. Proven by Testing.",
+        };
   const promisesC = promises.map((p, i) => ({ ...p, title: doc?.promises?.[i]?.title ?? p.title, copy: doc?.promises?.[i]?.copy ?? p.copy }));
   const stepsC = steps.map((s, i) => ({ ...s, n: doc?.steps?.[i]?.n ?? s.n, title: doc?.steps?.[i]?.title ?? s.title, copy: doc?.steps?.[i]?.copy ?? s.copy }));
   const valuesC = values.map((v, i) => ({ ...v, title: doc?.values?.[i]?.title ?? v.title, copy: doc?.values?.[i]?.copy ?? v.copy }));
@@ -101,7 +123,7 @@ export default async function AboutPage() {
               href="/shop"
               className="mt-2 w-fit rounded bg-copper-500 px-7 py-3.5 text-[14px] font-bold uppercase tracking-[0.03em] text-sand transition-colors hover:bg-copper-600"
             >
-              Explore Our Ovens
+              {L.exploreOvens}
             </I18nLink>
           </div>
         </div>
@@ -126,7 +148,7 @@ export default async function AboutPage() {
               href="/#collection"
               className="w-fit rounded bg-copper-500 px-7 py-3.5 text-[14px] font-bold uppercase tracking-[0.03em] text-sand transition-colors hover:bg-copper-600"
             >
-              Explore the Collection
+              {L.exploreCollection}
             </I18nLink>
           </div>
         </div>
@@ -159,8 +181,8 @@ export default async function AboutPage() {
       <section className="bg-background">
         <div className={`${wrap} py-20`}>
           <div className="flex flex-col items-center gap-3 text-center">
-            <span className={eyebrow}>The Material</span>
-            <h2 className={sectionTitle}>The Clay Difference</h2>
+            <span className={eyebrow}>{L.materialEyebrow}</span>
+            <h2 className={sectionTitle}>{L.materialTitle}</h2>
           </div>
           <div className="mt-12 grid gap-10 md:grid-cols-3">
             {promisesC.map(({ Icon, title, copy }) => (
@@ -178,8 +200,8 @@ export default async function AboutPage() {
       <section className="bg-background">
         <div className={`${wrap} flex flex-col gap-8 py-20`}>
           <div className="flex flex-col items-center gap-3 text-center">
-            <span className={eyebrow}>The Process</span>
-            <h2 className={sectionTitle}>Engineered first.</h2>
+            <span className={eyebrow}>{L.processEyebrow}</span>
+            <h2 className={sectionTitle}>{L.processTitle}</h2>
           </div>
           <div className="flex aspect-[1280/540] w-full items-center justify-center overflow-hidden rounded-xl border border-[#cbd5e0] bg-[#dedddd]">
             {artisansImage ? (
@@ -199,8 +221,8 @@ export default async function AboutPage() {
       <section className="bg-background">
         <div className={`${wrap} py-20`}>
           <div className="flex flex-col items-center gap-3 text-center">
-            <span className={eyebrow}>What Makes a Brasa</span>
-            <h2 className={sectionTitle}>Built by Hand. Proven by Testing.</h2>
+            <span className={eyebrow}>{L.makesEyebrow}</span>
+            <h2 className={sectionTitle}>{L.makesTitle}</h2>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {stepsC.map((s) => (
