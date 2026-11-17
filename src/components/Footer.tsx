@@ -31,8 +31,7 @@ const columns = [
 
 const social = [
   { label: "Instagram", href: "https://www.instagram.com/brasaoven", Icon: FaInstagram },
-  { label: "Facebook", href: "#", Icon: FaFacebookF },
-  { label: "YouTube", href: "#", Icon: FaYoutube },
+  { label: "Facebook", href: "https://www.facebook.com/brasaoven", Icon: FaFacebookF },
 ];
 
 const legal = [
