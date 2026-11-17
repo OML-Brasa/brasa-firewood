@@ -1,30 +1,36 @@
-import { Check } from "lucide-react";
-import Link from "next/link";
+"use client";
 
-const steps = [
-  { label: "Cart", href: "/cart" },
-  { label: "Checkout", href: "/checkout" },
-  { label: "Confirmation", href: "/order-confirmed" },
-];
+import { Check } from "lucide-react";
+
+import { I18nLink } from "@/components/I18nLink";
+import { useLocale } from "@/components/LocaleProvider";
+import { checkoutUI } from "@/i18n/checkout";
 
 const wrap = "mx-auto w-full max-w-[1440px] px-6 md:px-20";
 
 /** Sand subheader with breadcrumbs (left) + 3-step progress (right).
  *  `step` is 1-based: 1 = Cart, 2 = Checkout, 3 = Confirmation. */
 export function CheckoutStepper({ step }: { step: 1 | 2 | 3 }) {
+  const locale = useLocale();
+  const t = checkoutUI[locale];
+  const steps = [
+    { label: t.stepCart, href: "/cart" },
+    { label: t.stepCheckout, href: "/checkout" },
+    { label: t.stepConfirmation, href: "/order-confirmed" },
+  ];
   const crumbs = steps.slice(0, step);
   return (
     <div className="border-b border-[#e7e2d7] bg-sand">
       <div className={`${wrap} flex flex-wrap items-center justify-center gap-3 py-4 sm:justify-between`}>
         <nav className="hidden items-center gap-2 text-[13px] text-charcoal-500 sm:flex">
-          <Link href="/" className="transition-colors hover:text-copper-600">Home</Link>
+          <I18nLink href="/" className="transition-colors hover:text-copper-600">{t.home}</I18nLink>
           {crumbs.map((c, i) => (
             <span key={c.label} className="flex items-center gap-2">
               <span>/</span>
               {i === crumbs.length - 1 ? (
                 <span className="font-bold text-charcoal-800">{c.label}</span>
               ) : (
-                <Link href={c.href} className="transition-colors hover:text-copper-600">{c.label}</Link>
+                <I18nLink href={c.href} className="transition-colors hover:text-copper-600">{c.label}</I18nLink>
               )}
             </span>
           ))}

@@ -7,6 +7,13 @@ export const homePage = defineType({
   title: "Home Page",
   type: "document",
   fields: [
+    defineField({
+      name: "language",
+      title: "Language",
+      type: "string",
+      options: { list: [ { title: "English", value: "en" }, { title: "Español", value: "es" } ], layout: "radio" },
+      initialValue: "en",
+    }),
     defineField({ name: "title", title: "Internal title", type: "string", initialValue: "Home", hidden: true }),
 
     defineField({ name: "heroLine1", title: "Hero line 1", type: "string" }),

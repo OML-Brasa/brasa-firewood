@@ -1,9 +1,11 @@
+import type { Locale } from "@/lib/i18n";
 import { client } from "@/sanity/lib/client";
+import { localeDoc } from "@/sanity/lib/locale";
 import { urlFor } from "@/sanity/lib/image";
 
 import { checkoutDefaults, type CheckoutSettings } from "./checkoutDefaults";
 
-const query = `*[_type == "checkoutSettings"][0]{
+const query = `${localeDoc("checkoutSettings")}{
   shippingMethods[]{ name, description, price },
   trustBadges[]{ title, description },
   whatsNext[]{ title, description },
@@ -12,8 +14,8 @@ const query = `*[_type == "checkoutSettings"][0]{
 }`;
 
 /** Fetch checkout settings from Sanity, falling back to code defaults. */
-export async function getCheckoutSettings(): Promise<CheckoutSettings> {
-  const doc = await client.fetch(query).catch(() => null);
+export async function getCheckoutSettings(locale: Locale = "en"): Promise<CheckoutSettings> {
+  const doc = await client.fetch(query, { lang: locale }).catch(() => null);
   if (!doc) return checkoutDefaults;
   return {
     shippingMethods: doc.shippingMethods?.length ? doc.shippingMethods : checkoutDefaults.shippingMethods,

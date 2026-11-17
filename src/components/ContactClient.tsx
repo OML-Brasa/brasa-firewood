@@ -3,6 +3,8 @@
 import { Check, Mail, Minus, Plus, Clock } from "lucide-react";
 import { useState } from "react";
 
+import { useLocale } from "@/components/LocaleProvider";
+import { formsUI } from "@/i18n/forms";
 import type { ContactContent } from "@/lib/contactContent";
 
 const wrap = "mx-auto w-full max-w-[1440px] px-6 md:px-20";
@@ -11,6 +13,8 @@ const fieldCls = "rounded border border-charcoal-300 px-3 py-2.5 text-[14px] tex
 const labelCls = "text-[13px] font-semibold text-charcoal-800";
 
 export function ContactClient({ content, heroImage }: { content: ContactContent; heroImage?: string | null }) {
+  const locale = useLocale();
+  const t = formsUI[locale];
   const [form, setForm] = useState({ first: "", last: "", email: "", phone: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
@@ -21,14 +25,14 @@ export function ContactClient({ content, heroImage }: { content: ContactContent;
 
   const submit = () => {
     if (!form.first || !form.last || !form.email || !form.subject || !form.message) {
-      setError("Please fill in your name, email, subject, and message.");
+      setError(t.contactError);
       return;
     }
     setError("");
     const body = [
-      `Name: ${form.first} ${form.last}`,
-      `Email: ${form.email}`,
-      form.phone ? `Phone: ${form.phone}` : "",
+      `${t.bodyName}: ${form.first} ${form.last}`,
+      `${t.bodyEmail}: ${form.email}`,
+      form.phone ? `${t.bodyPhone}: ${form.phone}` : "",
       "",
       form.message,
     ]
@@ -65,32 +69,32 @@ export function ContactClient({ content, heroImage }: { content: ContactContent;
             <h2 className={sectionTitle}>{content.formTitle}</h2>
             {sent ? (
               <div className="flex flex-col items-start gap-2 rounded-lg border border-[#cbe0cf] bg-[#f1f7f2] p-6">
-                <span className="flex items-center gap-2 text-[16px] font-bold text-[#2f7d4f]"><Check size={18} /> Message sent</span>
-                <span className="text-[14px] text-charcoal-600">Thanks, {form.first}. Our team will get back to you at {form.email} shortly.</span>
+                <span className="flex items-center gap-2 text-[16px] font-bold text-[#2f7d4f]"><Check size={18} /> {t.contactSentTitle}</span>
+                <span className="text-[14px] text-charcoal-600">{t.contactSentThanksPrefix}{form.first}{t.contactSentMid}{form.email}{t.contactSentSuffix}</span>
               </div>
             ) : (
               <div className="flex flex-col gap-4">
                 {error && <p className="rounded border border-copper-300 bg-copper-50 px-4 py-2.5 text-[14px] text-copper-700">{error}</p>}
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="flex flex-col gap-1.5"><label className={labelCls}>First Name</label><input value={form.first} onChange={set("first")} placeholder="e.g. John" className={fieldCls} /></div>
-                  <div className="flex flex-col gap-1.5"><label className={labelCls}>Last Name</label><input value={form.last} onChange={set("last")} placeholder="e.g. Smith" className={fieldCls} /></div>
+                  <div className="flex flex-col gap-1.5"><label className={labelCls}>{t.firstName}</label><input value={form.first} onChange={set("first")} placeholder={t.firstNamePlaceholder} className={fieldCls} /></div>
+                  <div className="flex flex-col gap-1.5"><label className={labelCls}>{t.lastName}</label><input value={form.last} onChange={set("last")} placeholder={t.lastNamePlaceholder} className={fieldCls} /></div>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="flex flex-col gap-1.5"><label className={labelCls}>Email Address</label><input type="email" value={form.email} onChange={set("email")} placeholder="e.g. john@example.com" className={fieldCls} /></div>
-                  <div className="flex flex-col gap-1.5"><label className={labelCls}>Phone Number (Optional)</label><input value={form.phone} onChange={set("phone")} placeholder="e.g. (555) 000-0000" className={fieldCls} /></div>
+                  <div className="flex flex-col gap-1.5"><label className={labelCls}>{t.emailAddress}</label><input type="email" value={form.email} onChange={set("email")} placeholder={t.emailPlaceholder} className={fieldCls} /></div>
+                  <div className="flex flex-col gap-1.5"><label className={labelCls}>{t.phoneOptional}</label><input value={form.phone} onChange={set("phone")} placeholder={t.phonePlaceholder} className={fieldCls} /></div>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className={labelCls}>Subject</label>
+                  <label className={labelCls}>{t.subject}</label>
                   <select value={form.subject} onChange={set("subject")} className={fieldCls}>
-                    <option value="">Select a subject...</option>
+                    <option value="">{t.subjectSelect}</option>
                     {content.subjects.map((s) => <option key={s} value={s}>{s}</option>)}
                   </select>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className={labelCls}>Your Message</label>
-                  <textarea value={form.message} onChange={set("message")} rows={5} placeholder="Tell us about your project, culinary needs, or ask a question..." className={fieldCls} />
+                  <label className={labelCls}>{t.yourMessage}</label>
+                  <textarea value={form.message} onChange={set("message")} rows={5} placeholder={t.messagePlaceholder} className={fieldCls} />
                 </div>
-                <button onClick={submit} className="w-fit rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600">Send Message</button>
+                <button onClick={submit} className="w-fit rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600">{t.sendMessage}</button>
               </div>
             )}
           </div>
@@ -104,11 +108,11 @@ export function ContactClient({ content, heroImage }: { content: ContactContent;
             <div className="flex flex-col gap-5">
               <div className="flex items-start gap-3">
                 <Mail size={18} className="mt-0.5 text-copper-600" />
-                <div className="flex flex-col"><span className="text-[12px] font-bold uppercase tracking-[0.1em] text-charcoal-500">Email Address</span><span className="text-[15px] text-charcoal-800">{content.email}</span></div>
+                <div className="flex flex-col"><span className="text-[12px] font-bold uppercase tracking-[0.1em] text-charcoal-500">{t.emailAddress}</span><span className="text-[15px] text-charcoal-800">{content.email}</span></div>
               </div>
               <div className="flex items-start gap-3">
                 <Clock size={18} className="mt-0.5 text-copper-600" />
-                <div className="flex flex-col"><span className="text-[12px] font-bold uppercase tracking-[0.1em] text-charcoal-500">Business Hours</span><span className="whitespace-pre-line text-[15px] leading-[1.6] text-charcoal-800">{content.businessHours}</span></div>
+                <div className="flex flex-col"><span className="text-[12px] font-bold uppercase tracking-[0.1em] text-charcoal-500">{t.businessHours}</span><span className="whitespace-pre-line text-[15px] leading-[1.6] text-charcoal-800">{content.businessHours}</span></div>
               </div>
             </div>
           </div>

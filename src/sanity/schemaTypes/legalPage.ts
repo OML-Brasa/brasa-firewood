@@ -8,6 +8,13 @@ export const legalPage = defineType({
   title: "Legal Pages",
   type: "document",
   fields: [
+    defineField({
+      name: "language",
+      title: "Language",
+      type: "string",
+      options: { list: [ { title: "English", value: "en" }, { title: "Español", value: "es" } ], layout: "radio" },
+      initialValue: "en",
+    }),
     defineField({ name: "privacyTitle", title: "Privacy · title", type: "string" }),
     defineField({ name: "privacyUpdated", title: "Privacy · last updated", description: "e.g. January 2026", type: "string" }),
     defineField({

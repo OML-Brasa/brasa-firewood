@@ -11,7 +11,9 @@ import {
   Waves,
 } from "lucide-react";
 
-import Link from "next/link";
+import { I18nLink } from "@/components/I18nLink";
+import { getLocale } from "@/lib/getLocale";
+import { localeDoc } from "@/sanity/lib/locale";
 
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
@@ -27,7 +29,7 @@ export const revalidate = 60;
 const img = (src: Parameters<typeof urlFor>[0] | undefined | null, fallback: string, w = 1200) =>
   src ? urlFor(src).width(w).auto("format").url() : fallback;
 
-const aboutQuery = `*[_type == "aboutPage"][0]{
+const aboutQuery = `${localeDoc("aboutPage")}{
   heroTitle, heroSubtitle, heroImage, originEyebrow, originTitle, originBody, originImage,
   quoteText, quoteAuthor, quoteRole, artisansBody, artisansImage,
   promises[]{ title, copy }, steps[]{ n, title, copy }, values[]{ title, copy }
@@ -71,7 +73,8 @@ const values = [
 ];
 
 export default async function AboutPage() {
-  const doc = await client.fetch(aboutQuery).catch(() => null);
+  const locale = await getLocale();
+  const doc = await client.fetch(aboutQuery, { lang: locale }).catch(() => null);
   const promisesC = promises.map((p, i) => ({ ...p, title: doc?.promises?.[i]?.title ?? p.title, copy: doc?.promises?.[i]?.copy ?? p.copy }));
   const stepsC = steps.map((s, i) => ({ ...s, n: doc?.steps?.[i]?.n ?? s.n, title: doc?.steps?.[i]?.title ?? s.title, copy: doc?.steps?.[i]?.copy ?? s.copy }));
   const valuesC = values.map((v, i) => ({ ...v, title: doc?.values?.[i]?.title ?? v.title, copy: doc?.values?.[i]?.copy ?? v.copy }));
@@ -94,12 +97,12 @@ export default async function AboutPage() {
               {doc?.heroSubtitle ??
                 "Every Brasa is hand-formed by European artisans, then held to a standard closer to an instrument than an appliance. Each is measured, finished, and inspected before it leaves."}
             </p>
-            <Link
+            <I18nLink
               href="/shop"
               className="mt-2 w-fit rounded bg-copper-500 px-7 py-3.5 text-[14px] font-bold uppercase tracking-[0.03em] text-sand transition-colors hover:bg-copper-600"
             >
               Explore Our Ovens
-            </Link>
+            </I18nLink>
           </div>
         </div>
       </section>
@@ -119,12 +122,12 @@ export default async function AboutPage() {
               {doc?.originBody ??
                 "Brasa began with a conviction and a challenge. The conviction is that live-fire cooking is one of the last real disciplines a human can master at home. The challenge is to build an oven precise enough to reward that discipline — and refined enough to belong in a modern life and become a piece of art in every backyard."}
             </p>
-            <Link
+            <I18nLink
               href="/#collection"
               className="w-fit rounded bg-copper-500 px-7 py-3.5 text-[14px] font-bold uppercase tracking-[0.03em] text-sand transition-colors hover:bg-copper-600"
             >
               Explore the Collection
-            </Link>
+            </I18nLink>
           </div>
         </div>
       </section>

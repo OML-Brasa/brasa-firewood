@@ -2,19 +2,22 @@ import { FaqPageClient } from "@/components/FaqPageClient";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
+import { getLocale } from "@/lib/getLocale";
 import { faqDefaults, type FaqContent } from "@/lib/faqContent";
 import { client } from "@/sanity/lib/client";
+import { localeDoc } from "@/sanity/lib/locale";
 
 export const revalidate = 60;
 
-const query = `*[_type == "faqPage"][0]{
+const query = `${localeDoc("faqPage")}{
   heroTitle, heroSubtitle, searchPlaceholder,
   categories[]{ title, items[]{ question, answer } },
   ctaTitle, ctaSubtitle, ctaPhone, ctaEmail
 }`;
 
 export default async function FaqPage() {
-  const doc = await client.fetch(query).catch(() => null);
+  const locale = await getLocale();
+  const doc = await client.fetch(query, { lang: locale }).catch(() => null);
   const content: FaqContent = {
     heroTitle: doc?.heroTitle ?? faqDefaults.heroTitle,
     heroSubtitle: doc?.heroSubtitle ?? faqDefaults.heroSubtitle,

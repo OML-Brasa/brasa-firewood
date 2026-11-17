@@ -2,13 +2,15 @@ import { ContactClient } from "@/components/ContactClient";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
+import { getLocale } from "@/lib/getLocale";
 import { contactDefaults, type ContactContent } from "@/lib/contactContent";
 import { client } from "@/sanity/lib/client";
+import { localeDoc } from "@/sanity/lib/locale";
 import { urlFor } from "@/sanity/lib/image";
 
 export const revalidate = 60;
 
-const query = `*[_type == "contactPage"][0]{
+const query = `${localeDoc("contactPage")}{
   heroTitle, heroSubtitle, heroImage, formTitle, subjects,
   detailsTitle, detailsIntro, email, phone, businessHours,
   consultationTitle, consultationBody, faqTitle, faqIntro,
@@ -16,7 +18,8 @@ const query = `*[_type == "contactPage"][0]{
 }`;
 
 export default async function ContactPage() {
-  const doc = await client.fetch(query).catch(() => null);
+  const locale = await getLocale();
+  const doc = await client.fetch(query, { lang: locale }).catch(() => null);
   const content: ContactContent = {
     heroTitle: doc?.heroTitle ?? contactDefaults.heroTitle,
     heroSubtitle: doc?.heroSubtitle ?? contactDefaults.heroSubtitle,

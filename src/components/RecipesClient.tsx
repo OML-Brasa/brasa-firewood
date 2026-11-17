@@ -2,9 +2,12 @@
 
 /* eslint-disable @next/next/no-img-element */
 import { ChefHat, Download, Minus, Plus, Search } from "lucide-react";
-import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { I18nLink } from "@/components/I18nLink";
+import { useLocale } from "@/components/LocaleProvider";
+import { formsUI } from "@/i18n/forms";
+import { ui } from "@/i18n/ui";
 import type { RecipesContent } from "@/lib/recipesContent";
 
 const wrap = "mx-auto w-full max-w-[1440px] px-6 md:px-20";
@@ -20,6 +23,8 @@ function Meta({ label, value }: { label: string; value: string }) {
 }
 
 export function RecipesClient({ content }: { content: RecipesContent }) {
+  const locale = useLocale();
+  const t = formsUI[locale];
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState("All");
   const [open, setOpen] = useState<number | null>(null);
@@ -39,9 +44,9 @@ export function RecipesClient({ content }: { content: RecipesContent }) {
       <div className="bg-sand">
         <div className={wrap}>
           <nav className="flex items-center gap-2 py-4 text-[13px] text-charcoal-500">
-            <Link href="/" className="transition-colors hover:text-copper-600">Home</Link>
+            <I18nLink href="/" className="transition-colors hover:text-copper-600">{ui[locale].common.home}</I18nLink>
             <span>/</span>
-            <span className="text-charcoal-800">Recipes</span>
+            <span className="text-charcoal-800">{t.recipesBreadcrumb}</span>
           </nav>
         </div>
       </div>
@@ -75,7 +80,7 @@ export function RecipesClient({ content }: { content: RecipesContent }) {
       <section className="bg-background">
         <div className={`${wrap} pb-16`}>
           {recipes.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-charcoal-300 py-16 text-center text-[15px] text-charcoal-500">No recipes match your search.</div>
+            <div className="rounded-lg border border-dashed border-charcoal-300 py-16 text-center text-[15px] text-charcoal-500">{t.noRecipesMatch}</div>
           ) : (
             <div className="grid items-start gap-8 md:grid-cols-2">
               {recipes.map(({ r, i }) => {
@@ -86,7 +91,7 @@ export function RecipesClient({ content }: { content: RecipesContent }) {
                       const media = r.image ? <img src={r.image} alt={r.title} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" /> : <ChefHat size={32} className="text-charcoal-400" />;
                       const box = "group flex aspect-[580/320] items-center justify-center overflow-hidden rounded-md bg-[#dedddd]";
                       return r.pdf ? (
-                        <a href={r.pdf} target="_blank" rel="noopener noreferrer" aria-label={`Open ${r.title} recipe PDF`} className={`${box} cursor-pointer`}>
+                        <a href={r.pdf} target="_blank" rel="noopener noreferrer" aria-label={`${t.openRecipePdfPrefix}${r.title}${t.openRecipePdfSuffix}`} className={`${box} cursor-pointer`}>
                           {media}
                         </a>
                       ) : (
@@ -103,15 +108,15 @@ export function RecipesClient({ content }: { content: RecipesContent }) {
                     {isOpen && (
                       <div className="mt-4 flex flex-col gap-4">
                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
-                          {r.serves ? <Meta label="Serves" value={r.serves} /> : null}
-                          <Meta label="Prep Time" value={r.prepTime} />
-                          <Meta label="Cook Time" value={r.cookTime} />
-                          <Meta label="Oven Temp" value={r.ovenTemp} />
-                          <Meta label="Difficulty" value={r.difficulty} />
+                          {r.serves ? <Meta label={t.recipeServes} value={r.serves} /> : null}
+                          <Meta label={t.recipePrepTime} value={r.prepTime} />
+                          <Meta label={t.recipeCookTime} value={r.cookTime} />
+                          <Meta label={t.recipeOvenTemp} value={r.ovenTemp} />
+                          <Meta label={t.recipeDifficulty} value={r.difficulty} />
                         </div>
                         <div className="h-px w-full bg-[#edf2f7]" />
                         <div className="flex flex-col gap-2">
-                          <h3 className="font-heading text-[16px] font-extrabold text-charcoal-800">Ingredients</h3>
+                          <h3 className="font-heading text-[16px] font-extrabold text-charcoal-800">{t.ingredients}</h3>
                           <ul className="flex flex-col gap-1">
                             {r.ingredients.map((ing) => (
                               <li key={ing} className="text-[14px] leading-[1.5] text-charcoal-500">• {ing}</li>
@@ -120,7 +125,7 @@ export function RecipesClient({ content }: { content: RecipesContent }) {
                         </div>
                         <div className="h-px w-full bg-[#edf2f7]" />
                         <div className="flex flex-col gap-2">
-                          <h3 className="font-heading text-[16px] font-extrabold text-charcoal-800">Directions</h3>
+                          <h3 className="font-heading text-[16px] font-extrabold text-charcoal-800">{t.directions}</h3>
                           <p className="whitespace-pre-line text-[14px] leading-[1.6] text-charcoal-500">{r.directions}</p>
                         </div>
                         {r.pdf ? (
@@ -128,7 +133,7 @@ export function RecipesClient({ content }: { content: RecipesContent }) {
                             href={`${r.pdf}?dl=`}
                             className="inline-flex items-center justify-center gap-2 self-start rounded-md bg-copper-600 px-4 py-2.5 text-[14px] font-bold text-white transition-colors hover:bg-copper-700"
                           >
-                            <Download size={16} /> Download recipe PDF
+                            <Download size={16} /> {t.downloadRecipePdf}
                           </a>
                         ) : null}
                       </div>
@@ -150,13 +155,11 @@ export function RecipesClient({ content }: { content: RecipesContent }) {
           </div>
           <a
             href={`mailto:${content.submitEmail}?subject=${encodeURIComponent(
-              "Recipe Submission"
-            )}&body=${encodeURIComponent(
-              "Recipe name:\n\nServes:\n\nOven temperature:\n\nIngredients:\n- \n- \n\nMethod:\n1. \n2. \n\nYour name:\n\nAttach a photo of the finished dish if you have one — thank you!"
-            )}`}
+              t.recipeSubmissionSubject
+            )}&body=${encodeURIComponent(t.recipeSubmissionBody)}`}
             className="rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600"
           >
-            Submit Recipe
+            {t.submitRecipe}
           </a>
         </div>
       </section>

@@ -3,6 +3,13 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 const qa = {
   type: "object" as const,
   fields: [
+    defineField({
+      name: "language",
+      title: "Language",
+      type: "string",
+      options: { list: [ { title: "English", value: "en" }, { title: "Español", value: "es" } ], layout: "radio" },
+      initialValue: "en",
+    }),
     defineField({ name: "question", title: "Question", type: "string" }),
     defineField({ name: "answer", title: "Answer", type: "text", rows: 3 }),
   ],

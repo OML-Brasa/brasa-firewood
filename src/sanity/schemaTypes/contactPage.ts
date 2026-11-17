@@ -6,6 +6,13 @@ export const contactPage = defineType({
   title: "Contact Page",
   type: "document",
   fields: [
+    defineField({
+      name: "language",
+      title: "Language",
+      type: "string",
+      options: { list: [ { title: "English", value: "en" }, { title: "Español", value: "es" } ], layout: "radio" },
+      initialValue: "en",
+    }),
     defineField({ name: "heroTitle", title: "Hero · title", type: "string" }),
     defineField({ name: "heroSubtitle", title: "Hero · subtitle", type: "text", rows: 3 }),
     defineField({ name: "heroImage", title: "Hero · background image (optional)", type: "image", options: { hotspot: true } }),

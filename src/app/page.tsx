@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from "next/link";
-
 import { CollectionShowcase } from "@/components/CollectionShowcase";
 import { CompareTable } from "@/components/CompareTable";
 import { Footer } from "@/components/Footer";
+import { I18nLink } from "@/components/I18nLink";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
+import { getLocale } from "@/lib/getLocale";
 import { client } from "@/sanity/lib/client";
+import { localeDoc } from "@/sanity/lib/locale";
 import { urlFor } from "@/sanity/lib/image";
 
 /** Resolve a Sanity image to a sized URL, falling back to a bundled asset. */
@@ -17,7 +18,7 @@ const img = (src: Parameters<typeof urlFor>[0] | undefined | null, fallback: str
 // on the live site without a redeploy.
 export const revalidate = 60;
 
-const homeQuery = `*[_type == "homePage"][0]{
+const homeQuery = `${localeDoc("homePage")}{
   heroLine1, heroLine2, heroImage, philosophy,
   aboutEyebrow, aboutTitle, aboutIntro, aboutConviction, aboutChallenge, aboutImage,
   featuredImage, materialImage, editorialRecipesImage, editorialMemoriesImage,
@@ -120,7 +121,7 @@ function Arrow() {
 
 function LearnMore({ label, href = "#", light = false }: { label: string; href?: string; light?: boolean }) {
   return (
-    <a
+    <I18nLink
       href={href}
       className={`inline-flex w-fit items-center gap-2 text-[15px] font-bold uppercase tracking-[0.04em] transition-colors ${
         light ? "text-sand hover:text-white" : "text-charcoal-800 hover:text-copper-600"
@@ -128,12 +129,13 @@ function LearnMore({ label, href = "#", light = false }: { label: string; href?:
     >
       {label}
       <Arrow />
-    </a>
+    </I18nLink>
   );
 }
 
 export default async function Home() {
-  const doc = await client.fetch(homeQuery).catch(() => null);
+  const locale = await getLocale();
+  const doc = await client.fetch(homeQuery, { lang: locale }).catch(() => null);
   const c = {
     ...content,
     hero: {
@@ -299,9 +301,9 @@ export default async function Home() {
         <div className={`${wrap} grid gap-10 pb-20 md:grid-cols-2 md:pb-[120px]`}>
           {c.editorial.map((e) => (
             <article key={e.kicker} className="flex flex-col gap-5">
-              <Link href={e.href} className="aspect-[62/38] overflow-hidden rounded-xl">
+              <I18nLink href={e.href} className="aspect-[62/38] overflow-hidden rounded-xl">
                 <img src={e.image} alt={e.kicker} className="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.02]" />
-              </Link>
+              </I18nLink>
               <h3 className="font-heading text-[24px] font-extrabold tracking-[-0.01em] text-charcoal-800 md:text-[28px]">{e.kicker}</h3>
               <p className="text-[15px] leading-[1.5] text-charcoal-500">{e.copy}</p>
               <LearnMore label={e.cta} href={e.href} />

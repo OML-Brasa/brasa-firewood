@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 
 import { LegalArticle } from "@/components/LegalArticle";
+import { getLocale } from "@/lib/getLocale";
 import { privacyPlaceholder } from "@/lib/legalContent";
 import { client } from "@/sanity/lib/client";
+import { localeDoc } from "@/sanity/lib/locale";
 
 export const revalidate = 60;
 
@@ -11,10 +13,11 @@ export const metadata: Metadata = {
   description: "How Brasa collects, uses, and protects your information.",
 };
 
-const query = `*[_type == "legalPage"][0]{ privacyTitle, privacyUpdated, privacyBody }`;
+const query = `${localeDoc("legalPage")}{ privacyTitle, privacyUpdated, privacyBody }`;
 
 export default async function PrivacyPage() {
-  const doc = await client.fetch(query).catch(() => null);
+  const locale = await getLocale();
+  const doc = await client.fetch(query, { lang: locale }).catch(() => null);
   return (
     <LegalArticle
       title={doc?.privacyTitle ?? privacyPlaceholder.title}
