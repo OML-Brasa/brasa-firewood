@@ -22,7 +22,9 @@ export const homePage = defineType({
     defineField({ name: "aboutChallenge", title: "About · the challenge", type: "text", rows: 3 }),
     defineField({ name: "aboutImage", title: "About · image", type: "image", options: { hotspot: true } }),
 
-    defineField({ name: "featuredImage", title: "Collection · featured image", type: "image", options: { hotspot: true } }),
+    // Superseded by the per-product "Featured image" below; kept hidden so
+    // existing data isn't flagged as an unknown field.
+    defineField({ name: "featuredImage", title: "Collection · featured image (unused)", type: "image", options: { hotspot: true }, hidden: true }),
 
     defineField({
       name: "products",
@@ -34,7 +36,20 @@ export const homePage = defineType({
           fields: [
             defineField({ name: "name", type: "string" }),
             defineField({ name: "price", type: "string" }),
-            defineField({ name: "image", type: "image", options: { hotspot: true } }),
+            defineField({
+              name: "image",
+              title: "Thumbnail",
+              type: "image",
+              options: { hotspot: true },
+              description: "Small image shown in the product row.",
+            }),
+            defineField({
+              name: "featuredImage",
+              title: "Featured image",
+              type: "image",
+              options: { hotspot: true },
+              description: "Large image shown above the thumbnails when this product is selected. Falls back to the thumbnail.",
+            }),
           ],
           preview: { select: { title: "name", subtitle: "price", media: "image" } },
         }),

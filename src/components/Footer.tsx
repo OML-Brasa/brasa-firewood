@@ -30,7 +30,7 @@ const columns = [
 ];
 
 const social = [
-  { label: "Instagram", href: "#", Icon: FaInstagram },
+  { label: "Instagram", href: "https://www.instagram.com/brasaoven", Icon: FaInstagram },
   { label: "Facebook", href: "#", Icon: FaFacebookF },
   { label: "YouTube", href: "#", Icon: FaYoutube },
 ];
