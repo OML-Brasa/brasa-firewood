@@ -1,15 +1,20 @@
 "use client";
 
 import { Minus, Plus, Search } from "lucide-react";
-import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { I18nLink } from "@/components/I18nLink";
+import { useLocale } from "@/components/LocaleProvider";
+import { formsUI } from "@/i18n/forms";
+import { ui } from "@/i18n/ui";
 import type { FaqContent } from "@/lib/faqContent";
 
 const wrap = "mx-auto w-full max-w-[1440px] px-6 md:px-20";
 const sectionTitle = "font-heading text-[32px] md:text-[40px] font-extrabold leading-[1.1] tracking-[-0.015em] text-charcoal-800";
 
 export function FaqPageClient({ content }: { content: FaqContent }) {
+  const locale = useLocale();
+  const t = formsUI[locale];
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState<string | null>(null);
 
@@ -27,9 +32,9 @@ export function FaqPageClient({ content }: { content: FaqContent }) {
       <div className="bg-sand">
         <div className={wrap}>
           <nav className="flex items-center gap-2 py-4 text-[13px] text-charcoal-500">
-            <Link href="/" className="transition-colors hover:text-copper-600">Home</Link>
+            <I18nLink href="/" className="transition-colors hover:text-copper-600">{ui[locale].common.home}</I18nLink>
             <span>/</span>
-            <span className="text-charcoal-800">FAQ</span>
+            <span className="text-charcoal-800">{t.faqBreadcrumb}</span>
           </nav>
         </div>
       </div>
@@ -58,7 +63,7 @@ export function FaqPageClient({ content }: { content: FaqContent }) {
         <div className={`${wrap} pb-16`}>
           {categories.length === 0 ? (
             <div className="rounded-lg border border-dashed border-charcoal-300 py-16 text-center text-[15px] text-charcoal-500">
-              No answers match &ldquo;{query}&rdquo;. Try a different search.
+              {t.noAnswersPrefix}&ldquo;{query}&rdquo;. {t.tryDifferentSearch}
             </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2">
@@ -101,8 +106,8 @@ export function FaqPageClient({ content }: { content: FaqContent }) {
             <p className="text-[16px] text-charcoal-500">{content.ctaSubtitle}</p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <Link href="/contact" className="rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600">Contact Us</Link>
-            <Link href="/contact" className="rounded border border-charcoal-300 bg-background px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-charcoal-800 transition-colors hover:border-copper-500">Request a Quote</Link>
+            <I18nLink href="/contact" className="rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600">{t.contactUs}</I18nLink>
+            <I18nLink href="/contact" className="rounded border border-charcoal-300 bg-background px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-charcoal-800 transition-colors hover:border-copper-500">{t.requestQuote}</I18nLink>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-6 text-[14px] text-charcoal-700">
             {content.ctaPhone && <span className="font-semibold">{content.ctaPhone}</span>}

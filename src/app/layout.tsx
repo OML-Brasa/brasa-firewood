@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Archivo, Manrope, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
+import { LocaleProvider } from "@/components/LocaleProvider";
+import { getLocale } from "@/lib/getLocale";
+
 // Archivo — headings and display type.
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -31,14 +34,15 @@ export const metadata: Metadata = {
     "Handcrafted wood-fired ovens in refractory clay — engineered for the cook who takes fire seriously.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const locale = await getLocale();
   return (
     <html
-      lang="en"
+      lang={locale}
       className={`${archivo.variable} ${manrope.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground">
-        {children}
+        <LocaleProvider locale={locale}>{children}</LocaleProvider>
       </body>
     </html>
   );

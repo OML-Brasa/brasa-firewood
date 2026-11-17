@@ -4,9 +4,11 @@ import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
 import { ProductClient } from "@/components/ProductClient";
+import { getLocale } from "@/lib/getLocale";
 import { getAccessories } from "@/lib/getProducts";
 import { getOven, ovens, roundUpToTen, sharedFaqs, sharedFeatures, type Oven } from "@/lib/productDefaults";
 import { client } from "@/sanity/lib/client";
+import { localeDoc } from "@/sanity/lib/locale";
 import { urlFor } from "@/sanity/lib/image";
 
 export const revalidate = 60;
@@ -15,7 +17,7 @@ export function generateStaticParams() {
   return ovens.map((o) => ({ slug: o.slug }));
 }
 
-const ovenQuery = `*[_type == "product" && type == "oven" && slug.current == $slug && (language == "en" || !defined(language))][0]{
+const ovenQuery = `${localeDoc("product", 'type == "oven" && slug.current == $slug')}{
   name, "slug": slug.current, tagline, style, doors, shortDescription,
   variants[]{ size, finish, price, stock, base, description, image, gallery }
 }`;
@@ -24,10 +26,11 @@ type VariantImg = Parameters<typeof urlFor>[0];
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const locale = await getLocale();
   const def = getOven(slug);
   const [doc, accessories] = await Promise.all([
-    client.fetch(ovenQuery, { slug }).catch(() => null),
-    getAccessories(),
+    client.fetch(ovenQuery, { slug, lang: locale }).catch(() => null),
+    getAccessories(locale),
   ]);
 
   if (!doc && !def) notFound();

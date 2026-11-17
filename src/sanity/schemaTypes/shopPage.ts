@@ -7,6 +7,13 @@ export const shopPage = defineType({
   title: "Shop Page",
   type: "document",
   fields: [
+    defineField({
+      name: "language",
+      title: "Language",
+      type: "string",
+      options: { list: [ { title: "English", value: "en" }, { title: "Español", value: "es" } ], layout: "radio" },
+      initialValue: "en",
+    }),
     defineField({ name: "pageTitle", title: "Page title", type: "string" }),
     defineField({ name: "pageIntro", title: "Page intro", type: "text", rows: 3 }),
 

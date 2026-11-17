@@ -7,6 +7,13 @@ export const checkoutSettings = defineType({
   type: "document",
   fields: [
     defineField({
+      name: "language",
+      title: "Language",
+      type: "string",
+      options: { list: [ { title: "English", value: "en" }, { title: "Español", value: "es" } ], layout: "radio" },
+      initialValue: "en",
+    }),
+    defineField({
       name: "shippingMethods",
       title: "Shipping methods",
       type: "array",
