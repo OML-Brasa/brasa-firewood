@@ -20,7 +20,7 @@
         { "question": "What is refractory clay and why is it superior?", "answer": "Refractory clay absorbs heat, holds it, and radiates it back slow and even for hours — outperforming steel, which spikes and drops, and brick, which heats unevenly." },
         { "question": "How are Brasa ovens different from steel or brick?", "answer": "Each Brasa is a hand-formed refractory-clay chamber, engineered and tested for heat retention and even radiant performance, then finished to a standard closer to an instrument than an appliance." },
         { "question": "Where are the ovens manufactured?", "answer": "Every Brasa is hand-built by European artisans and inspected before it leaves the workshop." },
-        { "question": "What sizes are available?", "answer": "Models range from 75cm to 120cm depending on the line — enough for an intimate dinner up to a large reunion." },
+        { "question": "What sizes are available?", "answer": "Models range from 30 in to 47 in depending on the line — enough for an intimate dinner up to a large reunion." },
         { "question": "Can the oven be customized with different finishes?", "answer": "Yes. Choose your dome color, arch finish, base, and insulation when you configure your oven." },
         { "question": "What is the difference between freestanding and built-in?", "answer": "Freestanding ovens ship on a concrete or metal base ready to use; built-in models are designed to integrate into a custom outdoor kitchen." }
       ]
@@ -32,7 +32,7 @@
         { "question": "How long does it take to reach cooking temperature?", "answer": "About 45 minutes to reach 900°F from a cold start with seasoned hardwood." },
         { "question": "What fuel should I use?", "answer": "Seasoned hardwoods such as oak, maple, or fruitwoods. Avoid softwoods, treated lumber, or anything green or damp." },
         { "question": "Can I use the oven in the rain?", "answer": "Brasa ovens are built for year-round outdoor use; we recommend a fitted cover and keeping the chamber dry between fires." },
-        { "question": "How hot does the oven get?", "answer": "Up to 1000°F (538°C) — hot enough to fire a pizza in 90 seconds." },
+        { "question": "How hot does the oven get?", "answer": "Up to 1000°F — hot enough to fire a pizza in 90 seconds." },
         { "question": "How long does the oven retain heat?", "answer": "Once up to temperature, a Brasa holds usable cooking heat for hours, letting you sear, roast, and bake on a single fire." }
       ]
     },
@@ -51,12 +51,12 @@
         { "question": "What does the warranty cover?", "answer": "A multi-year warranty covers the refractory chamber against defects in materials and workmanship." },
         { "question": "How long is the warranty?", "answer": "Each Brasa is backed by a 2-year premium warranty; full coverage details ship with your oven." },
         { "question": "What is the return policy?", "answer": "Contact us within the return window for unused ovens in original condition. Custom-configured builds may be non-returnable — we'll walk you through it." },
-        { "question": "How do I file a warranty claim?", "answer": "Email support@brasaoutdoor.com with your order number and photos, and our team will take it from there." }
+        { "question": "How do I file a warranty claim?", "answer": "Email sales@brasaoven.com with your order number and photos, and our team will take it from there." }
       ]
     }
   ],
   "ctaTitle": "Still Have Questions?",
   "ctaSubtitle": "Our team is here to help you find the perfect oven.",
-  "ctaPhone": "+1 (800) 555-0199",
-  "ctaEmail": "support@brasaoutdoor.com"
+  "ctaPhone": "",
+  "ctaEmail": "sales@brasaoven.com"
 }

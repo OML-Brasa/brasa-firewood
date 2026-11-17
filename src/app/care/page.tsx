@@ -36,19 +36,19 @@ const avoid = [
 ];
 
 const dryingCycles: [string, string, string, string][] = [
-  ["1", "Day 1", "176–212°F (80–100°C)", "3–4 h"],
-  ["2", "Day 2 (or a few days later)", "176–212°F (80–100°C)", "3–4 h"],
-  ["3", "Next cycle", "302–392°F (150–200°C)", "3–4 h"],
-  ["4", "Next cycle", "482–572°F (250–300°C)", "2.5–3 h"],
-  ["5", "Final curing", "788–896°F (420–480°C)", "30–45 min"],
+  ["1", "Day 1", "176–212°F", "3–4 h"],
+  ["2", "Day 2 (or a few days later)", "176–212°F", "3–4 h"],
+  ["3", "Next cycle", "302–392°F", "3–4 h"],
+  ["4", "Next cycle", "482–572°F", "2.5–3 h"],
+  ["5", "Final curing", "788–896°F", "30–45 min"],
 ];
 
 const firingSteps: [string, string, string][] = [
   ["1", "Load 4–6 small, dry sticks or branches and light them.", "—"],
   ["2", "About 5 minutes after the flame catches, add 3–4 more sticks. If more combustion is needed, open the door slightly to increase the draft.", "—"],
-  ["3", "At 15 minutes, add 2–3 more sticks.", "≈ 572°F (300°C)"],
-  ["4", "Keep feeding the fire until it reaches the target temperature, and hold it for 20–30 minutes to heat the clay insulation.", "824–860°F (440–460°C)"],
-  ["5", "When the flame dies out, the dome turns white and the temperature drops. Remove the embers, leaving a couple of handfuls inside to retain heat longer.", "392–464°F (200–240°C)"],
+  ["3", "At 15 minutes, add 2–3 more sticks.", "≈ 572°F"],
+  ["4", "Keep feeding the fire until it reaches the target temperature, and hold it for 20–30 minutes to heat the clay insulation.", "824–860°F"],
+  ["5", "When the flame dies out, the dome turns white and the temperature drops. Remove the embers, leaving a couple of handfuls inside to retain heat longer.", "392–464°F"],
   ["6", "Close the chimney damper to 80% and close the door air-intake regulator. The oven is ready for cooking.", "—"],
 ];
 
@@ -57,8 +57,8 @@ const summary = [
   "Use dry, small-sized hardwood; avoid resinous, treated or toxic woods.",
   "Keep the door and chimney damper open during drying.",
   "Increase the temperature progressively.",
-  "Finish with a cycle at 788–896°F (420–480°C) for 30–45 minutes.",
-  "For each firing, bring the oven to 824–860°F (440–460°C) for 20–30 minutes, then close the damper to 80% and close the air regulator.",
+  "Finish with a cycle at 788–896°F for 30–45 minutes.",
+  "For each firing, bring the oven to 824–860°F for 20–30 minutes, then close the damper to 80% and close the air regulator.",
   "Expect lower performance during the first few uses; it improves progressively.",
   "Consider small initial fissures caused by insulation curing to be normal.",
 ];
@@ -95,7 +95,7 @@ export default function CarePage() {
             Drying &amp; Curing Your Clay Oven
           </h1>
           <p className="max-w-2xl text-[16px] leading-[1.6] text-charcoal-600">
-            A technical guide to drying, curing and firing your Brasa wood-fired oven for the best performance. Applies to all Brasa models · temperatures in °F and °C.
+            A technical guide to drying, curing and firing your Brasa wood-fired oven for the best performance. Applies to all Brasa models · temperatures in °F.
           </p>
           <a
             href={PDF_HREF}
@@ -190,7 +190,6 @@ export default function CarePage() {
               </tbody>
             </table>
           </div>
-          <p className="text-[13px] italic text-charcoal-500">°C values are the equivalents of the temperatures shown in °F.</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">

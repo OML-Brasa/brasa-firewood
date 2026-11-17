@@ -41,6 +41,6 @@ export const checkoutDefaults: CheckoutSettings = {
   ],
   taxRate: 0.08,
   financeText: "As Low As $405/Mo With Affirm",
-  supportPhone: "1-800-555-0199",
-  supportEmail: "support@brasaoutdoor.com",
+  supportPhone: "",
+  supportEmail: "sales@brasaoven.com",
 };

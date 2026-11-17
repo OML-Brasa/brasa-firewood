@@ -105,8 +105,8 @@ export function FaqPageClient({ content }: { content: FaqContent }) {
             <Link href="/contact" className="rounded border border-charcoal-300 bg-background px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-charcoal-800 transition-colors hover:border-copper-500">Request a Quote</Link>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-6 text-[14px] text-charcoal-700">
-            <span className="font-semibold">{content.ctaPhone}</span>
-            <span>{content.ctaEmail}</span>
+            {content.ctaPhone && <span className="font-semibold">{content.ctaPhone}</span>}
+            {content.ctaEmail && <a href={`mailto:${content.ctaEmail}`} className="transition-colors hover:text-copper-600">{content.ctaEmail}</a>}
           </div>
         </div>
       </section>

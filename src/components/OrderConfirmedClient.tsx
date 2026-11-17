@@ -136,7 +136,7 @@ export function OrderConfirmedClient({
             <div className={cardCls}>
               <h2 className="font-heading text-[20px] font-extrabold text-charcoal-800">Need Assistance?</h2>
               <div className="flex flex-col gap-1 text-[14px] text-charcoal-600">
-                <span>Call: <span className="font-bold text-charcoal-800">{supportPhone}</span></span>
+                {supportPhone && <span>Call: <span className="font-bold text-charcoal-800">{supportPhone}</span></span>}
                 <span>Email: <span className="font-bold text-charcoal-800">{supportEmail}</span></span>
               </div>
             </div>

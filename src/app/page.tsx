@@ -79,8 +79,8 @@ const content = {
     subtitle: "Side-by-side specifications for all assembled oven lines.",
     models: ["Dolce", "Ravvivata", "Ardente"],
     rows: [
-      { feature: "Model Sizes", values: ["75–120", "75–120", "90–120"] },
-      { feature: "Exterior Size", values: ["100×100 – 150×150 cm", "100×100 – 150×150 cm", "120×120 – 150×150 cm"] },
+      { feature: "Model Sizes", values: ["30–47 in", "30–47 in", "35–47 in"] },
+      { feature: "Exterior Size", values: ["39×39 – 59×59 in", "39×39 – 59×59 in", "47×47 – 59×59 in"] },
       { feature: "Concrete Base", values: ["6–32 blocks", "6–32 blocks", "10–36 blocks"] },
       { feature: "Insulation", values: ["Premium", "Premium", "Premium"] },
       { feature: "Finish Options", values: ["Smooth, Brick, Stone, Wood, Marble, Premium", "Smooth, Brick, Stone, Wood, Marble, Premium", "Traditional, Classic, Mixed, Brick, Stone, Wood"] },

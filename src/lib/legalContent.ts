@@ -37,7 +37,7 @@ export const privacyPlaceholder = {
     {
       heading: "Contact Us",
       paras: [
-        "Questions about this policy can be sent to support@brasaoutdoor.com.",
+        "Questions about this policy can be sent to sales@brasaoven.com.",
       ],
     },
   ] as LegalSection[],
@@ -76,7 +76,7 @@ export const termsPlaceholder = {
     {
       heading: "Contact Us",
       paras: [
-        "Questions about these terms can be sent to support@brasaoutdoor.com.",
+        "Questions about these terms can be sent to sales@brasaoven.com.",
       ],
     },
   ] as LegalSection[],
