@@ -39,6 +39,8 @@ export const shopPage = defineType({
     defineField({ name: "bundleDescription", title: "Essentials bundle · description", type: "text", rows: 3 }),
     defineField({ name: "bundlePrice", title: "Essentials bundle · price", type: "string" }),
     defineField({ name: "bundleImage", title: "Essentials bundle · image", type: "image", options: { hotspot: true } }),
+
+    defineField({ name: "seo", title: "SEO", type: "seo" }),
   ],
   preview: { prepare: () => ({ title: "Shop Page" }) },
 });

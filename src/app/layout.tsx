@@ -30,7 +30,14 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Brasa",
+  metadataBase: new URL("https://brasaoven.com"),
+  // Per-page titles flow through this template (e.g. "The Models" → "The
+  // Models | Brasa"); the home page and any page without its own title use
+  // the default. A page's SEO meta title in Sanity overrides the template.
+  title: {
+    default: "Brasa",
+    template: "%s | Brasa",
+  },
   description:
     "Handcrafted wood-fired ovens in refractory clay — engineered for the cook who takes fire seriously.",
 };

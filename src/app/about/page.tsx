@@ -10,8 +10,11 @@ import {
   Waves,
 } from "lucide-react";
 
+import type { Metadata } from "next";
+
 import { I18nLink } from "@/components/I18nLink";
 import { getLocale } from "@/lib/getLocale";
+import { fetchSeo, seoMetadata } from "@/lib/seo";
 import { localeDoc } from "@/sanity/lib/locale";
 
 import { Footer } from "@/components/Footer";
@@ -23,6 +26,16 @@ import { urlFor } from "@/sanity/lib/image";
 // Re-fetch from Sanity at most once a minute, so Studio edits appear
 // on the live site without a redeploy.
 export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const seo = await fetchSeo("aboutPage", { lang: locale });
+  return seoMetadata(seo, {
+    title: locale === "es" ? "Nuestra Historia" : "Our Story",
+    description:
+      "The story behind Brasa — hand-built refractory-clay ovens from a family workshop, engineered and finished for cooks who take fire seriously.",
+  });
+}
 
 /** Resolve a Sanity image to a sized URL, falling back to a bundled asset. */
 const img = (src: Parameters<typeof urlFor>[0] | undefined | null, fallback: string, w = 1200) =>

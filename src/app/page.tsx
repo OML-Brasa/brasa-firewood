@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import type { Metadata } from "next";
+
 import { CollectionShowcase } from "@/components/CollectionShowcase";
 import { CompareTable } from "@/components/CompareTable";
 import { Footer } from "@/components/Footer";
@@ -6,6 +8,7 @@ import { I18nLink } from "@/components/I18nLink";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
 import { getLocale } from "@/lib/getLocale";
+import { fetchSeo, seoMetadata } from "@/lib/seo";
 import { client } from "@/sanity/lib/client";
 import { localeDoc } from "@/sanity/lib/locale";
 import { urlFor } from "@/sanity/lib/image";
@@ -17,6 +20,16 @@ const img = (src: Parameters<typeof urlFor>[0] | undefined | null, fallback: str
 // Re-fetch from Sanity at most once a minute, so Studio edits appear
 // on the live site without a redeploy.
 export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const seo = await fetchSeo("homePage", { lang: locale });
+  return seoMetadata(seo, {
+    // Home uses the site default title ("Brasa"); only the description falls back.
+    description:
+      "Handcrafted wood-fired ovens in refractory clay — engineered for the cook who takes fire seriously. Explore the Dolce, Ravvivata, and Ardente collections.",
+  });
+}
 
 const homeQuery = `${localeDoc("homePage")}{
   heroLine1, heroLine2, heroImage, philosophy,

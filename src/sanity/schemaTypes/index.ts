@@ -10,7 +10,8 @@ import { legalPage } from "./legalPage";
 import { product } from "./product";
 import { recipesPage } from "./recipesPage";
 import { shopPage } from "./shopPage";
+import { seo } from "./objects/seo";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [homePage, aboutPage, shopPage, faqPage, contactPage, recipesPage, carePage, legalPage, product, checkoutSettings],
+  types: [homePage, aboutPage, shopPage, faqPage, contactPage, recipesPage, carePage, legalPage, product, checkoutSettings, seo],
 };

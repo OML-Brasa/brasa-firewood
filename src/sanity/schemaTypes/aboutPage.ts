@@ -56,6 +56,8 @@ export const aboutPage = defineType({
       ],
     }),
     defineField({ name: "values", title: "Brand values (4)", type: "array", of: [defineArrayMember(titleCopy)] }),
+
+    defineField({ name: "seo", title: "SEO", type: "seo" }),
   ],
   preview: { prepare: () => ({ title: "About Page" }) },
 });

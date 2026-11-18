@@ -1,14 +1,27 @@
+import type { Metadata } from "next";
+
 import { ContactClient } from "@/components/ContactClient";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
 import { getLocale } from "@/lib/getLocale";
 import { contactDefaults, type ContactContent } from "@/lib/contactContent";
+import { fetchSeo, seoMetadata } from "@/lib/seo";
 import { client } from "@/sanity/lib/client";
 import { localeDoc } from "@/sanity/lib/locale";
 import { urlFor } from "@/sanity/lib/image";
 
 export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const seo = await fetchSeo("contactPage", { lang: locale });
+  return seoMetadata(seo, {
+    title: locale === "es" ? "Contacto" : "Contact",
+    description:
+      "Get in touch with Brasa — questions about models, custom finishes, shipping quotes, or your order. We're here to help you build your oven.",
+  });
+}
 
 const query = `${localeDoc("contactPage")}{
   heroTitle, heroSubtitle, heroImage, formTitle, subjects,

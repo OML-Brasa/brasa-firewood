@@ -46,6 +46,8 @@ export const contactPage = defineType({
         }),
       ],
     }),
+
+    defineField({ name: "seo", title: "SEO", type: "seo" }),
   ],
   preview: { prepare: () => ({ title: "Contact Page" }) },
 });

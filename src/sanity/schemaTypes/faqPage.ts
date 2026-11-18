@@ -44,6 +44,8 @@ export const faqPage = defineType({
     defineField({ name: "ctaSubtitle", title: "CTA · subtitle", type: "string" }),
     defineField({ name: "ctaPhone", title: "CTA · phone", type: "string" }),
     defineField({ name: "ctaEmail", title: "CTA · email", type: "string" }),
+
+    defineField({ name: "seo", title: "SEO", type: "seo" }),
   ],
   preview: { prepare: () => ({ title: "FAQ Page" }) },
 });

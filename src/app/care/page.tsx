@@ -96,8 +96,13 @@ async function getCareContent(): Promise<CareContent> {
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getCareContent();
-  // Empty → omit, so the site-wide default title/description applies.
-  return { ...(t.metaTitle && { title: t.metaTitle }), ...(t.metaDescription && { description: t.metaDescription }) };
+  // metaTitle is the full page title (it already includes "| Brasa"), so use it
+  // verbatim via `absolute` to bypass the root "%s | Brasa" template and avoid a
+  // doubled suffix. Empty → omit, so the site-wide default title/description applies.
+  return {
+    ...(t.metaTitle && { title: { absolute: t.metaTitle } }),
+    ...(t.metaDescription && { description: t.metaDescription }),
+  };
 }
 
 function SectionTitle({ children }: { children: React.ReactNode }) {

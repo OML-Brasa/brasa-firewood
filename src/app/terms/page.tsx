@@ -3,15 +3,20 @@ import type { Metadata } from "next";
 import { LegalArticle } from "@/components/LegalArticle";
 import { getLocale } from "@/lib/getLocale";
 import { getTermsPlaceholder } from "@/lib/legalContent";
+import { fetchSeo, seoMetadata } from "@/lib/seo";
 import { client } from "@/sanity/lib/client";
 import { localeDoc } from "@/sanity/lib/locale";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Terms of Use — Brasa",
-  description: "The terms that govern your use of the Brasa website and products.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const seo = await fetchSeo("legalPage", { lang: locale }, { field: "termsSeo" });
+  return seoMetadata(seo, {
+    title: locale === "es" ? "Términos de Uso" : "Terms of Use",
+    description: "The terms that govern your use of the Brasa website and products.",
+  });
+}
 
 const query = `${localeDoc("legalPage")}{ termsTitle, termsUpdated, termsBody }`;
 
