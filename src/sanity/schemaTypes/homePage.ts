@@ -69,6 +69,8 @@ export const homePage = defineType({
 
     defineField({ name: "quoteText", title: "Quote", type: "text", rows: 2 }),
     defineField({ name: "quoteAttribution", title: "Quote attribution", type: "string" }),
+
+    defineField({ name: "seo", title: "SEO", type: "seo" }),
   ],
   preview: { prepare: () => ({ title: "Home Page" }) },
 });

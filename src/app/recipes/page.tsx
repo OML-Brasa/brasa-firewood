@@ -1,14 +1,27 @@
+import type { Metadata } from "next";
+
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
 import { RecipesClient } from "@/components/RecipesClient";
 import { getLocale } from "@/lib/getLocale";
 import { recipesDefaults, type Recipe, type RecipesContent } from "@/lib/recipesContent";
+import { fetchSeo, seoMetadata } from "@/lib/seo";
 import { client } from "@/sanity/lib/client";
 import { localeDoc } from "@/sanity/lib/locale";
 import { urlFor } from "@/sanity/lib/image";
 
 export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const seo = await fetchSeo("recipesPage", { lang: locale });
+  return seoMetadata(seo, {
+    title: locale === "es" ? "Recetas" : "Recipes",
+    description:
+      "Wood-fired recipes for your Brasa oven — pizza, bread, roasts and more, with prep times, temperatures and step-by-step directions.",
+  });
+}
 
 const query = `${localeDoc("recipesPage")}{
   heroTitle, heroSubtitle, searchPlaceholder, categories,

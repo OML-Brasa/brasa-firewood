@@ -31,6 +31,9 @@ export const legalPage = defineType({
       type: "array",
       of: [{ type: "block" }],
     }),
+
+    defineField({ name: "privacySeo", title: "Privacy · SEO", type: "seo" }),
+    defineField({ name: "termsSeo", title: "Terms · SEO", type: "seo" }),
   ],
   preview: { prepare: () => ({ title: "Legal Pages" }) },
 });

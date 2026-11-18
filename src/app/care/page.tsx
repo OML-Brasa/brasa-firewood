@@ -9,7 +9,8 @@ import { getLocale } from "@/lib/getLocale";
 const PDF_HREF = "/care/brasa-oven-curing-guide.pdf";
 
 export const metadata: Metadata = {
-  title: "Oven Care & Curing Guide | Brasa",
+  // Title flows through the root "%s | Brasa" template → "Oven Care … | Brasa".
+  title: "Oven Care & Curing Guide",
   description:
     "How to dry, cure and fire your Brasa wood-fired clay oven for best performance — recommended firewood, drying cycles and firing steps.",
 };

@@ -1,13 +1,26 @@
+import type { Metadata } from "next";
+
 import { FaqPageClient } from "@/components/FaqPageClient";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
 import { getLocale } from "@/lib/getLocale";
 import { faqDefaults, type FaqContent } from "@/lib/faqContent";
+import { fetchSeo, seoMetadata } from "@/lib/seo";
 import { client } from "@/sanity/lib/client";
 import { localeDoc } from "@/sanity/lib/locale";
 
 export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const seo = await fetchSeo("faqPage", { lang: locale });
+  return seoMetadata(seo, {
+    title: locale === "es" ? "Preguntas Frecuentes" : "FAQ",
+    description:
+      "Answers to common questions about owning and operating a Brasa wood-fired oven — sizing, finishes, shipping, installation, curing, and care.",
+  });
+}
 
 const query = `${localeDoc("faqPage")}{
   heroTitle, heroSubtitle, searchPlaceholder,

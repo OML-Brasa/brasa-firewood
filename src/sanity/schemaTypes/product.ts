@@ -68,6 +68,8 @@ export const product = defineType({
     defineField({ name: "price", title: "Price (USD)", type: "number", hidden: ({ parent }) => !isAccessory({ parent }) }),
     defineField({ name: "description", title: "Description", type: "text", rows: 3, hidden: ({ parent }) => !isAccessory({ parent }) }),
     defineField({ name: "image", title: "Photo", type: "image", options: { hotspot: true }, hidden: ({ parent }) => !isAccessory({ parent }) }),
+
+    defineField({ name: "seo", title: "SEO", type: "seo" }),
   ],
   orderings: [{ title: "Sort order", name: "orderAsc", by: [{ field: "order", direction: "asc" }] }],
   preview: {
