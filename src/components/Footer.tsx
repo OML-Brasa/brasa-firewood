@@ -37,7 +37,7 @@ export async function Footer() {
         { label: t.refractoryCare, href: "/care" },
         // Warranty PDF (uploaded to /public). A static asset, so it keeps the
         // same URL in both locales and opens in a new tab — see the render below.
-        { label: t.warranty, href: "/warranty.pdf" },
+        { label: t.warranty, href: "/brasa-limited-warranty-policy.pdf" },
         { label: t.recipes, href: "/recipes" },
         { label: t.faq, href: "/faq" },
       ],

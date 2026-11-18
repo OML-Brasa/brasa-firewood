@@ -23,6 +23,8 @@ export const recipesPage = defineType({
       type: "array",
       of: [
         defineArrayMember({
+          name: "recipe",
+          title: "Recipe",
           type: "object",
           fields: [
             defineField({ name: "title", title: "Title", type: "string" }),

@@ -1,0 +1,360 @@
+{
+  "en": {
+    "metaTitle": "Oven Care & Curing Guide | Brasa",
+    "metaDescription": "How to dry, cure and fire your Brasa wood-fired clay oven for best performance — recommended firewood, drying cycles and firing steps.",
+    "heroBadge": "Oven Care",
+    "heroTitle": "Drying & Curing Your Clay Oven",
+    "heroIntro": "A technical guide to drying, curing and firing your Brasa wood-fired oven for the best performance. Applies to all Brasa models · temperatures in °F.",
+    "downloadLabel": "Download the guide (PDF)",
+    "objectiveTitle": "Objective",
+    "objectiveBody": "This guide describes the recommended procedure for drying and starting up a new Brasa clay oven, or one that has been out of use, in order to remove internal moisture, properly cure its materials, and optimize its performance.",
+    "beforeTitle": "Before You Begin",
+    "beforeItems": [
+      "Before lighting the oven, make sure it is completely dry and free of moisture.",
+      "If the oven has been out of use for 10–15 days, carry out a gradual drying process before operating at high temperatures.",
+      "If the oven is installed outdoors, fit the chimney with a suitable flue pipe and rain cap.",
+      "Use only dry, small-sized hardwood (see “Recommended Firewood”).",
+      "Monitor the temperature with a thermometer during each cycle."
+    ],
+    "firewoodTitle": "Recommended Firewood",
+    "firewoodIntro": "Use well-seasoned hardwoods: air-dry them for 6 to 12 months, until moisture content is below 20%. These options are easy to find in the United States and Puerto Rico.",
+    "firewoodHeaders": [
+      "Wood",
+      "Where to find it",
+      "Characteristics"
+    ],
+    "firewood": [
+      {
+        "wood": "Oak",
+        "where": "Throughout the U.S.",
+        "characteristics": "Intense, long-lasting heat. The most versatile choice, and a relative of holm oak."
+      },
+      {
+        "wood": "Hickory",
+        "where": "Eastern & southern U.S.",
+        "characteristics": "Very dense; high heat and a strong smoky flavor."
+      },
+      {
+        "wood": "Hard maple",
+        "where": "Northern & eastern U.S.",
+        "characteristics": "Steady flame and mild flavor."
+      },
+      {
+        "wood": "Ash",
+        "where": "Throughout the U.S.",
+        "characteristics": "Lights easily and produces little smoke."
+      },
+      {
+        "wood": "Pecan & mesquite",
+        "where": "Southern & southwestern U.S.",
+        "characteristics": "Pecan: mild flavor. Mesquite: very hot; best mixed with another wood."
+      },
+      {
+        "wood": "Fruitwoods: apple, cherry",
+        "where": "Throughout the U.S.",
+        "characteristics": "Sweet, mild aroma; ideal for pizza, bread and meats."
+      },
+      {
+        "wood": "Guava",
+        "where": "Puerto Rico",
+        "characteristics": "Highly valued fruitwood; sweet aroma."
+      },
+      {
+        "wood": "Citrus: orange, lemon, grapefruit",
+        "where": "Puerto Rico",
+        "characteristics": "Readily available from pruning; pleasant aroma."
+      },
+      {
+        "wood": "Úcar (black olive)",
+        "where": "Puerto Rico",
+        "characteristics": "Very dense wood; long-lasting embers."
+      },
+      {
+        "wood": "Tamarind & algarrobo",
+        "where": "Puerto Rico",
+        "characteristics": "Hardwoods with good heat output."
+      }
+    ],
+    "avoidTitle": "Woods to Avoid",
+    "avoid": [
+      "Softwoods or resinous woods (pine, cypress, cedar) — heavy smoke and soot (creosote).",
+      "Treated, painted or varnished wood, plywood, pallets and construction scraps — they release toxic substances.",
+      "Toxic plants such as manchineel (common along Puerto Rico's coasts) or oleander — their smoke is toxic.",
+      "Green, damp or moldy wood — it smokes, soils the dome and produces little heat."
+    ],
+    "dryingTitle": "Initial Drying Process",
+    "dryingIntro": "Carry out the following heating cycles progressively. During drying, keep the door and the chimney damper fully open to allow moisture to escape.",
+    "dryingHeaders": [
+      "Cycle",
+      "When",
+      "Temperature",
+      "Duration"
+    ],
+    "dryingCycles": [
+      {
+        "cycle": "1",
+        "when": "Day 1",
+        "temperature": "176–212°F",
+        "duration": "3–4 h"
+      },
+      {
+        "cycle": "2",
+        "when": "Day 2 (or a few days later)",
+        "temperature": "176–212°F",
+        "duration": "3–4 h"
+      },
+      {
+        "cycle": "3",
+        "when": "Next cycle",
+        "temperature": "302–392°F",
+        "duration": "3–4 h"
+      },
+      {
+        "cycle": "4",
+        "when": "Next cycle",
+        "temperature": "482–572°F",
+        "duration": "2.5–3 h"
+      },
+      {
+        "cycle": "5",
+        "when": "Final curing",
+        "temperature": "788–896°F",
+        "duration": "30–45 min"
+      }
+    ],
+    "whyTitle": "Why is this necessary?",
+    "whyBody": "Gradual heating allows the oven's internal insulation to cure properly. The insulating materials absorb heat, contract slightly, and become harder and more stable.",
+    "cracksTitle": "Hairline cracks & fissures",
+    "cracksBody": "Small fissures may appear around the flue, the door, or the dome. These are a natural part of curing — after several uses they may open slightly, then seal on their own.",
+    "firingTitle": "Firing for Full Performance",
+    "firingIntro": "Once the initial drying is complete, follow this procedure each time you fire the oven. At the start, keep the chimney damper and the door air-intake regulator open.",
+    "firingHeaders": [
+      "Step",
+      "Action",
+      "Temperature"
+    ],
+    "firingSteps": [
+      {
+        "step": "1",
+        "action": "Load 4–6 small, dry sticks or branches and light them.",
+        "temperature": "—"
+      },
+      {
+        "step": "2",
+        "action": "About 5 minutes after the flame catches, add 3–4 more sticks. If more combustion is needed, open the door slightly to increase the draft.",
+        "temperature": "—"
+      },
+      {
+        "step": "3",
+        "action": "At 15 minutes, add 2–3 more sticks.",
+        "temperature": "≈ 572°F"
+      },
+      {
+        "step": "4",
+        "action": "Keep feeding the fire until it reaches the target temperature, and hold it for 20–30 minutes to heat the clay insulation.",
+        "temperature": "824–860°F"
+      },
+      {
+        "step": "5",
+        "action": "When the flame dies out, the dome turns white and the temperature drops. Remove the embers, leaving a couple of handfuls inside to retain heat longer.",
+        "temperature": "392–464°F"
+      },
+      {
+        "step": "6",
+        "action": "Close the chimney damper to 80% and close the door air-intake regulator. The oven is ready for cooking.",
+        "temperature": "—"
+      }
+    ],
+    "firingOutro": "During the first few uses, the oven performs below its full capacity. Performance improves progressively: it will reach temperature faster and use less firewood over time.",
+    "summaryTitle": "Summary",
+    "summary": [
+      "Verify that the oven is completely dry.",
+      "Use dry, small-sized hardwood; avoid resinous, treated or toxic woods.",
+      "Keep the door and chimney damper open during drying.",
+      "Increase the temperature progressively.",
+      "Finish with a cycle at 788–896°F for 30–45 minutes.",
+      "For each firing, bring the oven to 824–860°F for 20–30 minutes, then close the damper to 80% and close the air regulator.",
+      "Expect lower performance during the first few uses; it improves progressively.",
+      "Consider small initial fissures caused by insulation curing to be normal."
+    ]
+  },
+  "es": {
+    "metaTitle": "Guía de Cuidado y Curado del Horno | Brasa",
+    "metaDescription": "Cómo secar, curar y encender tu horno de arcilla de leña Brasa para el máximo rendimiento: leña recomendada, ciclos de secado y pasos de encendido.",
+    "heroBadge": "Cuidado del Horno",
+    "heroTitle": "Secado y Curado de tu Horno de Arcilla",
+    "heroIntro": "Una guía técnica para secar, curar y encender tu horno de leña Brasa y lograr el máximo rendimiento. Aplica a todos los modelos Brasa · temperaturas en °F.",
+    "downloadLabel": "Descargar la guía (PDF)",
+    "objectiveTitle": "Objetivo",
+    "objectiveBody": "Esta guía describe el procedimiento recomendado para secar y poner en marcha un horno de arcilla Brasa nuevo, o uno que ha estado sin uso, con el fin de eliminar la humedad interna, curar correctamente sus materiales y optimizar su rendimiento.",
+    "beforeTitle": "Antes de Empezar",
+    "beforeItems": [
+      "Antes de encender el horno, asegúrate de que esté completamente seco y libre de humedad.",
+      "Si el horno ha estado sin uso por 10–15 días, realiza un proceso de secado gradual antes de operarlo a altas temperaturas.",
+      "Si el horno está instalado al exterior, coloca en la chimenea un tubo de tiro adecuado y un sombrerete contra lluvia.",
+      "Usa solo madera dura seca y de tamaño pequeño (ver “Leña Recomendada”).",
+      "Monitorea la temperatura con un termómetro durante cada ciclo."
+    ],
+    "firewoodTitle": "Leña Recomendada",
+    "firewoodIntro": "Usa maderas duras bien curadas: sécalas al aire de 6 a 12 meses, hasta que la humedad esté por debajo del 20%. Estas opciones son fáciles de conseguir en Estados Unidos y Puerto Rico.",
+    "firewoodHeaders": [
+      "Madera",
+      "Dónde conseguirla",
+      "Características"
+    ],
+    "firewood": [
+      {
+        "wood": "Roble",
+        "where": "En todo EE. UU.",
+        "characteristics": "Calor intenso y duradero. La opción más versátil, y pariente de la encina."
+      },
+      {
+        "wood": "Nogal americano (hickory)",
+        "where": "Este y sur de EE. UU.",
+        "characteristics": "Muy densa; alto calor y un fuerte sabor ahumado."
+      },
+      {
+        "wood": "Arce duro",
+        "where": "Norte y este de EE. UU.",
+        "characteristics": "Llama constante y sabor suave."
+      },
+      {
+        "wood": "Fresno",
+        "where": "En todo EE. UU.",
+        "characteristics": "Enciende con facilidad y produce poco humo."
+      },
+      {
+        "wood": "Pecán y mezquite",
+        "where": "Sur y suroeste de EE. UU.",
+        "characteristics": "Pecán: sabor suave. Mezquite: muy caliente; mejor mezclado con otra madera."
+      },
+      {
+        "wood": "Frutales: manzano, cerezo",
+        "where": "En todo EE. UU.",
+        "characteristics": "Aroma dulce y suave; ideal para pizza, pan y carnes."
+      },
+      {
+        "wood": "Guayaba",
+        "where": "Puerto Rico",
+        "characteristics": "Frutal muy valorado; aroma dulce."
+      },
+      {
+        "wood": "Cítricos: naranja, limón, toronja",
+        "where": "Puerto Rico",
+        "characteristics": "Fácil de conseguir de la poda; aroma agradable."
+      },
+      {
+        "wood": "Úcar (olivo negro)",
+        "where": "Puerto Rico",
+        "characteristics": "Madera muy densa; brasas de larga duración."
+      },
+      {
+        "wood": "Tamarindo y algarrobo",
+        "where": "Puerto Rico",
+        "characteristics": "Maderas duras con buen rendimiento de calor."
+      }
+    ],
+    "avoidTitle": "Maderas a Evitar",
+    "avoid": [
+      "Maderas blandas o resinosas (pino, ciprés, cedro) — mucho humo y hollín (creosota).",
+      "Madera tratada, pintada o barnizada, plywood, paletas y restos de construcción — liberan sustancias tóxicas.",
+      "Plantas tóxicas como el manzanillo (común en las costas de Puerto Rico) o la adelfa — su humo es tóxico.",
+      "Madera verde, húmeda o con moho — humea, ensucia la bóveda y produce poco calor."
+    ],
+    "dryingTitle": "Proceso de Secado Inicial",
+    "dryingIntro": "Realiza los siguientes ciclos de calentamiento de forma progresiva. Durante el secado, mantén la puerta y el regulador de tiro de la chimenea completamente abiertos para permitir que la humedad escape.",
+    "dryingHeaders": [
+      "Ciclo",
+      "Cuándo",
+      "Temperatura",
+      "Duración"
+    ],
+    "dryingCycles": [
+      {
+        "cycle": "1",
+        "when": "Día 1",
+        "temperature": "176–212°F",
+        "duration": "3–4 h"
+      },
+      {
+        "cycle": "2",
+        "when": "Día 2 (o unos días después)",
+        "temperature": "176–212°F",
+        "duration": "3–4 h"
+      },
+      {
+        "cycle": "3",
+        "when": "Siguiente ciclo",
+        "temperature": "302–392°F",
+        "duration": "3–4 h"
+      },
+      {
+        "cycle": "4",
+        "when": "Siguiente ciclo",
+        "temperature": "482–572°F",
+        "duration": "2.5–3 h"
+      },
+      {
+        "cycle": "5",
+        "when": "Curado final",
+        "temperature": "788–896°F",
+        "duration": "30–45 min"
+      }
+    ],
+    "whyTitle": "¿Por qué es necesario?",
+    "whyBody": "El calentamiento gradual permite que el aislamiento interno del horno se cure correctamente. Los materiales aislantes absorben el calor, se contraen ligeramente y se vuelven más duros y estables.",
+    "cracksTitle": "Grietas finas y fisuras",
+    "cracksBody": "Pueden aparecer pequeñas fisuras alrededor del tiro, la puerta o la bóveda. Son una parte natural del curado — tras varios usos pueden abrirse un poco y luego sellarse por sí solas.",
+    "firingTitle": "Encendido para Máximo Rendimiento",
+    "firingIntro": "Una vez completado el secado inicial, sigue este procedimiento cada vez que enciendas el horno. Al inicio, mantén abiertos el regulador de tiro de la chimenea y el regulador de entrada de aire de la puerta.",
+    "firingHeaders": [
+      "Paso",
+      "Acción",
+      "Temperatura"
+    ],
+    "firingSteps": [
+      {
+        "step": "1",
+        "action": "Coloca 4–6 palos o ramas pequeñas y secas, y enciéndelos.",
+        "temperature": "—"
+      },
+      {
+        "step": "2",
+        "action": "Unos 5 minutos después de que prenda la llama, agrega 3–4 palos más. Si se necesita más combustión, abre un poco la puerta para aumentar el tiro.",
+        "temperature": "—"
+      },
+      {
+        "step": "3",
+        "action": "A los 15 minutos, agrega 2–3 palos más.",
+        "temperature": "≈ 572°F"
+      },
+      {
+        "step": "4",
+        "action": "Sigue alimentando el fuego hasta que alcance la temperatura objetivo, y mantenla por 20–30 minutos para calentar el aislamiento de arcilla.",
+        "temperature": "824–860°F"
+      },
+      {
+        "step": "5",
+        "action": "Cuando la llama se apaga, la bóveda se vuelve blanca y la temperatura baja. Retira las brasas, dejando un par de puñados dentro para conservar el calor por más tiempo.",
+        "temperature": "392–464°F"
+      },
+      {
+        "step": "6",
+        "action": "Cierra el regulador de tiro de la chimenea al 80% y cierra el regulador de entrada de aire de la puerta. El horno está listo para cocinar.",
+        "temperature": "—"
+      }
+    ],
+    "firingOutro": "Durante los primeros usos, el horno rinde por debajo de su capacidad total. El rendimiento mejora progresivamente: alcanzará la temperatura más rápido y usará menos leña con el tiempo.",
+    "summaryTitle": "Resumen",
+    "summary": [
+      "Verifica que el horno esté completamente seco.",
+      "Usa madera dura seca y de tamaño pequeño; evita maderas resinosas, tratadas o tóxicas.",
+      "Mantén la puerta y el regulador de tiro de la chimenea abiertos durante el secado.",
+      "Aumenta la temperatura progresivamente.",
+      "Termina con un ciclo a 788–896°F por 30–45 minutos.",
+      "Para cada encendido, lleva el horno a 824–860°F por 20–30 minutos, luego cierra el regulador de tiro al 80% y cierra el regulador de aire.",
+      "Espera un rendimiento menor durante los primeros usos; mejora progresivamente.",
+      "Considera normales las pequeñas fisuras iniciales causadas por el curado del aislamiento."
+    ]
+  }
+}

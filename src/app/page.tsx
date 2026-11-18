@@ -360,7 +360,7 @@ export default async function Home() {
       <section className="bg-copper-500 text-sand">
         <div className={`${wrap} flex flex-col items-center gap-6 py-24 text-center md:py-[140px]`}>
           <blockquote className="max-w-4xl font-serif text-[32px] italic leading-[1.15] md:text-[40px]">
-            &ldquo;{c.quote.text}&rdquo;
+            {c.quote.text}
           </blockquote>
           <cite className="text-[15px] font-bold uppercase not-italic tracking-[0.06em] text-sand/90">
             {c.quote.attribution}
