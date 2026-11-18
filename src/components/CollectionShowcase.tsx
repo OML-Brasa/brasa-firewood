@@ -69,9 +69,12 @@ export function CollectionShowcase({ products }: { products: ShowcaseProduct[] }
                   className="aspect-square w-full object-contain transition-transform group-hover:scale-[1.02]"
                 />
               </div>
-              <div className="flex items-center justify-between">
-                <h3 className={`text-[20px] font-extrabold transition-colors ${isActive ? "text-copper-600" : "text-charcoal-800"}`}>{p.name}</h3>
-                <span className="text-[18px] font-bold tracking-[0.02em] text-charcoal-800">{p.price}</span>
+              {/* Stack name over price on narrow cards (2-col mobile / 3-col
+                  tablet) so they never collide; switch to a single row only
+                  once the cards are wide enough (lg). Price stays on one line. */}
+              <div className="flex flex-col gap-0.5 lg:flex-row lg:items-center lg:justify-between lg:gap-3">
+                <h3 className={`text-[20px] font-extrabold transition-colors lg:min-w-0 lg:truncate ${isActive ? "text-copper-600" : "text-charcoal-800"}`}>{p.name}</h3>
+                <span className="whitespace-nowrap text-[18px] font-bold tracking-[0.02em] text-charcoal-800">{p.price}</span>
               </div>
             </button>
           );
