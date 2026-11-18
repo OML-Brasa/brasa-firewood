@@ -22,7 +22,7 @@ const homeQuery = `${localeDoc("homePage")}{
   heroLine1, heroLine2, heroImage, philosophy,
   aboutEyebrow, aboutTitle, aboutIntro, aboutConviction, aboutChallenge, aboutImage,
   featuredImage, materialImage, editorialRecipesImage, editorialMemoriesImage,
-  products[]{ name, price, image }, quoteText, quoteAttribution
+  products[]{ name, price, image, featuredImage }, quoteText, quoteAttribution
 }`;
 
 /* Content — verbatim from Figma frame brasa-home-luxury-wireframe (8039:1276). */
@@ -41,7 +41,6 @@ const content = {
   collection: {
     title: "The Collection",
     meta: "3 Models Available",
-    featured: "/images/featured-oven.png",
     products: [
       { name: "Dolce", slug: "dolce", price: "From $4,380", image: "/images/model-dolce.png" },
       { name: "Ravvivata", slug: "ravvivata", price: "From $5,040", image: "/images/model-ravvivata.png" },
@@ -88,7 +87,7 @@ const content = {
     ],
     shipTitle: "We Ship To",
     regions: [
-      { place: "United States", copy: "Standard freight ships free to the mainland U.S.; express and white-glove options are available at checkout." },
+      { place: "United States", copy: "Standard freight ship to the mainland U.S.; express and white-glove options are available at checkout." },
       { place: "Puerto Rico", copy: "We ship to Puerto Rico — contact us for current freight timelines to your zone." },
       { place: "Dominican Republic", copy: "We ship to the Dominican Republic — contact us for current freight timelines to your zone." },
     ],
@@ -125,7 +124,6 @@ const contentEs: typeof content = {
   collection: {
     title: "La Colección",
     meta: "3 modelos disponibles",
-    featured: "/images/featured-oven.png",
     products: [
       { name: "Dolce", slug: "dolce", price: "Desde $4,380", image: "/images/model-dolce.png" },
       { name: "Ravvivata", slug: "ravvivata", price: "Desde $5,040", image: "/images/model-ravvivata.png" },
@@ -240,13 +238,18 @@ export default async function Home() {
     },
     collection: {
       ...source.collection,
-      featured: img(doc?.featuredImage, source.collection.featured, 1400),
-      products: source.collection.products.map((p, i) => ({
-        ...p,
-        name: doc?.products?.[i]?.name ?? p.name,
-        price: doc?.products?.[i]?.price ?? p.price,
-        image: img(doc?.products?.[i]?.image, p.image, 700),
-      })),
+      products: source.collection.products.map((p, i) => {
+        const d = doc?.products?.[i];
+        const image = img(d?.image, p.image, 700);
+        return {
+          ...p,
+          name: d?.name ?? p.name,
+          price: d?.price ?? p.price,
+          image,
+          // Large image shown when this thumbnail is selected; falls back to the thumbnail.
+          featured: img(d?.featuredImage ?? d?.image, p.image, 1600),
+        };
+      }),
     },
     material: {
       ...source.material,

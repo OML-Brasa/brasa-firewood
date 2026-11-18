@@ -1,14 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa6";
+import { FaFacebookF, FaInstagram } from "react-icons/fa6";
 
 import { I18nLink } from "@/components/I18nLink";
 import { ui } from "@/i18n/ui";
 import { getLocale } from "@/lib/getLocale";
 
 const social = [
-  { label: "Instagram", href: "#", Icon: FaInstagram },
-  { label: "Facebook", href: "#", Icon: FaFacebookF },
-  { label: "YouTube", href: "#", Icon: FaYoutube },
+  { label: "Instagram", href: "https://www.instagram.com/brasaoven", Icon: FaInstagram },
+  { label: "Facebook", href: "https://www.facebook.com/brasaoven", Icon: FaFacebookF },
 ];
 
 export async function Footer() {
@@ -36,6 +35,9 @@ export async function Footer() {
       h: t.learn,
       items: [
         { label: t.refractoryCare, href: "/care" },
+        // Warranty PDF (uploaded to /public). A static asset, so it keeps the
+        // same URL in both locales and opens in a new tab — see the render below.
+        { label: t.warranty, href: "/warranty.pdf" },
         { label: t.recipes, href: "/recipes" },
         { label: t.faq, href: "/faq" },
       ],
@@ -61,11 +63,22 @@ export async function Footer() {
             <div key={col.h} className="flex flex-col gap-4">
               <span className="text-[15px] font-bold uppercase tracking-[0.04em] text-sand">{col.h}</span>
               <div className="flex flex-col gap-3">
-                {col.items.map((it) => (
-                  <I18nLink key={it.label} href={it.href} className="text-[15px] text-sand/70 transition-colors hover:text-copper-300">
-                    {it.label}
-                  </I18nLink>
-                ))}
+                {col.items.map((it) => {
+                  // Files (e.g. the warranty PDF) and external URLs live at a
+                  // fixed path in every locale — render a plain anchor so they
+                  // aren't rewritten with an /es prefix, and open in a new tab.
+                  const isAsset = it.href.startsWith("http") || it.href.includes(".");
+                  const cls = "text-[15px] text-sand/70 transition-colors hover:text-copper-300";
+                  return isAsset ? (
+                    <a key={it.label} href={it.href} target="_blank" rel="noopener noreferrer" className={cls}>
+                      {it.label}
+                    </a>
+                  ) : (
+                    <I18nLink key={it.label} href={it.href} className={cls}>
+                      {it.label}
+                    </I18nLink>
+                  );
+                })}
               </div>
             </div>
           ))}

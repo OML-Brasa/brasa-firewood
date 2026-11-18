@@ -12,11 +12,14 @@ export type ShowcaseProduct = {
   slug: string;
   price: string;
   image: string;
+  /** Large image shown in the hero when this product is selected. */
+  featured: string;
 };
 
 /**
  * Home "Collection" block.
- * Clicking a thumbnail swaps the large hero image above it (no navigation).
+ * Clicking a thumbnail swaps the large hero image above it to that product's
+ * featured image (no navigation).
  * The hero image itself is the link to the selected product's page.
  */
 export function CollectionShowcase({ products }: { products: ShowcaseProduct[] }) {
@@ -36,9 +39,10 @@ export function CollectionShowcase({ products }: { products: ShowcaseProduct[] }
         className="group mt-12 block overflow-hidden rounded-xl border border-[#e7e2d7] bg-white"
       >
         <img
-          src={active.image}
+          key={active.featured}
+          src={active.featured}
           alt={t.ovenAlt(active.name)}
-          className="aspect-[16/9] w-full object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+          className="aspect-[16/9] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
         />
       </I18nLink>
 
