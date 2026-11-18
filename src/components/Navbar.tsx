@@ -1,48 +1,54 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 
+import { I18nLink } from "@/components/I18nLink";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useLocale } from "@/components/LocaleProvider";
+import { ui } from "@/i18n/ui";
 import { useCart } from "@/lib/cart";
-
-const links = [
-  { label: "Story", href: "/about" },
-  { label: "Shop", href: "/shop" },
-  { label: "FAQ", href: "/faq" },
-  { label: "Recipes", href: "/recipes" },
-  { label: "Care", href: "/care" },
-  { label: "Contact", href: "/contact" },
-];
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const { count } = useCart();
+  const locale = useLocale();
+  const t = ui[locale].nav;
+
+  const links = [
+    { label: t.story, href: "/about" },
+    { label: t.shop, href: "/shop" },
+    { label: t.faq, href: "/faq" },
+    { label: t.recipes, href: "/recipes" },
+    { label: t.care, href: "/care" },
+    { label: t.contact, href: "/contact" },
+  ];
 
   return (
     <header className="sticky top-0 z-50 bg-charcoal-800/95 text-white backdrop-blur-md">
       <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-5 md:px-20">
-        <Link href="/" aria-label="Brasa — home" className="shrink-0">
+        <I18nLink href="/" aria-label="Brasa — home" className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/logo.png" alt="Brasa" className="h-10 w-auto" />
-        </Link>
+        </I18nLink>
 
         <ul className="hidden items-center gap-9 md:flex">
           {links.map((l) => (
             <li key={l.label}>
-              <Link
+              <I18nLink
                 href={l.href}
                 className="text-[15px] uppercase tracking-[0.08em] text-white/90 transition-colors hover:text-copper-300"
               >
                 {l.label}
-              </Link>
+              </I18nLink>
             </li>
           ))}
         </ul>
 
         <div className="flex items-center gap-5">
-          <Link
+          <LanguageSwitcher className="hidden sm:flex" />
+          <I18nLink
             href="/cart"
-            aria-label="Cart"
+            aria-label={t.cart}
             className="flex items-center gap-1.5 text-white/80 transition-colors hover:text-copper-300"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -51,9 +57,9 @@ export function Navbar() {
               <path d="M2 3h3l2.2 11.3a1.6 1.6 0 0 0 1.6 1.3h8.2a1.6 1.6 0 0 0 1.6-1.3L22 7H6" />
             </svg>
             <span className="text-[13px] text-white/60">({count})</span>
-          </Link>
+          </I18nLink>
           <button
-            aria-label="Menu"
+            aria-label={t.menu}
             onClick={() => setOpen((v) => !v)}
             className="flex h-10 w-10 items-center justify-center md:hidden"
           >
@@ -82,15 +88,18 @@ export function Navbar() {
         <ul className="flex flex-col gap-1 border-t border-white/10 px-6 pb-6 pt-2 md:hidden">
           {links.map((l) => (
             <li key={l.label}>
-              <Link
+              <I18nLink
                 href={l.href}
                 onClick={() => setOpen(false)}
                 className="block py-3 text-h6 text-white"
               >
                 {l.label}
-              </Link>
+              </I18nLink>
             </li>
           ))}
+          <li className="pt-2">
+            <LanguageSwitcher className="text-[14px]" />
+          </li>
         </ul>
       )}
     </header>

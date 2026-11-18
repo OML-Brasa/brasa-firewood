@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from "next/link";
-
 import { CollectionShowcase } from "@/components/CollectionShowcase";
 import { CompareTable } from "@/components/CompareTable";
 import { Footer } from "@/components/Footer";
+import { I18nLink } from "@/components/I18nLink";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
+import { getLocale } from "@/lib/getLocale";
 import { client } from "@/sanity/lib/client";
+import { localeDoc } from "@/sanity/lib/locale";
 import { urlFor } from "@/sanity/lib/image";
 
 /** Resolve a Sanity image to a sized URL, falling back to a bundled asset. */
@@ -17,7 +18,7 @@ const img = (src: Parameters<typeof urlFor>[0] | undefined | null, fallback: str
 // on the live site without a redeploy.
 export const revalidate = 60;
 
-const homeQuery = `*[_type == "homePage"][0]{
+const homeQuery = `${localeDoc("homePage")}{
   heroLine1, heroLine2, heroImage, philosophy,
   aboutEyebrow, aboutTitle, aboutIntro, aboutConviction, aboutChallenge, aboutImage,
   featuredImage, materialImage, editorialRecipesImage, editorialMemoriesImage,
@@ -104,6 +105,89 @@ const content = {
   },
 };
 
+/* Spanish mirror of the inline defaults. Sanity's homePage__es still overrides
+   the CMS-backed fields (hero, about, products, quote); this covers the sections
+   that live only in code (collection labels, material, experience, comparison,
+   shipping). */
+const contentEs: typeof content = {
+  hero: { image: "/images/hero.png", title: ["Diseñado para el fuego.", "Perfeccionado con pruebas."] },
+  philosophy: "ARTESANÍA EUROPEA · ARCILLA REFRACTARIA · CONSTRUIDO PARA DURAR GENERACIONES",
+  about: {
+    eyebrow: "Nosotros",
+    title: "Diseñado para quien se toma el fuego en serio.",
+    image: "/images/about.png",
+    cta: "Conoce más",
+    intro: "Brasa nació de una convicción y un reto.",
+    conviction: "que cocinar con fuego vivo es una de las últimas disciplinas reales que una persona puede dominar en casa.",
+    challenge: "construir un horno lo bastante preciso para premiar esa disciplina — y lo bastante refinado para pertenecer a la vida moderna y convertirse en una obra de arte en cada patio.",
+  },
+  collection: {
+    title: "La Colección",
+    meta: "3 modelos disponibles",
+    products: [
+      { name: "Dolce", slug: "dolce", price: "Desde $4,380", image: "/images/model-dolce.png" },
+      { name: "Ravvivata", slug: "ravvivata", price: "Desde $5,040", image: "/images/model-ravvivata.png" },
+      { name: "Ardente", slug: "ardente", price: "Desde $7,700", image: "/images/model-ardente.png" },
+    ],
+  },
+  material: {
+    title: "Rendimiento que puedes medir. Sofisticación que puedes ver.",
+    image: "/images/material.png",
+    cta: "Conoce la ciencia",
+    points: [
+      { label: "Diseñado, luego terminado", copy: "El rendimiento se diseña primero; la belleza sigue a la función." },
+      { label: "Comprobado con pruebas", copy: "Cada curva de calor, cada dimensión, refinada hasta que rindió." },
+      { label: "Control que se repite", copy: "Calor uniforme y predecible — los resultados que un cocinero disciplinado espera, siempre." },
+      { label: "Hecho para durar", copy: "Construido para rendir por décadas, no por temporadas." },
+    ],
+  },
+  quote: {
+    text: "Un instrumento, no un electrodoméstico. Esa es la diferencia que sientes la primera vez que cocinas en uno.",
+    attribution: "— Exel F. Colón, Fundador, Brasa",
+  },
+  experience: {
+    title: "La Experiencia de Tenerlo",
+    steps: [
+      { n: "01", title: "Elige tu horno", copy: "Elige entre tres colecciones — Dolce, Ravvivata o Ardente — cada una diseñada con el mismo estándar, dimensionada y terminada para tu forma de cocinar y el espacio que tienes." },
+      { n: "02", title: "Configúralo a tu gusto", copy: "Define tu base, aislamiento y acabado. Cada Brasa se fabrica por encargo, así que el instrumento que recibes es el que especificaste." },
+      { n: "03", title: "Entrega guante blanco", copy: "Desde el flete hasta la instalación completa de guante blanco, entregamos y colocamos tu horno para que esté listo para curar y encender desde el primer día." },
+    ],
+  },
+  editorial: [
+    { kicker: "Recetas", image: "/images/editorial-recipes.png", copy: "Desde tu primer fuego de curado hasta una noche entera de sellar, asar y hornear sobre una sola cama de brasas — recetas pensadas para la forma en que un Brasa realmente cocina.", cta: "Leer más", href: "/recipes" },
+    { kicker: "Momentos que vale la pena compartir", image: "/images/editorial-memories.png", copy: "Un Brasa está hecho tanto para la mesa como para el fuego — cenas largas, cocina con las manos y esas noches que son mejores con gente alrededor.", cta: "Leer más", href: "/recipes" },
+  ],
+  comparison: {
+    title: "Compara nuestros hornos",
+    subtitle: "Especificaciones lado a lado de todas las líneas de hornos ensamblados.",
+    models: ["Dolce", "Ravvivata", "Ardente"],
+    rows: [
+      { feature: "Medidas del modelo", values: ["30–47 in", "30–47 in", "35–47 in"] },
+      { feature: "Medida exterior", values: ["39×39 – 59×59 in", "39×39 – 59×59 in", "47×47 – 59×59 in"] },
+      { feature: "Base de concreto", values: ["6–32 bloques", "6–32 bloques", "10–36 bloques"] },
+      { feature: "Aislamiento", values: ["Premium", "Premium", "Premium"] },
+      { feature: "Opciones de acabado", values: ["Liso, Ladrillo, Piedra, Madera, Mármol, Premium", "Liso, Ladrillo, Piedra, Madera, Mármol, Premium", "Tradicional, Clásico, Mixto, Ladrillo, Piedra, Madera"] },
+    ],
+    shipTitle: "Enviamos a",
+    regions: [
+      { place: "Estados Unidos", copy: "El flete estándar es gratis a los EE. UU. continentales; opciones exprés y de guante blanco disponibles al finalizar la compra." },
+      { place: "Puerto Rico", copy: "Enviamos a Puerto Rico — contáctanos para conocer los tiempos de flete actuales a tu zona." },
+      { place: "República Dominicana", copy: "Enviamos a República Dominicana — contáctanos para conocer los tiempos de flete actuales a tu zona." },
+    ],
+  },
+  newsletter: { title: "Únete a la comunidad Brasa", copy: "Recetas, reabastecimientos y alguna que otra historia de fuego — directo a tu correo." },
+  footer: {
+    tagline: "Hornos de arcilla refractaria, hechos a mano y pensados para quienes cocinan con fuego en serio.",
+    columns: [
+      { h: "Colección", items: ["Dolce", "Ravvivata", "Ardente", "Acerba"] },
+      { h: "Compañía", items: ["Nuestra Historia", "Tienda", "Contacto"] },
+      { h: "Aprende", items: ["Cuidado del Horno", "Recetas", "Preguntas"] },
+    ],
+    social: { h: "Sigue el Fuego", copy: "Síguenos para ver fuego, comida y la creación de cada horno." },
+    legal: ["Política de Privacidad", "Términos de Uso"],
+  },
+};
+
 const wrap = "mx-auto w-full max-w-[1440px] px-6 md:px-20";
 const eyebrow = "text-[13px] font-semibold uppercase tracking-[0.19em] text-charcoal-500";
 const sectionTitle =
@@ -119,7 +203,7 @@ function Arrow() {
 
 function LearnMore({ label, href = "#", light = false }: { label: string; href?: string; light?: boolean }) {
   return (
-    <a
+    <I18nLink
       href={href}
       className={`inline-flex w-fit items-center gap-2 text-[15px] font-bold uppercase tracking-[0.04em] transition-colors ${
         light ? "text-sand hover:text-white" : "text-charcoal-800 hover:text-copper-600"
@@ -127,32 +211,34 @@ function LearnMore({ label, href = "#", light = false }: { label: string; href?:
     >
       {label}
       <Arrow />
-    </a>
+    </I18nLink>
   );
 }
 
 export default async function Home() {
-  const doc = await client.fetch(homeQuery).catch(() => null);
+  const locale = await getLocale();
+  const doc = await client.fetch(homeQuery, { lang: locale }).catch(() => null);
+  const source = locale === "es" ? contentEs : content;
   const c = {
-    ...content,
+    ...source,
     hero: {
-      ...content.hero,
-      title: [doc?.heroLine1 ?? content.hero.title[0], doc?.heroLine2 ?? content.hero.title[1]],
-      image: img(doc?.heroImage, content.hero.image, 1920),
+      ...source.hero,
+      title: [doc?.heroLine1 ?? source.hero.title[0], doc?.heroLine2 ?? source.hero.title[1]],
+      image: img(doc?.heroImage, source.hero.image, 1920),
     },
-    philosophy: doc?.philosophy ?? content.philosophy,
+    philosophy: doc?.philosophy ?? source.philosophy,
     about: {
-      ...content.about,
-      eyebrow: doc?.aboutEyebrow ?? content.about.eyebrow,
-      title: doc?.aboutTitle ?? content.about.title,
-      intro: doc?.aboutIntro ?? content.about.intro,
-      conviction: doc?.aboutConviction ?? content.about.conviction,
-      challenge: doc?.aboutChallenge ?? content.about.challenge,
-      image: img(doc?.aboutImage, content.about.image, 900),
+      ...source.about,
+      eyebrow: doc?.aboutEyebrow ?? source.about.eyebrow,
+      title: doc?.aboutTitle ?? source.about.title,
+      intro: doc?.aboutIntro ?? source.about.intro,
+      conviction: doc?.aboutConviction ?? source.about.conviction,
+      challenge: doc?.aboutChallenge ?? source.about.challenge,
+      image: img(doc?.aboutImage, source.about.image, 900),
     },
     collection: {
-      ...content.collection,
-      products: content.collection.products.map((p, i) => {
+      ...source.collection,
+      products: source.collection.products.map((p, i) => {
         const d = doc?.products?.[i];
         const image = img(d?.image, p.image, 700);
         return {
@@ -166,10 +252,10 @@ export default async function Home() {
       }),
     },
     material: {
-      ...content.material,
-      image: img(doc?.materialImage, content.material.image, 900),
+      ...source.material,
+      image: img(doc?.materialImage, source.material.image, 900),
     },
-    editorial: content.editorial.map((e, i) => ({
+    editorial: source.editorial.map((e, i) => ({
       ...e,
       image: img(
         i === 0 ? doc?.editorialRecipesImage : doc?.editorialMemoriesImage,
@@ -178,9 +264,9 @@ export default async function Home() {
       ),
     })),
     quote: {
-      ...content.quote,
-      text: doc?.quoteText ?? content.quote.text,
-      attribution: doc?.quoteAttribution ?? content.quote.attribution,
+      ...source.quote,
+      text: doc?.quoteText ?? source.quote.text,
+      attribution: doc?.quoteAttribution ?? source.quote.attribution,
     },
   };
   return (
@@ -303,9 +389,9 @@ export default async function Home() {
         <div className={`${wrap} grid gap-10 pb-20 md:grid-cols-2 md:pb-[120px]`}>
           {c.editorial.map((e) => (
             <article key={e.kicker} className="flex flex-col gap-5">
-              <Link href={e.href} className="aspect-[62/38] overflow-hidden rounded-xl">
+              <I18nLink href={e.href} className="aspect-[62/38] overflow-hidden rounded-xl">
                 <img src={e.image} alt={e.kicker} className="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.02]" />
-              </Link>
+              </I18nLink>
               <h3 className="font-heading text-[24px] font-extrabold tracking-[-0.01em] text-charcoal-800 md:text-[28px]">{e.kicker}</h3>
               <p className="text-[15px] leading-[1.5] text-charcoal-500">{e.copy}</p>
               <LearnMore label={e.cta} href={e.href} />

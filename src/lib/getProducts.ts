@@ -1,3 +1,4 @@
+import type { Locale } from "@/lib/i18n";
 import { accessories as accessoryDefaults, ovens as ovenDefaults, roundUpToTen, type AccessoryProduct, type Oven } from "@/lib/productDefaults";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
@@ -5,25 +6,24 @@ import { urlFor } from "@/sanity/lib/image";
 type ImgSrc = Parameters<typeof urlFor>[0];
 const url = (image: ImgSrc | undefined, w: number) => (image ? urlFor(image).width(w).auto("format").url() : null);
 
-// Only English/untagged products on the production (English) site. Spanish
-// siblings (language == "es") live in the same dataset for the /es build on the
-// spanish-support branch; this guard keeps them out of the live grid.
-const enOnly = `(language == "en" || !defined(language))`;
+// Prefer products in the requested language; if a locale has none yet, fall back
+// to English so the grid is never empty (`!defined(language)` covers legacy docs).
+const langFilter = `(language == $lang || ($lang == "en" && !defined(language)))`;
 
-const ovensQuery = `*[_type == "product" && type == "oven" && ${enOnly}] | order(order asc){
+const ovensQuery = `*[_type == "product" && type == "oven" && ${langFilter}] | order(order asc){
   name, "slug": slug.current, tagline, style, doors, shortDescription,
   variants[]{ size, finish, price, stock, base, description, image, gallery }
 }`;
 
-const accessoriesQuery = `*[_type == "product" && type == "accessory" && ${enOnly}] | order(order asc){
+const accessoriesQuery = `*[_type == "product" && type == "accessory" && ${langFilter}] | order(order asc){
   name, "slug": slug.current, price, stock, shortDescription, description, image
 }`;
 
 type DocVariant = { size: string; finish: string; price: number; stock?: number; base?: string; description?: string; image?: ImgSrc; gallery?: ImgSrc[] };
 
 /** All oven lines for the shop grid — Sanity first, code defaults as fallback. */
-export async function getOvens(): Promise<Oven[]> {
-  const docs = await client.fetch(ovensQuery).catch(() => null);
+export async function getOvens(locale: Locale = "en"): Promise<Oven[]> {
+  const docs = await client.fetch(ovensQuery, { lang: locale }).catch(() => null);
   if (!docs?.length) return ovenDefaults;
   return docs.map((d: { name: string; slug: string; tagline: string; style: string; doors: number; shortDescription: string; variants?: DocVariant[] }) => ({
     type: "oven" as const,
@@ -54,8 +54,8 @@ export async function getOvens(): Promise<Oven[]> {
 }
 
 /** All accessories — Sanity first, code defaults as fallback. */
-export async function getAccessories(): Promise<AccessoryProduct[]> {
-  const docs = await client.fetch(accessoriesQuery).catch(() => null);
+export async function getAccessories(locale: Locale = "en"): Promise<AccessoryProduct[]> {
+  const docs = await client.fetch(accessoriesQuery, { lang: locale }).catch(() => null);
   if (!docs?.length) return accessoryDefaults;
   return docs.map((d: { name: string; slug: string; price: number; stock?: number; shortDescription?: string; description?: string; image?: ImgSrc }) => ({
     type: "accessory" as const,

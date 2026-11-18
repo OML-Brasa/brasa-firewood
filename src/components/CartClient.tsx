@@ -2,27 +2,33 @@
 
 /* eslint-disable @next/next/no-img-element */
 import { Image as ImageIcon, Minus, Plus, ShieldCheck, Trash2, Truck } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { I18nLink } from "@/components/I18nLink";
+import { useLocale } from "@/components/LocaleProvider";
 import { addToCart, getPromo, money, PROMO_CODES, removeFromCart, setPromo, updateQty, useCart } from "@/lib/cart";
 import type { TrustBadge } from "@/lib/checkoutDefaults";
 import type { AccessoryProduct } from "@/lib/productDefaults";
+import { checkoutUI } from "@/i18n/checkout";
+import { ui } from "@/i18n/ui";
 
 const wrap = "mx-auto w-full max-w-[1440px] px-6 md:px-20";
 const sectionTitle = "font-heading text-[28px] md:text-[36px] font-extrabold leading-[1.14] tracking-[-0.015em] text-charcoal-800";
 
-function QtyStepper({ qty, onChange }: { qty: number; onChange: (q: number) => void }) {
+function QtyStepper({ qty, onChange, labels }: { qty: number; onChange: (q: number) => void; labels: { decrease: string; increase: string } }) {
   return (
     <div className="flex items-center rounded border border-charcoal-300">
-      <button onClick={() => onChange(qty - 1)} aria-label="Decrease quantity" className="flex size-9 items-center justify-center text-charcoal-700 transition-colors hover:bg-[#f8fafc]"><Minus size={14} /></button>
+      <button onClick={() => onChange(qty - 1)} aria-label={labels.decrease} className="flex size-9 items-center justify-center text-charcoal-700 transition-colors hover:bg-[#f8fafc]"><Minus size={14} /></button>
       <span className="w-8 text-center text-[14px] font-semibold text-charcoal-800">{qty}</span>
-      <button onClick={() => onChange(qty + 1)} aria-label="Increase quantity" className="flex size-9 items-center justify-center text-charcoal-700 transition-colors hover:bg-[#f8fafc]"><Plus size={14} /></button>
+      <button onClick={() => onChange(qty + 1)} aria-label={labels.increase} className="flex size-9 items-center justify-center text-charcoal-700 transition-colors hover:bg-[#f8fafc]"><Plus size={14} /></button>
     </div>
   );
 }
 
 export function CartClient({ accessories, trustBadges }: { accessories: AccessoryProduct[]; trustBadges: TrustBadge[] }) {
+  const locale = useLocale();
+  const t = checkoutUI[locale];
+  const c = ui[locale].common;
   const { items, subtotal, count } = useCart();
   const [promo, setPromoState] = useState<{ code: string; rate: number } | null>(null);
   const [promoInput, setPromoInput] = useState("");
@@ -40,7 +46,7 @@ export function CartClient({ accessories, trustBadges }: { accessories: Accessor
       setPromoState({ code, rate: PROMO_CODES[code] });
       setPromoError("");
     } else {
-      setPromoError("That code isn't valid. Try BRASA10 or BRASA15.");
+      setPromoError(t.promoInvalid);
     }
   };
 
@@ -57,8 +63,8 @@ export function CartClient({ accessories, trustBadges }: { accessories: Accessor
     <section className="bg-background">
       <div className={`${wrap} border-t border-[#edf2f7] py-12`}>
         <div className="flex items-center justify-between">
-          <h2 className="font-heading text-[28px] font-extrabold text-charcoal-800">Complete Your Setup</h2>
-          <Link href="/shop#accessories" className="text-[14px] text-copper-600 hover:text-copper-700">View All Accessories</Link>
+          <h2 className="font-heading text-[28px] font-extrabold text-charcoal-800">{t.completeSetup}</h2>
+          <I18nLink href="/shop#accessories" className="text-[14px] text-copper-600 hover:text-copper-700">{t.viewAllAccessories}</I18nLink>
         </div>
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {accessories.slice(0, 4).map((a) => (
@@ -72,7 +78,7 @@ export function CartClient({ accessories, trustBadges }: { accessories: Accessor
               </div>
               <div className="mt-1 flex items-center justify-between">
                 <span className="text-[15px] font-bold text-charcoal-800">{money(a.price)}</span>
-                <button onClick={() => addToCart({ id: `acc:${a.slug}`, slug: a.slug, name: a.name, desc: a.shortDescription, price: a.price, image: a.image ?? "" })} className="rounded bg-copper-500 px-4 py-2 text-[12px] font-bold uppercase tracking-[0.02em] text-white transition-colors hover:bg-copper-600">Add</button>
+                <button onClick={() => addToCart({ id: `acc:${a.slug}`, slug: a.slug, name: a.name, desc: a.shortDescription, price: a.price, image: a.image ?? "" })} className="rounded bg-copper-500 px-4 py-2 text-[12px] font-bold uppercase tracking-[0.02em] text-white transition-colors hover:bg-copper-600">{c.add}</button>
               </div>
             </div>
           ))}
@@ -86,12 +92,12 @@ export function CartClient({ accessories, trustBadges }: { accessories: Accessor
       <>
         <section className="bg-background">
           <div className={`${wrap} py-16`}>
-            <h1 className={sectionTitle}>Your Cart</h1>
+            <h1 className={sectionTitle}>{t.cartTitle}</h1>
             <div className="mt-8 flex flex-col items-center gap-3 rounded-lg border border-dashed border-charcoal-300 py-20 text-center">
               <ImageIcon size={32} className="text-charcoal-400" />
-              <span className="text-[18px] font-semibold text-charcoal-700">Your cart is empty</span>
-              <span className="text-[14px] text-charcoal-500">Add an oven or accessory to get started.</span>
-              <Link href="/shop" className="mt-2 rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600">Browse the Shop</Link>
+              <span className="text-[18px] font-semibold text-charcoal-700">{t.emptyCart}</span>
+              <span className="text-[14px] text-charcoal-500">{t.emptyCartHint}</span>
+              <I18nLink href="/shop" className="mt-2 rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600">{t.browseShop}</I18nLink>
             </div>
           </div>
         </section>
@@ -105,8 +111,8 @@ export function CartClient({ accessories, trustBadges }: { accessories: Accessor
       <section className="bg-background">
         <div className={`${wrap} py-12`}>
           <h1 className="flex items-baseline gap-3">
-            <span className={sectionTitle}>Your Cart</span>
-            <span className="text-[16px] text-charcoal-500">({count} {count === 1 ? "item" : "items"})</span>
+            <span className={sectionTitle}>{t.cartTitle}</span>
+            <span className="text-[16px] text-charcoal-500">({count} {count === 1 ? t.itemSingular : t.itemPlural})</span>
           </h1>
 
           <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_400px]">
@@ -128,11 +134,11 @@ export function CartClient({ accessories, trustBadges }: { accessories: Accessor
                         <span className="shrink-0 text-[16px] font-bold text-charcoal-800">{money(it.price * it.qty)}</span>
                       </div>
                       <div className="mt-1 flex items-center justify-between gap-3">
-                        <QtyStepper qty={it.qty} onChange={(q) => updateQty(it.id, q)} />
+                        <QtyStepper qty={it.qty} onChange={(q) => updateQty(it.id, q)} labels={{ decrease: t.decreaseQty, increase: t.increaseQty }} />
                         <div className="flex items-center gap-3 text-[13px] text-charcoal-500">
-                          {isOven && it.slug && <Link href={`/shop/${it.slug}`} className="transition-colors hover:text-copper-600">Edit</Link>}
+                          {isOven && it.slug && <I18nLink href={`/shop/${it.slug}`} className="transition-colors hover:text-copper-600">{t.edit}</I18nLink>}
                           {isOven && it.slug && <span className="text-charcoal-300">|</span>}
-                          <button onClick={() => removeFromCart(it.id)} className="flex items-center gap-1 transition-colors hover:text-copper-600"><Trash2 size={13} /> Remove</button>
+                          <button onClick={() => removeFromCart(it.id)} className="flex items-center gap-1 transition-colors hover:text-copper-600"><Trash2 size={13} /> {t.remove}</button>
                         </div>
                       </div>
                     </div>
@@ -143,41 +149,41 @@ export function CartClient({ accessories, trustBadges }: { accessories: Accessor
               {/* Promo */}
               <div className="flex flex-wrap items-start gap-3">
                 <div className="flex items-center gap-2">
-                  <input value={promoInput} onChange={(e) => setPromoInput(e.target.value)} placeholder="Discount code" className="w-44 rounded border border-charcoal-300 px-3 py-2.5 text-[14px] text-charcoal-800" />
-                  <button onClick={applyPromo} className="rounded bg-copper-500 px-5 py-2.5 text-[13px] font-bold uppercase tracking-[0.02em] text-white transition-colors hover:bg-copper-600">Apply</button>
+                  <input value={promoInput} onChange={(e) => setPromoInput(e.target.value)} placeholder={t.discountCode} className="w-44 rounded border border-charcoal-300 px-3 py-2.5 text-[14px] text-charcoal-800" />
+                  <button onClick={applyPromo} className="rounded bg-copper-500 px-5 py-2.5 text-[13px] font-bold uppercase tracking-[0.02em] text-white transition-colors hover:bg-copper-600">{t.apply}</button>
                 </div>
               </div>
               {promoError && <span className="text-[13px] text-copper-700">{promoError}</span>}
-              {promo && <span className="text-[13px] font-semibold text-[#2f7d4f]">Code {promo.code} applied — {Math.round(promo.rate * 100)}% off. <button onClick={clearPromo} className="font-normal text-charcoal-500 underline">remove</button></span>}
+              {promo && <span className="text-[13px] font-semibold text-[#2f7d4f]">{t.promoCodePrefix} {promo.code} {t.promoApplied} {Math.round(promo.rate * 100)}{t.promoOff} <button onClick={clearPromo} className="font-normal text-charcoal-500 underline">{t.promoRemove}</button></span>}
 
-              <Link href="/shop" className="text-[14px] text-charcoal-500 transition-colors hover:text-copper-600">← Continue Shopping</Link>
+              <I18nLink href="/shop" className="text-[14px] text-charcoal-500 transition-colors hover:text-copper-600">← {t.continueShopping}</I18nLink>
             </div>
 
             {/* Order summary */}
             <aside className="flex h-fit flex-col gap-5 rounded-lg border border-charcoal-300 p-6">
-              <h2 className="font-heading text-[22px] font-extrabold text-charcoal-800">Order Summary</h2>
+              <h2 className="font-heading text-[22px] font-extrabold text-charcoal-800">{t.orderSummary}</h2>
               <div className="flex items-center justify-between text-[15px]">
-                <span className="text-charcoal-500">Subtotal</span>
+                <span className="text-charcoal-500">{t.subtotal}</span>
                 <span className="font-bold text-charcoal-800">{money(subtotal)}</span>
               </div>
               {discount > 0 && (
                 <div className="flex items-center justify-between text-[15px]">
-                  <span className="text-charcoal-500">Discount ({promo?.code})</span>
+                  <span className="text-charcoal-500">{t.discount} ({promo?.code})</span>
                   <span className="font-bold text-[#2f7d4f]">−{money(discount)}</span>
                 </div>
               )}
               <div className="flex items-center justify-between text-[14px]">
-                <span className="text-charcoal-500">Shipping</span>
-                <span className="text-charcoal-500">Quoted after checkout</span>
+                <span className="text-charcoal-500">{t.shipping}</span>
+                <span className="text-charcoal-500">{t.quotedAfterCheckout}</span>
               </div>
               <div className="flex items-center justify-between border-t border-[#edf2f7] pt-4">
-                <span className="font-heading text-[20px] font-extrabold text-charcoal-800">Estimated Subtotal</span>
+                <span className="font-heading text-[20px] font-extrabold text-charcoal-800">{t.estimatedSubtotal}</span>
                 <span className="font-heading text-[24px] font-extrabold text-charcoal-800">{money(total)}</span>
               </div>
-              <Link href="/checkout" className="rounded bg-copper-500 py-4 text-center text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600">Proceed to Checkout</Link>
+              <I18nLink href="/checkout" className="rounded bg-copper-500 py-4 text-center text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600">{t.proceedToCheckout}</I18nLink>
               <div className="flex items-start gap-2 text-[12px] text-charcoal-500">
                 <Truck size={14} className="mt-0.5 shrink-0" />
-                These ovens ship by freight — you&rsquo;ll request a shipping quote at checkout. No payment is taken online.
+                {t.freightNoteCart}
               </div>
               <div className="flex flex-col gap-3 border-t border-[#edf2f7] pt-4">
                 {trustBadges.map((b) => (

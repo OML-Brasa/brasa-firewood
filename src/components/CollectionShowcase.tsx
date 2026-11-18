@@ -1,8 +1,11 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-import Link from "next/link";
 import { useState } from "react";
+
+import { I18nLink } from "@/components/I18nLink";
+import { useLocale } from "@/components/LocaleProvider";
+import { shopUI } from "@/i18n/shop";
 
 export type ShowcaseProduct = {
   name: string;
@@ -20,6 +23,8 @@ export type ShowcaseProduct = {
  * The hero image itself is the link to the selected product's page.
  */
 export function CollectionShowcase({ products }: { products: ShowcaseProduct[] }) {
+  const locale = useLocale();
+  const t = shopUI[locale];
   const [selected, setSelected] = useState(0);
   const active = products[selected] ?? products[0];
 
@@ -28,18 +33,18 @@ export function CollectionShowcase({ products }: { products: ShowcaseProduct[] }
   return (
     <>
       {/* Hero — shows the selected model and links to its product page */}
-      <Link
+      <I18nLink
         href={`/shop/${active.slug}`}
-        aria-label={`View the Brasa ${active.name}`}
+        aria-label={t.viewBrasa(active.name)}
         className="group mt-12 block overflow-hidden rounded-xl border border-[#e7e2d7] bg-white"
       >
         <img
           key={active.featured}
           src={active.featured}
-          alt={`Brasa ${active.name} oven`}
+          alt={t.ovenAlt(active.name)}
           className="aspect-[16/9] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
         />
-      </Link>
+      </I18nLink>
 
       {/* Thumbnails — click to change the hero (they do not link) */}
       <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3">
@@ -60,7 +65,7 @@ export function CollectionShowcase({ products }: { products: ShowcaseProduct[] }
               >
                 <img
                   src={p.image}
-                  alt={`Brasa ${p.name} oven`}
+                  alt={t.ovenAlt(p.name)}
                   className="aspect-square w-full object-contain transition-transform group-hover:scale-[1.02]"
                 />
               </div>

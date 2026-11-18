@@ -2,13 +2,15 @@ import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
 import { RecipesClient } from "@/components/RecipesClient";
+import { getLocale } from "@/lib/getLocale";
 import { recipesDefaults, type Recipe, type RecipesContent } from "@/lib/recipesContent";
 import { client } from "@/sanity/lib/client";
+import { localeDoc } from "@/sanity/lib/locale";
 import { urlFor } from "@/sanity/lib/image";
 
 export const revalidate = 60;
 
-const query = `*[_type == "recipesPage"][0]{
+const query = `${localeDoc("recipesPage")}{
   heroTitle, heroSubtitle, searchPlaceholder, categories,
   recipes[]{ title, category, region, serves, image, "pdf": pdf.asset->url, prepTime, cookTime, ovenTemp, difficulty, ingredients, directions },
   submitTitle, submitSubtitle, submitEmail
@@ -17,7 +19,8 @@ const query = `*[_type == "recipesPage"][0]{
 type DocRecipe = Omit<Recipe, "image" | "pdf"> & { image?: Parameters<typeof urlFor>[0]; pdf?: string | null };
 
 export default async function RecipesPage() {
-  const doc = await client.fetch(query).catch(() => null);
+  const locale = await getLocale();
+  const doc = await client.fetch(query, { lang: locale }).catch(() => null);
   const recipes: Recipe[] = doc?.recipes?.length
     ? doc.recipes.map((r: DocRecipe) => ({ ...r, image: r.image ? urlFor(r.image).width(800).auto("format").url() : null, pdf: r.pdf ?? null }))
     : recipesDefaults.recipes;

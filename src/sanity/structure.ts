@@ -1,48 +1,70 @@
 import type { StructureResolver } from "sanity/structure";
 
 /**
- * Singleton page documents open their single editable document directly.
- * Products are a normal collection (a list you can add to / reorder).
+ * Each page exists in two languages: the English document keeps its original id
+ * (e.g. `homePage`) and the Spanish one uses the `__es` suffix (e.g.
+ * `homePage__es`). Singletons open an English / Español pair; products are
+ * grouped into English and Español lists by their `language` field.
  */
+type S = Parameters<StructureResolver>[0];
+
+const singleton = (S: S, type: string, title: string) =>
+  S.listItem()
+    .title(title)
+    .id(type)
+    .child(
+      S.list()
+        .title(title)
+        .items([
+          S.listItem()
+            .title("English")
+            .id(`${type}-en`)
+            .child(S.document().schemaType(type).documentId(type)),
+          S.listItem()
+            .title("Español")
+            .id(`${type}-es`)
+            .child(S.document().schemaType(type).documentId(`${type}__es`)),
+        ])
+    );
+
 export const structure: StructureResolver = (S) =>
   S.list()
     .title("Content")
     .items([
-      S.listItem()
-        .title("Home Page")
-        .id("homePage")
-        .child(S.document().schemaType("homePage").documentId("homePage")),
-      S.listItem()
-        .title("About Page")
-        .id("aboutPage")
-        .child(S.document().schemaType("aboutPage").documentId("aboutPage")),
-      S.listItem()
-        .title("Shop Page")
-        .id("shopPage")
-        .child(S.document().schemaType("shopPage").documentId("shopPage")),
-      S.listItem()
-        .title("FAQ Page")
-        .id("faqPage")
-        .child(S.document().schemaType("faqPage").documentId("faqPage")),
-      S.listItem()
-        .title("Contact Page")
-        .id("contactPage")
-        .child(S.document().schemaType("contactPage").documentId("contactPage")),
-      S.listItem()
-        .title("Recipes Page")
-        .id("recipesPage")
-        .child(S.document().schemaType("recipesPage").documentId("recipesPage")),
-      S.listItem()
-        .title("Legal Pages")
-        .id("legalPage")
-        .child(S.document().schemaType("legalPage").documentId("legalPage")),
-      S.listItem()
-        .title("Checkout Settings")
-        .id("checkoutSettings")
-        .child(S.document().schemaType("checkoutSettings").documentId("checkoutSettings")),
+      singleton(S, "homePage", "Home Page"),
+      singleton(S, "aboutPage", "About Page"),
+      singleton(S, "shopPage", "Shop Page"),
+      singleton(S, "faqPage", "FAQ Page"),
+      singleton(S, "contactPage", "Contact Page"),
+      singleton(S, "recipesPage", "Recipes Page"),
+      singleton(S, "legalPage", "Legal Pages"),
+      singleton(S, "checkoutSettings", "Checkout Settings"),
       S.divider(),
       S.listItem()
         .title("Products")
-        .schemaType("product")
-        .child(S.documentTypeList("product").title("Products").defaultOrdering([{ field: "order", direction: "asc" }])),
+        .id("products")
+        .child(
+          S.list()
+            .title("Products")
+            .items([
+              S.listItem()
+                .title("English")
+                .id("products-en")
+                .child(
+                  S.documentList()
+                    .title("Products — English")
+                    .filter('_type == "product" && (language == "en" || !defined(language))')
+                    .defaultOrdering([{ field: "order", direction: "asc" }])
+                ),
+              S.listItem()
+                .title("Español")
+                .id("products-es")
+                .child(
+                  S.documentList()
+                    .title("Products — Español")
+                    .filter('_type == "product" && language == "es"')
+                    .defaultOrdering([{ field: "order", direction: "asc" }])
+                ),
+            ])
+        ),
     ]);

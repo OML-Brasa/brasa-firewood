@@ -1,45 +1,51 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from "next/link";
-import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa6";
+import { FaFacebookF, FaInstagram } from "react-icons/fa6";
 
-const columns = [
-  {
-    h: "Collection",
-    items: [
-      { label: "Dolce", href: "/shop/dolce" },
-      { label: "Ravvivata", href: "/shop/ravvivata" },
-      { label: "Ardente", href: "/shop/ardente" },
-    ],
-  },
-  {
-    h: "Company",
-    items: [
-      { label: "Our Story", href: "/about" },
-      { label: "Shop", href: "/shop" },
-      { label: "Contact", href: "/contact" },
-    ],
-  },
-  {
-    h: "Learn",
-    items: [
-      { label: "Refractory Care", href: "/care" },
-      { label: "Recipes", href: "/recipes" },
-      { label: "FAQ", href: "/faq" },
-    ],
-  },
-];
+import { I18nLink } from "@/components/I18nLink";
+import { ui } from "@/i18n/ui";
+import { getLocale } from "@/lib/getLocale";
 
 const social = [
   { label: "Instagram", href: "https://www.instagram.com/brasaoven", Icon: FaInstagram },
   { label: "Facebook", href: "https://www.facebook.com/brasaoven", Icon: FaFacebookF },
 ];
 
-const legal = [
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Terms of Use", href: "/terms" },
-];
+export async function Footer() {
+  const locale = await getLocale();
+  const t = ui[locale].footer;
 
-export function Footer() {
+  const columns = [
+    {
+      h: t.collection,
+      items: [
+        { label: "Dolce", href: "/shop/dolce" },
+        { label: "Ravvivata", href: "/shop/ravvivata" },
+        { label: "Ardente", href: "/shop/ardente" },
+      ],
+    },
+    {
+      h: t.company,
+      items: [
+        { label: t.ourStory, href: "/about" },
+        { label: t.shop, href: "/shop" },
+        { label: t.contact, href: "/contact" },
+      ],
+    },
+    {
+      h: t.learn,
+      items: [
+        { label: t.refractoryCare, href: "/care" },
+        { label: t.recipes, href: "/recipes" },
+        { label: t.faq, href: "/faq" },
+      ],
+    },
+  ];
+
+  const legal = [
+    { label: t.privacy, href: "/privacy" },
+    { label: t.terms, href: "/terms" },
+  ];
+
   return (
     <footer className="bg-charcoal-800 text-sand">
       <div className="mx-auto w-full max-w-[1440px] px-6 pb-10 pt-20 md:px-20">
@@ -47,7 +53,7 @@ export function Footer() {
           <div className="flex flex-col gap-4">
             <img src="/images/logo.png" alt="Brasa" className="h-12 w-auto object-contain object-left" />
             <p className="max-w-xs text-[15px] leading-[1.4] text-sand/70">
-              Hand-built, refractory-clay ovens engineered for the way serious cooks actually cook.
+              {t.tagline}
             </p>
           </div>
           {columns.map((col) => (
@@ -55,17 +61,17 @@ export function Footer() {
               <span className="text-[15px] font-bold uppercase tracking-[0.04em] text-sand">{col.h}</span>
               <div className="flex flex-col gap-3">
                 {col.items.map((it) => (
-                  <Link key={it.label} href={it.href} className="text-[15px] text-sand/70 transition-colors hover:text-copper-300">
+                  <I18nLink key={it.label} href={it.href} className="text-[15px] text-sand/70 transition-colors hover:text-copper-300">
                     {it.label}
-                  </Link>
+                  </I18nLink>
                 ))}
               </div>
             </div>
           ))}
           <div className="flex flex-col gap-4">
-            <span className="text-[15px] font-bold uppercase tracking-[0.04em] text-sand">Follow the Fire</span>
+            <span className="text-[15px] font-bold uppercase tracking-[0.04em] text-sand">{t.followTitle}</span>
             <p className="text-[15px] leading-[1.4] text-sand/70">
-              Follow along for fire, food, and the making of every oven.
+              {t.followCopy}
             </p>
             <div className="flex gap-3">
               {social.map(({ label, href, Icon }) => (
@@ -84,7 +90,7 @@ export function Footer() {
         <div className="mt-16 border-t border-[#cbd5e0]/30 pt-5">
           <div className="flex flex-col justify-between gap-3 text-[13px] text-sand/70 sm:flex-row">
             <span>
-              © {new Date().getFullYear()} Brasa by OML Imports. All rights reserved. Designed by{" "} 
+              © {new Date().getFullYear()} Brasa by OML Imports. {t.rights} {t.designedBy}{" "}
               <a
                 href="https://www.depictbrands.com/"
                 target="_blank"
@@ -97,9 +103,9 @@ export function Footer() {
             </span>
             <div className="flex gap-6">
               {legal.map((l) => (
-                <Link key={l.label} href={l.href} className="transition-colors hover:text-copper-300">
+                <I18nLink key={l.label} href={l.href} className="transition-colors hover:text-copper-300">
                   {l.label}
-                </Link>
+                </I18nLink>
               ))}
             </div>
           </div>

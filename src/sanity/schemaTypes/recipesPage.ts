@@ -6,6 +6,13 @@ export const recipesPage = defineType({
   title: "Recipes Page",
   type: "document",
   fields: [
+    defineField({
+      name: "language",
+      title: "Language",
+      type: "string",
+      options: { list: [ { title: "English", value: "en" }, { title: "Español", value: "es" } ], layout: "radio" },
+      initialValue: "en",
+    }),
     defineField({ name: "heroTitle", title: "Hero · title", type: "string" }),
     defineField({ name: "heroSubtitle", title: "Hero · subtitle", type: "string" }),
     defineField({ name: "searchPlaceholder", title: "Search placeholder", type: "string" }),

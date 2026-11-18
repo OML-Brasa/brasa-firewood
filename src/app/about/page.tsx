@@ -11,7 +11,9 @@ import {
   Waves,
 } from "lucide-react";
 
-import Link from "next/link";
+import { I18nLink } from "@/components/I18nLink";
+import { getLocale } from "@/lib/getLocale";
+import { localeDoc } from "@/sanity/lib/locale";
 
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
@@ -27,7 +29,7 @@ export const revalidate = 60;
 const img = (src: Parameters<typeof urlFor>[0] | undefined | null, fallback: string, w = 1200) =>
   src ? urlFor(src).width(w).auto("format").url() : fallback;
 
-const aboutQuery = `*[_type == "aboutPage"][0]{
+const aboutQuery = `${localeDoc("aboutPage")}{
   heroTitle, heroSubtitle, heroImage, originEyebrow, originTitle, originBody, originImage,
   quoteText, quoteAuthor, quoteRole, artisansBody, artisansImage,
   promises[]{ title, copy }, steps[]{ n, title, copy }, values[]{ title, copy }
@@ -71,7 +73,30 @@ const values = [
 ];
 
 export default async function AboutPage() {
-  const doc = await client.fetch(aboutQuery).catch(() => null);
+  const locale = await getLocale();
+  const doc = await client.fetch(aboutQuery, { lang: locale }).catch(() => null);
+  const L =
+    locale === "es"
+      ? {
+          exploreOvens: "Explora Nuestros Hornos",
+          exploreCollection: "Explora la Colección",
+          materialEyebrow: "El Material",
+          materialTitle: "La Diferencia de la Arcilla",
+          processEyebrow: "El Proceso",
+          processTitle: "Diseñado primero.",
+          makesEyebrow: "Lo que Hace a un Brasa",
+          makesTitle: "Hecho a Mano. Comprobado con Pruebas.",
+        }
+      : {
+          exploreOvens: "Explore Our Ovens",
+          exploreCollection: "Explore the Collection",
+          materialEyebrow: "The Material",
+          materialTitle: "The Clay Difference",
+          processEyebrow: "The Process",
+          processTitle: "Engineered first.",
+          makesEyebrow: "What Makes a Brasa",
+          makesTitle: "Built by Hand. Proven by Testing.",
+        };
   const promisesC = promises.map((p, i) => ({ ...p, title: doc?.promises?.[i]?.title ?? p.title, copy: doc?.promises?.[i]?.copy ?? p.copy }));
   const stepsC = steps.map((s, i) => ({ ...s, n: doc?.steps?.[i]?.n ?? s.n, title: doc?.steps?.[i]?.title ?? s.title, copy: doc?.steps?.[i]?.copy ?? s.copy }));
   const valuesC = values.map((v, i) => ({ ...v, title: doc?.values?.[i]?.title ?? v.title, copy: doc?.values?.[i]?.copy ?? v.copy }));
@@ -94,12 +119,12 @@ export default async function AboutPage() {
               {doc?.heroSubtitle ??
                 "Every Brasa is hand-formed by European artisans, then held to a standard closer to an instrument than an appliance. Each is measured, finished, and inspected before it leaves."}
             </p>
-            <Link
+            <I18nLink
               href="/shop"
               className="mt-2 w-fit rounded bg-copper-500 px-7 py-3.5 text-[14px] font-bold uppercase tracking-[0.03em] text-sand transition-colors hover:bg-copper-600"
             >
-              Explore Our Ovens
-            </Link>
+              {L.exploreOvens}
+            </I18nLink>
           </div>
         </div>
       </section>
@@ -119,12 +144,12 @@ export default async function AboutPage() {
               {doc?.originBody ??
                 "Brasa began with a conviction and a challenge. The conviction is that live-fire cooking is one of the last real disciplines a human can master at home. The challenge is to build an oven precise enough to reward that discipline — and refined enough to belong in a modern life and become a piece of art in every backyard."}
             </p>
-            <Link
+            <I18nLink
               href="/#collection"
               className="w-fit rounded bg-copper-500 px-7 py-3.5 text-[14px] font-bold uppercase tracking-[0.03em] text-sand transition-colors hover:bg-copper-600"
             >
-              Explore the Collection
-            </Link>
+              {L.exploreCollection}
+            </I18nLink>
           </div>
         </div>
       </section>
@@ -156,8 +181,8 @@ export default async function AboutPage() {
       <section className="bg-background">
         <div className={`${wrap} py-20`}>
           <div className="flex flex-col items-center gap-3 text-center">
-            <span className={eyebrow}>The Material</span>
-            <h2 className={sectionTitle}>The Clay Difference</h2>
+            <span className={eyebrow}>{L.materialEyebrow}</span>
+            <h2 className={sectionTitle}>{L.materialTitle}</h2>
           </div>
           <div className="mt-12 grid gap-10 md:grid-cols-3">
             {promisesC.map(({ Icon, title, copy }) => (
@@ -175,8 +200,8 @@ export default async function AboutPage() {
       <section className="bg-background">
         <div className={`${wrap} flex flex-col gap-8 py-20`}>
           <div className="flex flex-col items-center gap-3 text-center">
-            <span className={eyebrow}>The Process</span>
-            <h2 className={sectionTitle}>Engineered first.</h2>
+            <span className={eyebrow}>{L.processEyebrow}</span>
+            <h2 className={sectionTitle}>{L.processTitle}</h2>
           </div>
           <div className="flex aspect-[1280/540] w-full items-center justify-center overflow-hidden rounded-xl border border-[#cbd5e0] bg-[#dedddd]">
             {artisansImage ? (
@@ -196,8 +221,8 @@ export default async function AboutPage() {
       <section className="bg-background">
         <div className={`${wrap} py-20`}>
           <div className="flex flex-col items-center gap-3 text-center">
-            <span className={eyebrow}>What Makes a Brasa</span>
-            <h2 className={sectionTitle}>Built by Hand. Proven by Testing.</h2>
+            <span className={eyebrow}>{L.makesEyebrow}</span>
+            <h2 className={sectionTitle}>{L.makesTitle}</h2>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {stepsC.map((s) => (

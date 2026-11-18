@@ -2,18 +2,21 @@ import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
 import { ShopClient } from "@/components/ShopClient";
+import { getLocale } from "@/lib/getLocale";
 import { getAccessories, getOvens } from "@/lib/getProducts";
 import { client } from "@/sanity/lib/client";
+import { localeDoc } from "@/sanity/lib/locale";
 
 export const revalidate = 60;
 
-const shopQuery = `*[_type == "shopPage"][0]{ pageTitle, pageIntro }`;
+const shopQuery = `${localeDoc("shopPage")}{ pageTitle, pageIntro }`;
 
 export default async function ShopPage() {
+  const locale = await getLocale();
   const [doc, ovens, accessories] = await Promise.all([
-    client.fetch(shopQuery).catch(() => null),
-    getOvens(),
-    getAccessories(),
+    client.fetch(shopQuery, { lang: locale }).catch(() => null),
+    getOvens(locale),
+    getAccessories(locale),
   ]);
 
   return (

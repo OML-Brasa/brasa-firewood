@@ -3,12 +3,14 @@ import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
 import { OrderConfirmedClient } from "@/components/OrderConfirmedClient";
+import { getLocale } from "@/lib/getLocale";
 import { getCheckoutSettings } from "@/lib/getCheckoutSettings";
 
 export const revalidate = 60;
 
 export default async function OrderConfirmedPage() {
-  const s = await getCheckoutSettings();
+  const locale = await getLocale();
+  const s = await getCheckoutSettings(locale);
   return (
     <div className="flex flex-col bg-background">
       <Navbar />
