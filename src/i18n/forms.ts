@@ -37,10 +37,9 @@ const en = {
   newsletterTitle: "Join the Brasa Community",
   newsletterCopy: "Recipes, restocks, and the occasional fire story — straight to your inbox.",
   newsletterThanks: "Thanks for subscribing — we’ll be in touch soon.",
+  newsletterError: "Something went wrong. Please try again in a moment.",
   newsletterPlaceholder: "Enter your email address",
   subscribe: "Subscribe",
-  newsletterSubject: "Newsletter signup",
-  newsletterBodyPrefix: "Please add this email address to the Brasa newsletter list:\n\n",
 
   // Recipes
   recipesBreadcrumb: "Recipes",
@@ -100,10 +99,9 @@ const es: Dict = {
   newsletterTitle: "Únete a la comunidad Brasa",
   newsletterCopy: "Recetas, reabastecimientos y alguna que otra historia de fuego — directo a tu correo.",
   newsletterThanks: "Gracias por suscribirte — pronto estaremos en contacto.",
+  newsletterError: "Algo salió mal. Por favor inténtalo de nuevo en un momento.",
   newsletterPlaceholder: "Ingresa tu correo electrónico",
   subscribe: "Suscribirse",
-  newsletterSubject: "Suscripción al boletín",
-  newsletterBodyPrefix: "Por favor agrega este correo electrónico a la lista del boletín de Brasa:\n\n",
 
   // Recipes
   recipesBreadcrumb: "Recetas",

@@ -5,22 +5,32 @@ import { useState } from "react";
 import { useLocale } from "@/components/LocaleProvider";
 import { formsUI } from "@/i18n/forms";
 
-const SALES_EMAIL = "sales@brasaoven.com";
-
 export function Newsletter() {
   const locale = useLocale();
   const t = formsUI[locale];
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const subscribe = (e: React.FormEvent) => {
+  const subscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
-    const body = `${t.newsletterBodyPrefix}${email}`;
-    window.location.href = `mailto:${SALES_EMAIL}?subject=${encodeURIComponent(
-      t.newsletterSubject
-    )}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+    if (!email || submitting) return;
+    setSubmitting(true);
+    setError(false);
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, locale }),
+      });
+      if (!res.ok) throw new Error("subscribe-failed");
+      setSent(true);
+    } catch {
+      setError(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -48,11 +58,15 @@ export function Newsletter() {
             />
             <button
               type="submit"
-              className="rounded bg-copper-500 px-7 py-3.5 text-[14px] font-bold uppercase tracking-[0.03em] text-sand transition-colors hover:bg-copper-600"
+              disabled={submitting}
+              className="rounded bg-copper-500 px-7 py-3.5 text-[14px] font-bold uppercase tracking-[0.03em] text-sand transition-colors hover:bg-copper-600 disabled:opacity-60"
             >
               {t.subscribe}
             </button>
           </form>
+        )}
+        {error && !sent && (
+          <p className="text-[15px] font-medium text-copper-700">{t.newsletterError}</p>
         )}
       </div>
     </section>
