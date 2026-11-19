@@ -1,4 +1,26 @@
-import { defineArrayMember, defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType, type SlugIsUniqueValidator } from "sanity";
+
+/**
+ * Slugs are unique per language, not across the whole dataset. Sanity's default
+ * check ignores `language`, so the English and Spanish copies of a product
+ * (`product-dolce` / `product-dolce__es`), which intentionally share "dolce",
+ * blocked each other from publishing with "Slug is already in use".
+ *
+ * Another product counts as a clash only if it's in the same language (a missing
+ * language counts as English, as on the site) and isn't one of this document's
+ * own copies: its published version, draft, or release versions.
+ */
+const isSlugUniqueInLanguage: SlugIsUniqueValidator = async (slug, { document, getClient }) => {
+  const id = (document?._id ?? "").replace(/^(drafts\.|versions\.[^.]+\.)/, "");
+  const lang = typeof document?.language === "string" && document.language ? document.language : "en";
+  const ids: string[] = await getClient({ apiVersion: "2024-10-01" }).fetch(
+    `*[_type == "product" && slug.current == $slug && coalesce(language, "en") == $lang]._id`,
+    { slug, lang }
+  );
+  const isOwnCopy = (other: string) =>
+    other === id || other === `drafts.${id}` || (other.startsWith("versions.") && other.endsWith(`.${id}`) && other.split(".").length === id.split(".").length + 2);
+  return ids.every(isOwnCopy);
+};
 
 const isAccessory = ({ parent }: { parent?: { type?: string } }) => parent?.type === "accessory";
 const isOven = ({ parent }: { parent?: { type?: string } }) => parent?.type !== "oven";
@@ -27,7 +49,14 @@ export const product = defineType({
       validation: (r) => r.required(),
     }),
     defineField({ name: "name", title: "Name", type: "string", description: 'Oven line (e.g. "Dolce") or accessory name', validation: (r) => r.required() }),
-    defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "name", maxLength: 96 }, validation: (r) => r.required() }),
+    defineField({
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      description: "Shared by the English and Spanish versions (e.g. both “dolce” → /shop/dolce and /es/shop/dolce). Must be unique within each language.",
+      options: { source: "name", maxLength: 96, isUnique: isSlugUniqueInLanguage },
+      validation: (r) => r.required(),
+    }),
     defineField({ name: "order", title: "Sort order", type: "number", initialValue: 0 }),
     defineField({ name: "shortDescription", title: "Short description", type: "string", description: "One line, shown on the shop card." }),
 
