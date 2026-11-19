@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Archivo, Manrope, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
+import { ElfsightPopup } from "@/components/ElfsightPopup";
 import { LocaleProvider } from "@/components/LocaleProvider";
 import { getLocale } from "@/lib/getLocale";
 
@@ -50,6 +51,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground">
         <LocaleProvider locale={locale}>{children}</LocaleProvider>
+        <ElfsightPopup />
       </body>
     </html>
   );

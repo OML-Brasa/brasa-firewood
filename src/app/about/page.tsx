@@ -7,7 +7,6 @@ import {
   Image as ImageIcon,
   LibraryBig,
   ShieldCheck,
-  Star,
   Waves,
 } from "lucide-react";
 
@@ -170,23 +169,11 @@ export default async function AboutPage() {
       {/* 3. PHILOSOPHY */}
       <section className="bg-copper-500 text-sand">
         <div className={`${wrap} flex flex-col items-center gap-6 py-24 text-center`}>
-          <div className="flex gap-1">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} size={20} strokeWidth={2} className="text-sand" />
-            ))}
-          </div>
           <blockquote className="max-w-3xl font-serif text-[32px] italic leading-[1.15] md:text-[40px]">
-            &ldquo;
             {doc?.quoteText ??
               "We didn't set out to build an oven. We set out to build the standard every serious cook deserves."}
-            &rdquo;
           </blockquote>
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-[15px] font-bold uppercase tracking-[0.04em]">
-              {doc?.quoteAuthor ?? "— Exel Colón"}
-            </span>
-            <span className="text-[14px] text-sand/85">{doc?.quoteRole ?? "Founder & Master Potter"}</span>
-          </div>
+          <span className="text-[14px] text-sand/85">Founder, Brasa</span>
         </div>
       </section>
 

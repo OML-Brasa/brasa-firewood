@@ -112,7 +112,7 @@ async function build() {
     quoteText:
       "We didn't set out to build an oven. We set out to build the standard every serious cook deserves.",
     quoteAuthor: "— Exel Colón",
-    quoteRole: "Founder & Master Potter",
+    quoteRole: "Founder, Brasa",
     promises: [
       { _key: "pr1", title: "Proven for Generations", copy: "Refractory clay has earned its place over hundreds of years — not a lab trial, a tradition that works." },
       { _key: "pr2", title: "Holds Its Heat", copy: "Steel spikes hot and drops fast. Brick heats unevenly. Clay absorbs heat, holds it, and radiates it back slow and even, hour after hour." },
