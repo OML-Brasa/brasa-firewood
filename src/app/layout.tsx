@@ -42,6 +42,8 @@ export const metadata: Metadata = {
     "Handcrafted wood-fired ovens in refractory clay — engineered for the cook who takes fire seriously.",
 };
 
+const GTM_ID = "GTM-P7R6VGPT";
+
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const locale = await getLocale();
   return (
@@ -49,6 +51,17 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       lang={locale}
       className={`${archivo.variable} ${manrope.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
+      <head>
+        {/* Google tag (GTM container GTM-P7R6VGPT) — first thing in <head> on every page. Add no other Google tag. */}
+        <script async src={`https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground">
         <LocaleProvider locale={locale}>{children}</LocaleProvider>
         <ElfsightPopup />
