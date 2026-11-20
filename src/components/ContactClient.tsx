@@ -18,17 +18,15 @@ export function ContactClient({ content, heroImage }: { content: ContactContent;
   const [form, setForm] = useState({ first: "", last: "", email: "", phone: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const submit = () => {
-    if (!form.first || !form.last || !form.email || !form.subject || !form.message) {
-      setError(t.contactError);
-      return;
-    }
-    setError("");
+  // Fallback used until HubSpot is configured (or if a submission fails): open
+  // the visitor's email app addressed to the sales inbox, so no message is lost.
+  const openMailto = () => {
     const body = [
       `${t.bodyName}: ${form.first} ${form.last}`,
       `${t.bodyEmail}: ${form.email}`,
@@ -41,7 +39,41 @@ export function ContactClient({ content, heroImage }: { content: ContactContent;
     window.location.href = `mailto:${content.email}?subject=${encodeURIComponent(
       form.subject
     )}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+  };
+
+  const submit = async () => {
+    if (!form.first || !form.last || !form.email || !form.subject || !form.message) {
+      setError(t.contactError);
+      return;
+    }
+    if (submitting) return;
+    setError("");
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: form.first,
+          lastName: form.last,
+          email: form.email,
+          phone: form.phone,
+          subject: form.subject,
+          message: form.message,
+          pageUri: typeof window !== "undefined" ? window.location.href : undefined,
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { delivered?: string };
+      // Went to HubSpot → done. Otherwise (not configured yet, or an error) fall
+      // back to email so the message still reaches the team.
+      if (!(res.ok && data.delivered === "hubspot")) openMailto();
+      setSent(true);
+    } catch {
+      openMailto();
+      setSent(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -94,7 +126,7 @@ export function ContactClient({ content, heroImage }: { content: ContactContent;
                   <label className={labelCls}>{t.yourMessage}</label>
                   <textarea value={form.message} onChange={set("message")} rows={5} placeholder={t.messagePlaceholder} className={fieldCls} />
                 </div>
-                <button onClick={submit} className="w-fit rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600">{t.sendMessage}</button>
+                <button onClick={submit} disabled={submitting} className="w-fit rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600 disabled:opacity-60">{t.sendMessage}</button>
               </div>
             )}
           </div>
