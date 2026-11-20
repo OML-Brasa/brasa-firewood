@@ -7,7 +7,7 @@ import { Newsletter } from "@/components/Newsletter";
 import { ProductClient } from "@/components/ProductClient";
 import { getLocale } from "@/lib/getLocale";
 import { getAccessories } from "@/lib/getProducts";
-import { getOven, ovens, roundUpToTen, sharedFaqs, sharedFeatures, type Oven } from "@/lib/productDefaults";
+import { getOven, isHiddenProduct, ovens, roundUpToTen, sharedFaqs, sharedFeatures, type Oven } from "@/lib/productDefaults";
 import { fetchSeo, seoMetadata } from "@/lib/seo";
 import { client } from "@/sanity/lib/client";
 import { localeDoc } from "@/sanity/lib/locale";
@@ -16,7 +16,7 @@ import { urlFor } from "@/sanity/lib/image";
 export const revalidate = 60;
 
 export function generateStaticParams() {
-  return ovens.map((o) => ({ slug: o.slug }));
+  return ovens.filter((o) => !isHiddenProduct(o.slug)).map((o) => ({ slug: o.slug }));
 }
 
 const PRODUCT_FILTER = 'type == "oven" && slug.current == $slug';
@@ -44,6 +44,8 @@ type VariantImg = Parameters<typeof urlFor>[0];
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  // Hidden products (e.g. Acerba) are not reachable by direct URL.
+  if (isHiddenProduct(slug)) notFound();
   const locale = await getLocale();
   const def = getOven(slug);
   const [doc, accessories] = await Promise.all([

@@ -78,6 +78,16 @@ export const accessories: AccessoryProduct[] = (catalog.accessories as RawAccess
 
 export const getOven = (slug: string) => ovens.find((o) => o.slug === slug);
 
+/**
+ * Product slugs temporarily hidden from the whole site — the shop grid, the
+ * oven and accessory cards, the add-ons on oven pages, and the /shop/<slug>
+ * page (which 404s). Applies to both ovens and accessories that share the slug.
+ * Reversible: remove the slug here to bring the product back everywhere. Acerba
+ * hidden 2026-11-19 at the client's request while its content is reviewed.
+ */
+export const HIDDEN_PRODUCT_SLUGS = ["acerba"];
+export const isHiddenProduct = (slug: string) => HIDDEN_PRODUCT_SLUGS.includes(slug);
+
 // Shared brand content used across every oven's detail page.
 export const sharedFeatures = [
   { title: "Refractory-Clay Core", copy: "Proven for hundreds of years for heat retention and even radiant performance." },

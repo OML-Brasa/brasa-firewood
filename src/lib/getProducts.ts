@@ -1,5 +1,5 @@
 import type { Locale } from "@/lib/i18n";
-import { accessories as accessoryDefaults, ovens as ovenDefaults, roundUpToTen, type AccessoryProduct, type Oven } from "@/lib/productDefaults";
+import { accessories as accessoryDefaults, isHiddenProduct, ovens as ovenDefaults, roundUpToTen, type AccessoryProduct, type Oven } from "@/lib/productDefaults";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 
@@ -24,7 +24,7 @@ type DocVariant = { size: string; finish: string; price: number; stock?: number;
 /** All oven lines for the shop grid — Sanity first, code defaults as fallback. */
 export async function getOvens(locale: Locale = "en"): Promise<Oven[]> {
   const docs = await client.fetch(ovensQuery, { lang: locale }).catch(() => null);
-  if (!docs?.length) return ovenDefaults;
+  if (!docs?.length) return ovenDefaults.filter((o) => !isHiddenProduct(o.slug));
   return docs.map((d: { name: string; slug: string; tagline: string; style: string; doors: number; shortDescription: string; variants?: DocVariant[] }) => ({
     type: "oven" as const,
     slug: d.slug,
@@ -50,13 +50,13 @@ export async function getOvens(locale: Locale = "en"): Promise<Oven[]> {
         gallery,
       };
     }),
-  }));
+  })).filter((o: Oven) => !isHiddenProduct(o.slug));
 }
 
 /** All accessories — Sanity first, code defaults as fallback. */
 export async function getAccessories(locale: Locale = "en"): Promise<AccessoryProduct[]> {
   const docs = await client.fetch(accessoriesQuery, { lang: locale }).catch(() => null);
-  if (!docs?.length) return accessoryDefaults;
+  if (!docs?.length) return accessoryDefaults.filter((a) => !isHiddenProduct(a.slug));
   return docs.map((d: { name: string; slug: string; price: number; stock?: number; shortDescription?: string; description?: string; image?: ImgSrc }) => ({
     type: "accessory" as const,
     slug: d.slug,
@@ -66,5 +66,5 @@ export async function getAccessories(locale: Locale = "en"): Promise<AccessoryPr
     shortDescription: d.shortDescription ?? "",
     description: d.description ?? "",
     image: url(d.image, 600),
-  }));
+  })).filter((a: AccessoryProduct) => !isHiddenProduct(a.slug));
 }
