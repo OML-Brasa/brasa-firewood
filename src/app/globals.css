@@ -106,6 +106,13 @@
   }
 }
 
+/* Stop the elastic overscroll "bounce" (macOS trackpad, iOS Safari) from
+   pulling the page past the footer and revealing a strip of white canvas. */
+html,
+body {
+  overscroll-behavior-y: none;
+}
+
 body {
   background: var(--color-background);
   color: var(--color-foreground);

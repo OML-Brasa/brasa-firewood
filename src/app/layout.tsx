@@ -3,7 +3,7 @@ import { Archivo, Manrope, Instrument_Serif } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
-import { ElfsightPopup } from "@/components/ElfsightPopup";
+import { ElfsightWidgets } from "@/components/ElfsightWidgets";
 import { LocaleProvider } from "@/components/LocaleProvider";
 import { getLocale } from "@/lib/getLocale";
 
@@ -76,7 +76,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         <LocaleProvider locale={locale}>{children}</LocaleProvider>
-        <ElfsightPopup />
+        <ElfsightWidgets />
       </body>
     </html>
   );
