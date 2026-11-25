@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Mail, Minus, Plus, Clock } from "lucide-react";
+import { Mail, Minus, Plus, Clock } from "lucide-react";
 import { useState } from "react";
 
 import { useLocale } from "@/components/LocaleProvider";
@@ -9,72 +9,14 @@ import type { ContactContent } from "@/lib/contactContent";
 
 const wrap = "mx-auto w-full max-w-[1440px] px-6 md:px-20";
 const sectionTitle = "font-heading text-[28px] md:text-[36px] font-extrabold leading-[1.14] tracking-[-0.015em] text-charcoal-800";
-const fieldCls = "rounded border border-charcoal-300 px-3 py-2.5 text-[14px] text-charcoal-800 placeholder:text-charcoal-400 focus:border-copper-500 focus:outline-none";
-const labelCls = "text-[13px] font-semibold text-charcoal-800";
+
+// Elfsight Contact Form | Brasa Contact Form
+const CONTACT_FORM_WIDGET = "a07088e2-f157-4b92-b31c-f8d3f82fdb59";
 
 export function ContactClient({ content, heroImage }: { content: ContactContent; heroImage?: string | null }) {
   const locale = useLocale();
   const t = formsUI[locale];
-  const [form, setForm] = useState({ first: "", last: "", email: "", phone: "", subject: "", message: "" });
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState("");
-  const [submitting, setSubmitting] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
-    setForm((f) => ({ ...f, [k]: e.target.value }));
-
-  // Fallback used until HubSpot is configured (or if a submission fails): open
-  // the visitor's email app addressed to the sales inbox, so no message is lost.
-  const openMailto = () => {
-    const body = [
-      `${t.bodyName}: ${form.first} ${form.last}`,
-      `${t.bodyEmail}: ${form.email}`,
-      form.phone ? `${t.bodyPhone}: ${form.phone}` : "",
-      "",
-      form.message,
-    ]
-      .filter((l) => l !== "")
-      .join("\n");
-    window.location.href = `mailto:${content.email}?subject=${encodeURIComponent(
-      form.subject
-    )}&body=${encodeURIComponent(body)}`;
-  };
-
-  const submit = async () => {
-    if (!form.first || !form.last || !form.email || !form.subject || !form.message) {
-      setError(t.contactError);
-      return;
-    }
-    if (submitting) return;
-    setError("");
-    setSubmitting(true);
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: form.first,
-          lastName: form.last,
-          email: form.email,
-          phone: form.phone,
-          subject: form.subject,
-          message: form.message,
-          pageUri: typeof window !== "undefined" ? window.location.href : undefined,
-        }),
-      });
-      const data = (await res.json().catch(() => ({}))) as { delivered?: string };
-      // Went to HubSpot → done. Otherwise (not configured yet, or an error) fall
-      // back to email so the message still reaches the team.
-      if (!(res.ok && data.delivered === "hubspot")) openMailto();
-      setSent(true);
-    } catch {
-      openMailto();
-      setSent(true);
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   return (
     <>
@@ -98,37 +40,10 @@ export function ContactClient({ content, heroImage }: { content: ContactContent;
         <div className={`${wrap} grid gap-12 py-16 lg:grid-cols-2`}>
           {/* Form */}
           <div className="flex flex-col gap-6">
-            <h2 className={sectionTitle}>{content.formTitle}</h2>
-            {sent ? (
-              <div className="flex flex-col items-start gap-2 rounded-lg border border-[#cbe0cf] bg-[#f1f7f2] p-6">
-                <span className="flex items-center gap-2 text-[16px] font-bold text-[#2f7d4f]"><Check size={18} /> {t.contactSentTitle}</span>
-                <span className="text-[14px] text-charcoal-600">{t.contactSentThanksPrefix}{form.first}{t.contactSentMid}{form.email}{t.contactSentSuffix}</span>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-4">
-                {error && <p className="rounded border border-copper-300 bg-copper-50 px-4 py-2.5 text-[14px] text-copper-700">{error}</p>}
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="flex flex-col gap-1.5"><label className={labelCls}>{t.firstName}</label><input value={form.first} onChange={set("first")} placeholder={t.firstNamePlaceholder} className={fieldCls} /></div>
-                  <div className="flex flex-col gap-1.5"><label className={labelCls}>{t.lastName}</label><input value={form.last} onChange={set("last")} placeholder={t.lastNamePlaceholder} className={fieldCls} /></div>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="flex flex-col gap-1.5"><label className={labelCls}>{t.emailAddress}</label><input type="email" value={form.email} onChange={set("email")} placeholder={t.emailPlaceholder} className={fieldCls} /></div>
-                  <div className="flex flex-col gap-1.5"><label className={labelCls}>{t.phoneOptional}</label><input value={form.phone} onChange={set("phone")} placeholder={t.phonePlaceholder} className={fieldCls} /></div>
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <label className={labelCls}>{t.subject}</label>
-                  <select value={form.subject} onChange={set("subject")} className={fieldCls}>
-                    <option value="">{t.subjectSelect}</option>
-                    {content.subjects.map((s) => <option key={s} value={s}>{s}</option>)}
-                  </select>
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <label className={labelCls}>{t.yourMessage}</label>
-                  <textarea value={form.message} onChange={set("message")} rows={5} placeholder={t.messagePlaceholder} className={fieldCls} />
-                </div>
-                <button onClick={submit} disabled={submitting} className="w-fit rounded bg-copper-500 px-7 py-3 text-[14px] font-bold uppercase tracking-[0.03em] text-white transition-colors hover:bg-copper-600 disabled:opacity-60">{t.sendMessage}</button>
-              </div>
-            )}
+            {/* Elfsight "Brasa Contact Form" widget — it renders its own title, so
+                there's no heading here. platform.js is loaded site-wide by
+                ElfsightWidgets (root layout), so only the container is needed. */}
+            <div className={`elfsight-app-${CONTACT_FORM_WIDGET}`} data-elfsight-app-lazy />
           </div>
 
           {/* Details */}
